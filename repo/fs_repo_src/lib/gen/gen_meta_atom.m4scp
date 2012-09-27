@@ -1,0 +1,349 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: gen_meta_atom.m4scp
+// Description:
+// Файл содержит процедуру создания копии контура с заменой 
+// sc-переменных на sc-метаперемменые
+// 1-й аргумент - исходный контур
+// 2-й аргумент - результат генерации
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 11.01.11
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "lib_gen.scsy"
+#include "lib_search.scsy"
+#include "lib_check.scsy"
+
+procedure(gen_meta_atom,
+[[		
+	create_link=gen_var_link;	
+	search_start=search_bin_pair_begin_proc;
+	search_end=search_bin_pair_end_proc;
+	//#search_bin_pair_end_proc;
+	//#search_bin_pair_end_proc;
+	node_copy=gen_meta_node;
+	check_linked_vars;
+	here=/"\n\nI have entered GMA!\n\n"/;
+	last=/"\n\nLAST:"/;
+	rel=nrel_copy;
+	//#oper="/operation/find_formula";
+]],
+[{	
+	arc,arc1,temp,resstat,stat,set,node,newnode,fromnode,tonode,seg,segments,copyrel,tempstat
+}],
+{[
+	1_: in_: stat,
+	2_: out_: resstat
+]}
+)
+sys_get_location([1_: stat,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+//#printEl([1_: oper])
+printNl([1_: here])
+
+genEl([1_: assign_: node_: var_: resstat])
+genEl([1_: assign_: node_: var_: tempstat])
+genEl([1_: assign_: node_: const_: copyrel])
+//////////////////////////////////////
+// Перебираем все константные узлы исходного множества
+searchSetStr3([	
+	1_: fixed_: stat,
+	2_: assign_: arc,
+	3_: assign_: node_: const_: temp,
+	set3_: assign_: set
+])
+ifVarAssign([1_: set],,const_nodes_done)
+label(next_const_node)
+ifVarAssign([1_: node],,no_erase_const_node)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: f_: arc,
+	3_: fixed_: node
+])
+label(no_erase_const_node)
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: arc,
+	3_: assign_: node
+],,const_nodes_done)
+callReturn([
+	1_: fixed_: create_link,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: node,
+			2_: fixed_: node,
+			3_: fixed_: resstat,
+			4_: fixed_: copyrel
+		]}
+],next_const_node,next_const_node)
+label(const_nodes_done)
+
+//#printEl([1_: resstat])
+//-------------------------------------------------------------------------------------------------------------------
+//////////////////////////////////////
+// Перебираем все переменные узлы исходного множества
+searchSetStr3([	
+	1_: fixed_: stat,
+	2_: assign_: arc,
+	3_: assign_: node_: var_: temp,
+	set3_: assign_: set
+])
+ifVarAssign([1_: set],,var_nodes_done)
+label(next_var_node)
+ifVarAssign([1_: node],,no_erase_var_node)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: f_: arc,
+	3_: fixed_: node
+])
+label(no_erase_var_node)
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: arc,
+	3_: assign_: node
+],,var_nodes_done)
+callReturn([
+	1_: fixed_: node_copy,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: node,
+			2_: fixed_: newnode			
+		]}
+])
+callReturn([
+	1_: fixed_: create_link,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: node,
+			2_: fixed_: newnode,
+			3_: fixed_: tempstat,
+			4_: fixed_: rel
+		]}		
+])
+callReturn([
+	1_: fixed_: create_link,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: node,
+			2_: fixed_: newnode,
+			3_: fixed_: resstat,
+			4_: fixed_: copyrel
+		]}
+],next_var_node,next_var_node)
+label(var_nodes_done)
+//#printEl([1_: resstat])
+//-------------------------------------------------------------------------------------------------------------------
+//////////////////////////////////////
+// Перебираем все переменные дуги исходного множества
+searchSetStr3([	
+	1_: fixed_: stat,
+	2_: assign_: arc,
+	3_: assign_: arc_: var_: temp,
+	set3_: assign_: set
+])
+ifVarAssign([1_: set],,var_undfs_done)
+label(next_var_undf)
+ifVarAssign([1_: node],,no_erase_var_undf)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: f_: arc,
+	3_: fixed_: node
+])
+label(no_erase_var_undf)
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: arc,
+	3_: assign_: node
+],,var_undfs_done)
+//#printEl([1_: node])
+genEl([1_: undf_: meta_: assign_: newnode])
+callReturn([
+	1_: fixed_: create_link,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: node,
+			2_: fixed_: newnode,
+			3_: fixed_: resstat,
+			4_: fixed_: copyrel
+		]}
+],next_var_undf,next_var_undf)
+label(var_undfs_done)
+//#printEl([1_: resstat])
+//-------------------------------------------------------------------------------------------------------------------
+//////////////////////////////////////
+// Перебираем все неопределенные узлы исходного множества
+searchSetStr3([	
+	1_: fixed_: stat,
+	2_: assign_: arc,
+	3_: assign_: undf_: var_: temp,
+	set3_: assign_: set
+])
+ifVarAssign([1_: set],,var_undfs_done1)
+label(next_var_undf1)
+ifVarAssign([1_: node],,no_erase_var_undf1)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: f_: arc,
+	3_: fixed_: node
+])
+label(no_erase_var_undf1)
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: arc,
+	3_: assign_: node
+],,var_undfs_done1)
+genEl([1_: undf_: meta_: newnode])
+callReturn([
+	1_: fixed_: create_link,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: node,
+			2_: fixed_: newnode,
+			3_: fixed_: tempstat,
+			4_: fixed_: rel
+		]}		
+])
+callReturn([
+	1_: fixed_: create_link,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: node,
+			2_: fixed_: newnode,
+			3_: fixed_: resstat,
+			4_: fixed_: copyrel
+		]}
+],next_var_undf1,next_var_undf1)
+label(var_undfs_done1)
+//#printEl([1_: resstat])
+//-------------------------------------------------------------------------------------------------------------------
+//////////////////////////////////////
+// Устанавливаем начала и концы всех переменных дуг конечного множества
+searchSetStr3([	
+	1_: fixed_: resstat,
+	2_: assign_: arc,
+	3_: assign_: undf_: meta_: temp,
+	set3_: assign_: set
+])
+ifVarAssign([1_: set],,var_arcs_done)
+label(next_var_arc)
+ifVarAssign([1_: node],,no_erase_var_arc)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: f_: arc,
+	3_: fixed_: node
+])
+label(no_erase_var_arc)
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: arc,
+	3_: assign_: node
+],,var_arcs_done)
+callReturn([
+	1_: fixed_: search_start,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: node,
+			2_: fixed_: copyrel,
+			3_: assign_: arc
+		]}
+])
+//#printEl([1_: node])
+//#printEl([1_: arc])
+searchElStr3([
+	1_: assign_: fromnode,
+	2_: fixed_: arc,
+	3_: assign_: tonode
+])
+//#ifVarAssign([1_: fromnode],,pr)
+//#ifVarAssign([1_: tonode],,pr)
+callReturn([
+	1_: fixed_: search_bin_pair_end_proc,
+	2_: fixed_: 
+		{[
+			1_: fixed_: fromnode,
+			2_: fixed_: copyrel,
+			3_: assign_: fromnode
+		]}
+])
+
+callReturn([
+	1_: fixed_: search_bin_pair_end_proc,
+	2_: fixed_: 
+		{[
+			1_: fixed_: tonode,
+			2_: fixed_: copyrel,
+			3_: assign_: tonode
+		]}
+])
+
+//#printEl([1_: copyrel])
+//#printEl([1_: tonode])
+
+ifType([1_: pos_: arc_: arc],,no_pos)
+genElStr3([
+	1_: fixed_: fromnode,
+	2_: fixed_: pos_: node,
+	3_: fixed_: tonode
+],next_var_arc,next_var_arc)
+label(no_pos)
+
+ifType([1_: neg_: arc_: arc],,no_neg)
+genElStr3([
+	1_: fixed_: fromnode,
+	2_: fixed_: neg_: node,
+	3_: fixed_: tonode
+],next_var_arc,next_var_arc)
+label(no_neg)
+
+ifType([1_: fuz_: arc_: arc],,no_fuz)
+genElStr3([
+	1_: fixed_: fromnode,
+	2_: fixed_: fuz_: node,
+	3_: fixed_: tonode
+],next_var_arc,next_var_arc)
+label(no_fuz)
+
+label(var_arcs_done)
+
+eraseSetStr3([
+	1_: fixed_: f_: copyrel,
+	2_: assign_: arc,
+	3_: assign_: f_: node
+])
+eraseEl([1_: tempstat])
+//#callReturn([
+//#	1_: fixed_: check_linked_vars,
+//#	2_: fixed_: {[]}
+//#])
+
+//#printNl([1_: last])
+//#printEl([1_: resstat])
+
+label(exit)
+
+return()
+end

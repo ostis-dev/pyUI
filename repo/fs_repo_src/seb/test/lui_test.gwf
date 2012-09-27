@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<GWF version="1.6">
+    <staticSector>
+        <node type="node/const/general_node" idtf="lui1" shapeColor="255" id="22549128" parent="0" left="0" top="0" right="30" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="275" y="264" haveBus="false">
+            <content type="1" mime_type="content/term" file_name=""><![CDATA[Создать массовую, комплексную и активно развивающуюся технологию проектирования интеллектуальных систем, включающую в себя теоретические и практические, программные и аппаратные аспекты.Создать инфраструктуру, обеспечивающую сочетание научной и учебной, инженерной и коммерческой деятельности в области искусственного интеллекта.]]></content>
+        </node>
+        <node type="node/const/general_node" idtf="" shapeColor="0" id="22525216" parent="0" x="259" y="134" haveBus="false">
+            <content type="1" mime_type="content/binary" file_name=""><![CDATA[Open Semantic Technology for Intelligent Systems. <br> Это открытый проект, направленный на создание <br> массовой семантической технологии компонентного <br> проектирования интеллектуальных систем различного <br>назначения.]]></content>
+        </node>
+        <node type="node/const/group" idtf="русский язык" shapeColor="0" id="61898944" parent="0" left="0" top="0" right="85" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="620" y="20" haveBus="true">
+            <content type="0" mime_type="content/base" file_name=""/>
+        </node>
+        <node type="node/const/general_node" idtf="" shapeColor="0" id="61238560" parent="0" x="190" y="60" haveBus="false">
+            <content type="1" mime_type="content/binary" file_name=""><![CDATA[Что такое Геометрия Евклида?]]></content>
+        </node>
+        <node type="node/const/group" idtf="lui_test" shapeColor="0" id="23514936" parent="0" left="0" top="0" right="50" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="20" y="20" haveBus="true">
+            <content type="0" mime_type="content/base" file_name=""/>
+        </node>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="23832464" parent="0" id_b="61352088" id_e="22549128" b_x="0" b_y="0" e_x="275" e_y="264" dotBBalance="0.233228" dotEBalance="0">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="22189352" parent="0" id_b="22562104" id_e="22549128" b_x="0" b_y="0" e_x="275" e_y="264" dotBBalance="0.252966" dotEBalance="0">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="12578664" parent="0" id_b="61352088" id_e="22525216" b_x="0" b_y="0" e_x="259" e_y="134" dotBBalance="0.0957792" dotEBalance="0">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="61230896" parent="0" id_b="22562104" id_e="22525216" b_x="0" b_y="0" e_x="259" e_y="134" dotBBalance="0.0954692" dotEBalance="0">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="22862672" parent="0" id_b="61352088" id_e="61238560" b_x="0" b_y="0" e_x="190" e_y="60" dotBBalance="0.0416667" dotEBalance="0">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="13168152" parent="0" id_b="22562104" id_e="61238560" b_x="0" b_y="0" e_x="190" e_y="60" dotBBalance="0.0415318" dotEBalance="0">
+            <points/>
+        </arc>
+        <bus type="" idtf="" shapeColor="0" id="61352088" parent="0" owner="61898944" b_x="620" b_y="34.5" e_x="620" e_y="947">
+            <points/>
+        </bus>
+        <bus type="" idtf="" shapeColor="0" id="22562104" parent="0" owner="23514936" b_x="20.0156" b_y="34.5" e_x="21" e_y="950">
+            <points/>
+        </bus>
+    </staticSector>
+</GWF>

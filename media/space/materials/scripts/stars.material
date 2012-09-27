@@ -1,0 +1,83 @@
+
+//	Suns and stars
+//	(c) Christian Wendt 2009
+
+material Stars/Sun1
+{
+	receive_shadows off 
+	technique
+	{
+		pass
+		{
+			
+			lighting off
+			scene_blend add
+			depth_write off
+
+			texture_unit
+			{
+				texture sunflare.png
+			}
+		}
+	}
+}
+
+material Stars/Star1
+{
+
+	technique
+	{
+		pass
+		{
+			
+			lighting off
+//			receive_shadows off
+			depth_write off
+			scene_blend add
+			texture_unit
+			{
+				texture starflare.png
+			}
+		}
+	}
+}
+
+material Stars/Dim
+{
+	technique
+	{
+		pass
+		{
+			
+			lighting off
+			//receive_shadows off
+			depth_write off
+			scene_blend add
+			texture_unit
+			{
+				texture starflare_dim.png
+			}
+		}
+	}
+}
+
+material Stars/Point
+{	
+	technique
+	{
+		pass
+		{
+			
+			lighting off
+			//receive_shadows off
+			depth_write off
+			scene_blend add
+			texture_unit
+			{
+				texture point.png
+			}
+		}
+	}
+}
+
+

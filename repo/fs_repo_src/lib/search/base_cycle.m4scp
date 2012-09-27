@@ -1,0 +1,122 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: search_base_question.m4scp
+// Description: File contains procedure to 
+//				organize unificated structure 
+//				for all operations, that search
+//				answers to a question.
+//				If calls specified procedure (or program)
+//				for elements in specified set, and merge
+//				results.
+/////////////////////////////////////////////////////
+// 		Author: Denis Koronchik
+//        Date: 28.11.10
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_search.scsy"
+#include "lib_set.scsy"
+#include "lib_answer.scsy"
+
+/* Procedure, that process base search cycle for elements set
+*/
+procedure(base_cycle,
+[[
+	set_merge;
+]],
+[{
+	// input params
+	el_set, search_proc, result,
+	// other
+	result, tmp_res, el_for_process, el_set, a, proc_elements, segment, t_seg
+}],
+{[
+	1_: in_: el_set,		// set of elements for processing
+	2_: in_: search_proc,	// search procedure
+	3_: out_: result			// result set (must be created)
+]}
+)
+
+/* need to set segment that contains el_set node as default to generate answer in it */
+sys_get_location([1_: fixed_: el_set, 2_: assign_: segment])	
+//# sys_open_segment([1_: fixed_: segment])
+sys_spin_segment([1_: fixed_: segment, 2_: assign_: t_seg])
+sys_set_default_segment([1_: fixed_: segment])
+
+// copy elements to organize cycle
+searchSetStr3([
+	1_: fixed_: el_set,
+	2_: assign_: arc_: pos_: const_: a,
+	3_: assign_: tmp_res,
+	set3_: assign_: proc_elements
+	], , , goto_error)
+	
+// create result set
+genEl([1_: assign_: node_: const_: result])
+	
+label(process_el)
+// process elements
+searchElStr3([
+	1_: fixed_: el_set,
+	2_: assign_: const_: pos_: arc_: a,
+	3_: assign_: el_for_process], , finish_op, goto_error)
+	
+// remove processed element from a set
+eraseEl([1_: fixed_: a])
+
+// create result set
+//# genEl([1_: assign_: node_: const_: tmp_res])
+
+// process search procedure
+callReturn([
+	1_: fixed_: search_proc,
+	2_: fixed_: {[
+		1_: el_for_process,
+		2_: result]}
+	], , , goto_error)
+
+// append processed element into result set
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a,
+	3_: fixed_: el_for_process])
+
+// merge temporary results to main results
+//# callReturn([
+//#	1_: fixed_: set_merge,
+//#	2_: fixed_: {[
+//#		1_: tmp_res,
+//#		2_: result]}
+//#	]2, , , goto_error)
+
+// remove temporary result
+//# eraseEl([1_: fixed_: tmp_res])
+
+label(goto_error)
+
+label(finish_op)
+
+return()
+end()

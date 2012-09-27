@@ -1,0 +1,101 @@
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "com_keynodes.scsy"
+#include "lib_search.scsy"
+
+procedure(search,
+[[
+	// Ключевой узел, обозначающий отношение "величина*"
+	nrel_value;
+	// Ключевой узел, обозначающий отношение "идентификация*"
+	nrel_identification;
+	// Атрибут для обозначения десятичного числа
+	rrel_decimal_number;
+	// Процедура поиска начала бинарной пары
+	search_bin_pair_begin_proc;	
+]],
+[{
+	location, segments,
+	quantity, resultValue, valueNode, numberNode, identificationNode,
+	arc, attributeArc, attributeNode
+}],
+{[
+	1_: in_: quantity,
+	2_: out_: resultValue
+]}
+)
+// Получение сегмента, в котором находится узел искомой величины
+sys_get_location([
+	1_: fixed_: quantity,
+	2_: assign_: location
+])
+
+// Установка найденного сегмента как основного
+sys_set_default_segment([
+	1_: fixed_: location
+])
+
+//Разворачивание установленного сегмента
+sys_spin_segment([
+	1_: fixed_: location,
+	2_: assign_: segments
+])
+
+// Находим значение искомой величины
+callReturn([
+	1_: fixed_: search_bin_pair_begin_proc,
+	2_: fixed_: {[
+		1_: quantity,
+		2_: nrel_value,
+		3_: valueNode
+	]}
+], , , goto_error)
+
+// Проверяем, что значение искомой величины действительно найдено
+ifVarAssign([
+	1_: valueNode
+], , goto_error)
+
+// Находим число, являющееся значением этой величины в каких-то единицах измерения
+searchElStr3([
+	1_: fixed_: valueNode,
+	2_: assign_: arc_: const_: pos_: arc,
+	3_: assign_: node_: const_: numberNode
+])
+
+// Проверяем, что число, являющееся значением искомой величины действительно найдено
+ifVarAssign([
+	1_: numberNode
+], , goto_error)
+
+// Находим идентификацию искомой величины
+callReturn([
+	1_: fixed_: search_bin_pair_begin_proc,
+	2_: fixed_: {[
+		1_: numberNode,
+		2_: nrel_identification,
+		3_: identificationNode
+	]}
+], , , goto_error)
+
+// Проверяем, что идентификация искомой величины действительно найдена
+ifVarAssign([
+	1_: identificationNode
+], , goto_error)
+
+// Находим десятичное число, являющееся идентификацией искомой величины
+searchElStr5([
+	1_: fixed_: identificationNode,
+	2_: assign_: arc_: const_: pos_: arc,
+	3_: assign_: node_: const_: resultValue,
+	4_: assign_: arc_: const_: pos_: attributeArc,
+	5_: fixed_ : rrel_decimal_number
+])
+
+// Завершение в случае ошибки
+label(goto_error)
+
+return()
+	
+end

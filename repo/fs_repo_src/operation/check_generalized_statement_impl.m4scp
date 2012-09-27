@@ -1,0 +1,362 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: check_generalized_statement_impl.m4scp
+// Description:
+// Файл содержит процедуру генерации обобщенного высказывания об импликации двух атомарных высказываний
+// 1-й аргумент - системный узел, необходимый для автоматического реагирования операции на состояние памяти
+// 2-й аргумент - системный узел, необходимый для автоматического реагирования операции на состояние памяти
+// 3-й аргумент - дуга, проведенная пользователем из узла запроса
+// 4-й аргумент - узел, в который была проведена дуга из узла запроса
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 11.01.11
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+#include "lib_gen.scsy"
+
+program(init_op,
+[[	
+	q_statement_validity;
+	catch_output_arc;	
+	//#here=/"\n\nHandler setted!\n\n"/;
+]],
+[{
+	nodeVar
+}],
+{[
+]}
+)
+
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: check_generalized_statement_impl,
+	3_: fixed_: {1_: q_statement_validity},
+	4_: assign_: nodeVar
+])
+
+return()
+end
+
+procedure(check_generalized_statement_impl,
+[[		
+	pattern_superclass=[nrel_inclusion->>{. 1_::_superclass, 2_::_subclass.};];	
+	ctype=stype_concept_norel;
+	relations=stype_bin_orient_norole_rel;
+	gen_copy=gen_atom_copy_with_replacement;
+	req=q_gen_all_trans_relation_links;
+	myreq=q_statement_validity;
+	kindof=nrel_inclusion;
+	ans=rrel_answer_is_present;
+	answerIsAbsentAsIs = rrel_answer_is_absent_at_evident_view;
+	answerIsAbsent = rrel_answer_is_absent;
+	answerIs = rrel_answer_is_present;
+	mystat=group_generated_statement;
+	impl=nrel_impl;
+	catch_output_arc;
+	waitdone=/"\n\nWait done...\n\n"/;
+	refl=/"\n\nRefl done!\n\n"/;
+	good=/"GOOD END!!!!"/;
+	here=/"\n\nI have entered GGSI\n\n"/;
+	exited=/"\n\nI have exited GGSI\n\n"/;
+	statgen=/"\n\nStatement genered...\n\n"/;
+]],
+[{	
+	inputarc,arc,arc1,resstat,stat,left,temp,class,left1,superclasses,superclass,rel,right,handler,element,set,seg,mwin,
+	segments
+}],
+{[
+	1_: in_: handler,
+	2_: in_: element,
+	3_: in_: inputarc,
+	4_: in_: stat
+]}
+)
+sys_get_location([1_: stat,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+printNl([1_: here])
+searchElStr3([
+	1_: fixed_: mystat,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: stat
+],exit)
+
+searchElStr3([
+	1_: fixed_: ans,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: inputarc
+],exit)
+
+searchElStr3([
+	1_: fixed_: answerIsAbsentAsIs,	
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: inputarc
+],,exit)
+
+//Определяем тип высказывания
+searchSetStr3([
+	1_: assign_: node_: const_: rel,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: stat,
+	set1_: assign_: set
+])
+label(next_rel)
+ifVarAssign([1_: rel],,no_erase_rel)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: fixed_: rel
+])
+label(no_erase_rel)
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: rel
+],,exit)
+searchElStr3([
+	1_: fixed_: relations,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: rel
+],,next_rel)
+
+ifCoin([1_: impl,2_: rel],,exit)
+
+label(wait0)
+searchElStr3([
+	1_: fixed_: answerIs,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: inputarc
+],good_end)
+searchElStr3([
+	1_: fixed_: answerIsAbsent,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: inputarc
+],,wait0)
+
+////////////////////////////////
+//Находим левую часть высказывания
+searchElStr5([
+	1_: fixed_: stat,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: left,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 1_
+])
+////////////////////////////////
+// ищем правую часть высказывания
+searchElStr5([
+	1_: fixed_: stat,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: right,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 2_
+])
+
+searchSetStr3([
+	1_: fixed_: left,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: const_: temp,
+	set3_: assign_: temp
+])
+////////////////////////////////
+// перебираем все семейства из левой части
+label(next_class)
+ifVarAssign([1_: class],,no_erase_class)
+eraseElStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: fixed_: class
+])
+label(no_erase_class)
+searchElStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: class
+],,exit)
+searchElStr3([
+	1_: fixed_: ctype,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: class
+],,next_class)
+
+////////////////////////////////
+// запуск операции генерации транзитивных связок
+genEl([1_: node_: const_: temp])
+genElStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: class
+])
+genElStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: kindof
+])
+genElStr3([
+	1_: fixed_: req,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: temp
+])
+
+label(wait1)
+
+sys_wait([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: {1_: ans}
+])
+
+searchElStr5([
+	1_: fixed_: req,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: temp,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: ans
+],,wait1)
+
+//#printNl([1_: refl])
+////////////////////////////////
+// ищем множество надклассов
+sys_search([
+	1_: fixed_: pattern_superclass,
+	2_: fixed_: {
+		{1_: _superclass, 2_: set_: superclasses}
+	},
+	3_: fixed_: {
+		{1_: _subclass, 2_: class}
+	}
+])
+ifVarAssign([1_: superclasses],,exit)
+/////////////////////////////////////////////
+// Перебираем надклассы
+label(next_superclass)
+ifVarAssign([1_: superclass],,no_erase_superclass)
+eraseElStr3([
+	1_: fixed_: superclasses,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: fixed_: superclass
+])
+label(no_erase_superclass)
+searchElStr3([
+	1_: fixed_: superclasses,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: superclass
+],,next_class)
+
+//Создаем копию левой части высказывания с заменой
+callReturn([1_: fixed_: gen_copy,
+	    2_: fixed_:
+		{[
+			1_: fixed_: left,
+			2_: fixed_: class,
+			3_: fixed_: superclass,
+			4_: assign_: left1
+		]}
+])
+
+genElStr3([
+	1_: fixed_: rel,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: resstat
+])
+
+genElStr5([
+	1_: fixed_: resstat,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: left1,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 1_
+])
+
+genElStr5([
+	1_: fixed_: resstat,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: right,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 2_
+])
+
+genElStr3([
+	1_: fixed_: mystat,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: resstat
+])
+genElStr3([
+	1_: fixed_: myreq,
+	2_: assign_: inputarc,
+	3_: fixed_: resstat
+])
+
+//#printNl([1_: statgen])
+
+label(wait2)
+searchElStr5([
+	1_: fixed_: myreq,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: resstat,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: answerIs
+],good_end)
+searchElStr5([
+	1_: fixed_: myreq,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: resstat,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: answerIsAbsent
+],,wait2)
+
+printNl([1_: waitdone])
+
+eraseSetStr3([
+	1_: fixed_: left1,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: assign_: node_: var_: f_: temp
+])
+eraseSetStr3([
+	1_: fixed_: left1,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: assign_: undf_: var_: f_: temp
+])
+eraseEl([1_: fixed_: left1])
+eraseEl([1_: fixed_: resstat])
+nop(next_superclass)
+
+label(good_end)
+printNl([1_: good])
+genElStr5([
+	1_: fixed_: myreq,
+	2_: fixed_: inputarc,
+	3_: fixed_: stat,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: answerIs
+])
+
+label(exit)
+printNl([1_: exited])
+return()
+end

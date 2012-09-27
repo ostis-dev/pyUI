@@ -1,0 +1,69 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+"sheet_" = "/proc/agents/shell/keynode/sheet_";
+"confirm_" = "/proc/agents/nsm/keynode/confirm_";
+"nsm_mailbox_hook" = "/proc/agents/nsm/keynode/nsm_mailbox_hook";
+"PossibleCommands" = "/proc/agents/nsm/keynode/PossibleCommands";
+"denied_" = "/proc/agents/nsm/keynode/denied_";
+"store_in_one_" = "/proc/agents/nsm/keynode/store_in_one_";
+"search_only_one_" = "/proc/agents/nsm/keynode/search_only_one_";
+"nsm_command" = "/proc/agents/nsm/keynode/nsm_command";
+"nsm_command_" = "/proc/agents/nsm/keynode/nsm_command_";
+"nsm_command_pattern_" = "/proc/agents/nsm/keynode/nsm_command_pattern_";
+"nsm_command_elem_" = "/proc/agents/nsm/keynode/nsm_command_elem_";
+"nsm_show_content_" = "/proc/agents/nsm/keynode/nsm_show_content_";
+"nsm_command_comment_" = "/proc/agents/nsm/keynode/nsm_command_comment_";
+"nsm_command_layout_" = "/proc/agents/nsm/keynode/nsm_command_layout_";
+"nsm_command_shortname_" = "/proc/agents/nsm/keynode/nsm_command_shortname_";
+"return_only_" = "/proc/agents/nsm/keynode/return_only_";
+"searched_" = "/proc/agents/nsm/keynode/searched_";
+"nsm_not_returned_elems_" = "/proc/agents/nsm/keynode/nsm_not_returned_elems_";
+"nsm_returned_elems_" = "/proc/agents/nsm/keynode/nsm_returned_elems_";
+"goals" = "/proc/agents/nsm/keynode/goals";
+"active_" = "/proc/agents/nsm/keynode/active_";
+"Result" = "/proc/agents/nsm/keynode/Result";
+"confirmed_" = "/proc/agents/nsm/keynode/confirmed_";
+"add_ui_info_" = "/proc/agents/nsm/keynode/add_ui_info_";
+"search_" = "/proc/agents/nsm/keynode/search_";
+"generate_" = "/proc/agents/nsm/keynode/generate_";
+"generated_" = "/proc/agents/nsm/keynode/generated_";
+"deny_" = "/proc/agents/nsm/keynode/deny_";
+"search_in_segment_" = "/proc/agents/nsm/keynode/search_in_segment_";
+"cache_sheet" = "/proc/agents/nsm/keynode/cache_sheet";
+"reply_on_msg" = "/proc/agents/nsm/keynode/reply_on_msg";
+"gen_msg" = "/proc/agents/nsm/keynode/gen_msg";
+"synonyms" = "/proc/agents/nsm/keynode/synonyms";
+"search_all_input_arcs" = "/proc/agents/nsm/keynode/search_all_input_arcs";
+"search_all_input_attr" = "/proc/agents/nsm/keynode/search_all_input_attr";
+"search_all_kort" = "/proc/agents/nsm/keynode/search_all_kort";
+"search_all_output_arcs" = "/proc/agents/nsm/keynode/search_all_output_arcs";
+"search_all_output_attr" = "/proc/agents/nsm/keynode/search_all_output_attr";
+"search_all_rel" = "/proc/agents/nsm/keynode/search_all_rel";
+"search_classification_scheme" = "/proc/agents/nsm/keynode/search_classification_scheme";
+"search_program_header" = "/proc/agents/nsm/keynode/search_program_header";
+"nsm_main_KeySign_document" = "/proc/agents/nsm/keynode/nsm_main_KeySign_document";
+"nsm_main_KeySign2_KeySign3" = "/proc/agents/nsm/keynode/nsm_main_KeySign2_KeySign3";
+"nsm_main_KeySign2" = "/proc/agents/nsm/keynode/nsm_main_KeySign2";
+"nsm_main_KeySign" = "/proc/agents/nsm/keynode/nsm_main_KeySign";

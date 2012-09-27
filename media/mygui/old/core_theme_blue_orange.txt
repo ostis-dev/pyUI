@@ -1,0 +1,6 @@
+﻿MyGUI_Theme_Texture	core_blue_orange.png
+MyGUI_Theme_Texture_Menu	core_menu_skin.png
+MyGUI_Theme_Button_ColourNormal	#FFFFFF
+MyGUI_Theme_Button_ColourPushed	#000000
+MyGUI_Theme_Idtf_Colour #00aa00
+MyGUI_Theme_ArgumentsLabel_Colour #ffffff

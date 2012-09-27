@@ -1,0 +1,781 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modfirst_ely
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  first_el not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: calculation.m4scp
+// Description: Файл содержит операцию вычисления формулы
+/////////////////////////////////////////////////////
+// 		Author: Sergei Zalivako
+//        Date: 24.01.2011 
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_set.scsy"
+#include "lib_search.scsy"
+#include "lib_answer.scsy"
+#include "lib_set.scsy"
+#include "meta_info.scsy"
+
+program(init_op,
+[[
+	// Вызываемая SCP-программа
+	calculation;	
+	// Ключевой узел, обозначающий инициированный вопрос
+	q_initiated;
+	// Событие, на которое реагирует обработчик(проведение выходящей дуги из узла)
+	catch_output_arc;
+]],
+[{
+}],
+{[
+]}
+)
+// Установка обработчика события на проведение дуги  из узла "запрос вычисления формулы" 
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: calculation,
+	3_: fixed_: {1_: q_initiated}
+])
+
+return()
+	
+end
+
+procedure(calculation,
+[[
+	// Ключевой узел, обозначающий запрос
+	q_calculation;
+	
+	// Атрибут, обозначающий, что выражение подставлено в формулу
+	rrel_expression_is_substituted;
+	
+	// Атрибут, обозначающий, что выражение не подставлено в формулу
+	rrel_expression_isnt_substituted;
+
+	// Атрибут присутствия ответа
+	rrel_answer_is_present;
+	
+	// Атрибут отсутствия ответа
+	rrel_answer_is_absent;
+	
+	// Атрибут того, что операция выполнилась
+	rrel_operation_is_over;
+
+	// Ключевой узел отношения сложения в базе знаний
+	nrel_addition;
+	
+	// Ключевой узел отношения умножения в базе знаний
+	nrel_multiplication;
+	
+	// Ключевой узел отношения возведения в степень в базе знаний
+	nrel_exponention;
+	
+	// Ключевой узел, обозначающий инициированный вопрос
+	q_initiated;
+	
+	// Ключевой узел, обозначающий вопрос
+	question;
+	
+	// Ключевой узел запроса операции суммы
+	q_addition;
+	
+	// Ключевой узел запроса операции произведения
+	q_multiplication;
+	
+	// Ключевой узел запроса операции возведения в степень
+	q_exponention;
+	
+	// Узел, содержимым которого является число 0
+	zero =n= 0;
+	
+	// Процедура поиска значения величины
+	search_quantity_value;
+	
+	// Процедура для генерации ответа
+	answer_make;
+	
+	// Процедура удаление элемента из множества
+	set_rm_el;
+	
+	// Узел, содержимым которого является число 1
+	one =n= 1;
+	
+	// Процедура "склеивания" двух узлов в базе знаний
+	full_merge;	
+]],
+[{
+	handler, element,
+	arcFromRequest, arcFromQuestion,
+	location, segments,
+	calculationLink, deletedLink,
+	someRelationLink, someObject, someRelation,
+	someRelationLinksCopy, someRelationLinkCopy,
+	arcForChecking, arcVar, attributeArc, nodeVar, arc, nodeVar1,
+	valuesForMerge, valueNode,
+	formula, targetValue, checkedRelation,
+	formulaCopy, arifmeticOperationsCount, resultNode,
+	answer, temp, out_set
+	
+}],
+{[
+	1_: in_: handler, 
+	2_: in_: element, 
+	3_: in_: arcFromQuestion, 
+	4_: in_: calculationLink
+]}
+)
+
+
+// Получение сегмента, в котором находится узел "присутствует ответ_"
+sys_get_location([
+	1_: fixed_: calculationLink,
+	2_: assign_: location
+])
+
+// Установка найденного сегмента как основного
+sys_set_default_segment([
+	1_: fixed_: location
+])
+
+//Разворачивание установленного сегмента
+sys_spin_segment([
+	1_: fixed_: location,
+	2_: assign_: segments
+])
+
+// Проверяем, что в узел запроса проведена дуга из узла "запрос вычисления"
+searchElStr3([
+	1_: fixed_: q_calculation,
+	2_: assign_: const_: pos_: arc_: arcFromRequest,
+	3_: fixed_: calculationLink
+], , finishOperation)
+
+// Проверяем, что выражение подставлено. Если не подставлено, то прекращаем работу операции
+searchElStr5([
+	1_: fixed_: calculationLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: formula,
+	4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+	5_: fixed_: rrel_expression_isnt_substituted
+], finishOperation)
+
+// Проверяем, что выражение подставлено. Если не подставлено, то прекращаем работу операции
+searchElStr5([
+	1_: fixed_: calculationLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: formula,
+	4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+	5_: fixed_: rrel_expression_is_substituted
+], , finishOperation)
+
+printNl([
+	1_: fixed_: /"I have entered CALCULATION"/
+])
+
+// Удаляем дугу, которая идет к формуле
+eraseEl([
+	1_: fixed_: f_: arcVar
+])
+
+// Ищем узел, который обозначает множество величин, которые должны быть подставлены в формулу
+searchElStr3([
+	1_: fixed_: calculationLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: valuesForMerge
+], , exit)
+
+// Просматриваем объекты, которые должны быть подставлены в формулу
+label(viewValuesForMerge)
+
+	// Ищем объект, характеристику которого надо подставить в формулу
+	searchElStr3([
+		1_: fixed_: valuesForMerge,
+		2_: assign_: arc_: const_: pos_: actual_: arcVar,
+		3_: assign_: node_: const_: someObject
+	], , formulaCalculation)
+	
+	// Удаляем дугу из множества подставляемых в формулу объектов
+	eraseEl([
+		1_: fixed_: arcVar
+	])
+	
+	// Делаем копию всех связок отношений, первым кортежем которых будет являться найденный объект
+	searchSetStr5([
+		1_: assign_: node_: const_: someRelationLink,
+		2_: assign_: arc_: const_: pos_: actual_: arcVar,
+		3_: fixed_: someObject,
+		4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+		5_: fixed_: 1_,
+		set1_: assign_: const_: node_: someRelationLinksCopy
+	])
+	
+	// Проверяем все связки на принадлежность к контуру
+	label(findLinkNotInFormula)
+		
+		// Ищем очередную связку
+		searchElStr3([
+			1_: fixed_: someRelationLinksCopy,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: const_: node_: someRelationLink
+		], , formulaCalculation )
+		
+		//  Удаляем дугу к очередной связке
+		eraseEl([
+			1_: fixed_: f_: arcVar
+		])
+
+		// Проверяем, что данная связка принадлежит контуру.
+		searchElStr3([
+			1_: fixed_: formula,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: someRelationLink
+		], findLinkNotInFormula)
+		
+		
+			searchSetStr3([
+				1_: assign_: const_: node_: temp,
+				2_: assign_: const_: pos_: arc,
+				3_: fixed_: someRelationLink,
+				set1_: assign_: out_set
+			])
+			label(next_rel)
+			ifVarAssign([1_: checkedRelation],,noerase)
+			eraseElStr3([
+				1_: fixed_: out_set,
+				2_: assign_: const_: pos_: f_: arc,
+				3_: fixed_: checkedRelation
+			])
+			label(noerase)
+				searchElStr3([
+					1_: fixed_: out_set,
+					2_: assign_: const_: pos_: arc,
+					3_: assign_: node_: const_: checkedRelation
+				])
+				ifCoin([1_: stype_sheaf, 2_: checkedRelation],next_rel)
+				
+				//#printEl([
+					//#1_: checkedRelation
+				//#])
+		
+		
+		// Находим отношение, которому принадлежит найденная связка
+		//#searchElStr3([
+			//1_: assign_: const_: node_: checkedRelation,
+			//2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			//3_: fixed_: someRelationLink
+		//])
+		
+		// Проверяем, что найденное отношение находится в контуре
+		searchElStr3([
+			1_: fixed_: formula,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: checkedRelation
+		], , findLinkNotInFormula)
+		
+	searchElStr5([
+			1_: fixed_: someRelationLink,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: const_: node_: valueNode,
+			4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+			5_: fixed_: 2_
+	])
+	
+	
+	searchSetStr3([
+		1_: fixed_: checkedRelation,
+		2_: assign_: arc_: const_: pos_: actual_: arcVar,
+		3_: assign_: node_: const_: someRelationLink,
+		set3_: assign_: node_: const_: someRelationLinkCopy
+	])
+	
+	label(someRelationLinksView)
+		
+		searchElStr3([
+			1_: fixed_: someRelationLinkCopy,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: node_: const_: someRelationLink
+		])
+		
+		eraseEl([
+			1_: fixed_: arcVar
+		])
+		
+		searchElStr3([
+			1_: fixed_: formula,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: someRelationLink
+		], , someRelationLinksView)
+		
+		
+		searchElStr5([
+			1_: fixed_: someRelationLink,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: const_: node_: nodeVar,
+			4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+			5_: fixed_: 2_
+		])
+		
+		callReturn([
+			1_: fixed_: full_merge,
+			2_: fixed_: {[
+				1_: nodeVar,
+				2_: valueNode
+			]}
+		])
+			
+	label(eraseCopy)
+		eraseEl([
+			1_: fixed_: f_: someRelationLinksCopy
+		], viewValuesForMerge, viewValuesForMerge)
+
+		
+
+label(formulaCalculation)
+
+// Создаем копию формулы для очередного просмотра
+label(calculationNotSuccess)
+
+	// Делаем копию формулы
+	searchSetStr3([
+		1_: fixed_: formula,
+		2_: assign_: arc_: const_: pos_: actual_: arcVar,
+		3_: assign_: node_: const_: nodeVar1,
+		set3_: assign_: const_: node_: formulaCopy
+	])
+	
+	// Обнуляем число арифметических операций в формуле
+	add([
+		1_: assign_: node_: const_: arifmeticOperationsCount,
+		2_: fixed_: zero,
+		3_: fixed_: zero
+	])
+	
+	// Удаляем дуги из атрибута "операция выполнилась_"
+	label(deleteArcsFromOperationIsOver)
+
+		// Ищем дугу, которая выходит из атрибута "операция выполнилась_"
+		searchElStr3([
+			1_: fixed_: rrel_operation_is_over,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: arc_: const_: pos_: actual_: attributeArc
+		], , deleteArcsEnd )
+
+		// Удаляем найденную дугу
+		eraseEl([
+			1_: fixed_: arcVar
+		], deleteArcsFromOperationIsOver)
+
+	// Заканчиваем просмотр дуг из атрибута "операция выполнилась_"
+	label(deleteArcsEnd)
+
+	// Просматриваем формулу для подсчета целевой величины
+	label(formulaView)
+
+		// Просматриваем очередной узел формулы
+		searchElStr3([
+			1_: fixed_: formulaCopy,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: node_: const_: nodeVar
+		], , checkResult)
+
+		// Удаляем дугу к очередному узлу
+		eraseEl([
+			1_: fixed_: f_: arcVar
+		])
+
+		// Если найденный узел является связкой операции суммы, то инициируем операцию суммы
+		searchElStr3([
+			1_: fixed_: nrel_addition,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		], makeAddition )
+
+		// Если найденный узел является связкой операции произведения, то инициируем операцию произведения
+		searchElStr3([
+			1_: fixed_: nrel_multiplication,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		], makeMultiplication )
+
+		// Если найденный узел является связкой операции возведения в степень, то инициируем операцию возведения в степень
+		searchElStr3([
+			1_: fixed_: nrel_exponention,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		], makeExponention, formulaView )
+
+	label(makeAddition)
+
+		// Инициируем выполнение операции суммы
+		// Проводим дугу из запроса вычисления суммы
+		genElStr3([
+			1_: fixed_: q_addition,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+		// Проводим дугу из узла "вопрос"
+		genElStr3([
+			1_: fixed_: question,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+		// Проводим дугу из узла "инициированный вопрос"
+		genElStr3([
+			1_: fixed_: q_initiated,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+
+		// Ждем пока операция сложения завершится
+		label(waitingForAddition)
+		
+			sys_wait([
+				1_: fixed_: catch_output_arc,
+				2_: fixed_: {1_: rrel_operation_is_over}
+			])
+		// Увеличиваем счетчик арифметических операций на единицу
+		add([
+			1_: fixed_: arifmeticOperationsCount,
+			2_: fixed_: arifmeticOperationsCount,
+			3_: fixed_: one
+		])
+		
+		// Ищем атрибут успешного завершения операции
+		// Если он найлен, то удаляем связку отношения сложения, чтобы в дальнейшем не рассматривать
+		// Если не найден, то продолжаем просмотр формулы
+		searchElStr5([
+			1_: fixed_: q_addition,
+			2_: assign_: arc_: const_: pos_: actual_: arc,
+			3_: fixed_: nodeVar,
+			4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+			5_: fixed_: rrel_answer_is_present
+		], deleteAdditionLink, formulaView)
+
+		// Удаление связки отношения сложения и множества слагаемых
+		label(deleteAdditionLink)
+			
+			printNl([1_: /"Success addition"/])
+			
+			//  Находим множество слагаемых
+			searchElStr5([
+				1_: fixed_: nodeVar,
+				2_: assign_: arc_: const_: pos_: actual_: arc,
+				3_: assign_: const_: node_: deletedLink,
+				4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+				5_: fixed_: 1_
+			])
+			
+			// Удаляем связку отношения сложения
+			eraseEl([
+				1_: fixed_: f_: nodeVar
+			])
+			
+			// Удаляем множество слагаемых
+			eraseEl([
+				1_: fixed_: f_: deletedLink
+			], calculationNotSuccess, calculationNotSuccess)
+			
+	label(makeMultiplication)
+
+		// Инициируем выполнение операции произведения
+		// Проводим дугу из запроса вычисления произведения
+		genElStr3([
+			1_: fixed_: q_multiplication,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+		// Проводим дугу из узла "вопрос"
+		genElStr3([
+			1_: fixed_: question,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+		// Проводим дугу из узла "инициированный вопрос"
+		genElStr3([
+			1_: fixed_: q_initiated,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		])
+
+		// Ждем пока операция умножения завершится
+		label(waitingForMultiplication)
+			sys_wait([
+				1_: fixed_: catch_output_arc,
+				2_: fixed_: {1_: rrel_operation_is_over}
+			])
+		// Увеличиваем счетчик арифметических операций на единицу
+		add([
+			1_: fixed_: arifmeticOperationsCount,
+			2_: fixed_: arifmeticOperationsCount,
+			3_: fixed_: one
+		])
+		
+		// Ищем атрибут успешного завершения операции
+		// Если он найлен, то удаляем связку отношения умножения, чтобы в дальнейшем не рассматривать
+		// Если не найден, то продолжаем просмотр формулы
+		searchElStr5([
+			1_: fixed_: q_multiplication,
+			2_: assign_: arc_: const_: pos_: actual_: arc,
+			3_: fixed_: nodeVar,
+			4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+			5_: fixed_: rrel_answer_is_present
+		], deleteMultiplicationLink, formulaView)
+
+		// Удаление связки отношения сложения и множества множителей
+		label(deleteMultiplicationLink)
+			
+			printNl([1_: /"Success multiplication"/])
+			
+			//  Находим множество множителей
+			searchElStr5([
+				1_: fixed_: nodeVar,
+				2_: assign_: arc_: const_: pos_: actual_: arc,
+				3_: assign_: const_: node_: deletedLink,
+				4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+				5_: fixed_: 1_
+			])
+			
+			// Удаляем связку отношения умножения
+			eraseEl([
+				1_: fixed_: f_: nodeVar
+			])
+			
+			// Удаляем множество множителей
+			eraseEl([
+				1_: fixed_: f_: deletedLink
+			], calculationNotSuccess, calculationNotSuccess)
+			
+	label(makeExponention)
+
+		// Инициируем выполнение операции возведение в степень
+		// Проводим дугу из запроса вычисления степени
+		genElStr3([
+			1_: fixed_: q_exponention,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+		// Проводим дугу из узла "вопрос"
+		genElStr3([
+			1_: fixed_: question,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+		// Проводим дугу из узла "инициированный вопрос"
+		genElStr3([
+			1_: fixed_: q_initiated,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+		// Ждем пока операция умножения завершится
+		label(waitingForExponention)
+		//#printNl([1_: /"EXP WAIT START"/])
+			// Ищем атрибут завершения операции
+			sys_wait([
+				1_: fixed_: catch_output_arc,
+				2_: fixed_: {1_: rrel_operation_is_over}
+			])
+		//#printNl([1_: /"EXP WAIT END"/])
+		// Увеличиваем счетчик арифметических операций на единицу
+		add([
+			1_: fixed_: arifmeticOperationsCount,
+			2_: fixed_: arifmeticOperationsCount,
+			3_: fixed_: one
+		])
+			
+		// Ищем атрибут успешного завершения операции
+		// Если он найлен, то удаляем связку отношения возведения в степень, чтобы в дальнейшем не рассматривать
+		// Если не найден, то продолжаем просмотр формулы
+		searchElStr5([
+			1_: fixed_: q_exponention,
+			2_: assign_: arc_: const_: pos_: actual_: arc,
+			3_: fixed_: nodeVar,
+			4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+			5_: fixed_: rrel_answer_is_present
+		], deleteExponentionLink, formulaView)
+
+		// Удаление связки отношения возведения в степень
+		label(deleteExponentionLink)
+		
+			printNl([1_: /"Success exponention"/])
+			
+			// Удаляем связку отношения возведения в степень
+			eraseEl([
+				1_: fixed_: f_: nodeVar
+			], calculationNotSuccess, calculationNotSuccess)
+
+// Проверка того, успешно ли завершилась операция
+label(checkResult)
+
+	// Если число арифметических операций в формуле больше нуля, то формула не посчитана
+	// В противном случае формула успешно посчитана
+	ifGr([
+		1_: fixed_: arifmeticOperationsCount,
+		2_: fixed_: zero
+	], notSuccessResult)
+
+// Вычисление формулы завершилось успешно
+label(successResult)
+	
+	// Удаляем копию формулы
+	eraseEl([
+		1_: fixed_: f_: formulaCopy
+	])
+
+	//#printNl([1_: /"Answer is present"/])
+
+	// Генерируем факт присутствия ответа
+	genElStr5([
+		1_: fixed_: q_calculation,
+		2_: fixed_: arcFromRequest,
+		3_: fixed_: calculationLink,
+		4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+		5_: fixed_: rrel_answer_is_present
+	])
+
+	// Генерируем узел для вывода ответа
+	genEl([
+		1_: assign_: const_: node_: answer
+	])
+	
+	// Добавляем в ответ узел "присутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: rrel_answer_is_present
+	], exit, exit)
+	
+label(notSuccessResult)
+
+	// Удаляем копию формулы
+	eraseEl([
+		1_: fixed_: f_: formulaCopy
+	])
+
+	//#printNl([1_: /"Answer is absent"/])
+	// Генерируем факт отсутствия ответа
+	genElStr5([
+		1_: fixed_: q_calculation,
+		2_: fixed_: arcFromRequest,
+		3_: fixed_: calculationLink,
+		4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+		5_: fixed_: rrel_answer_is_absent
+	])
+	
+	// Генерируем узел для вывода ответа
+	genEl([
+		1_: assign_: const_: node_: answer
+	])
+	
+	// Добавляем в ответ узел "отсутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: rrel_answer_is_absent
+	], exit, exit)
+
+label(exit)
+	
+	// Добавляем в ответ узел запроса степени
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: q_calculation
+	])
+	
+	// Добавляем в ответ дугу из узла запроса степени
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: arcFromRequest
+	])
+	
+	// Добавляем в ответ связку запроса вычисления
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: calculationLink
+	])
+	
+	// Добавляем в ответ дугу из узла "присутствует ответ_" или из узла "отсутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: attributeArc
+	])
+	
+	// Добавляем в связку вопроса формулу
+	genElStr3([
+		1_: fixed_: calculationLink,
+		2_: assign_: const_: pos_: arc_: arc,
+		3_: fixed_: formula
+	])
+	
+	// Добавляем в ответ дугу к формуле
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: arc
+	])
+	
+	// Добавляем в ответ формулу
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: formula
+	])
+	
+	// Генерация ответа операции
+	callReturn([
+		1_:	fixed_: answer_make,
+		2_:	fixed_: {[
+			1_: calculationLink,
+			2_: answer
+		]}
+	])
+	
+	//#printNl([
+	//#	1_: fixed_: /"Calculation answer is"/
+	//#])
+	
+	//#printEl([
+		//#1_: answer
+	//#])
+
+label(finishOperation)
+
+	printNl([
+		1_: fixed_: /"I have exited CALCULATION"/
+	])
+
+return()
+	
+end

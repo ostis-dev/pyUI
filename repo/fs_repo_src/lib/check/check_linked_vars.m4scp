@@ -1,0 +1,143 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: check_linked_vars.m4scp
+// Description:
+// Файл содержит процедуру обеспечения неявности связывания переменных
+// 1-й аргумент - знак отношения
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 11.01.11
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "lib_set.scsy"
+
+procedure(check_linked_vars,
+[[
+	rel=rel_copy;
+	merge=set_merge;
+]],
+[{	
+	arc,arc1,a1,a2,b,c,link1,link2,set1,set2,erSet
+}],
+{[
+]}
+)
+
+searchSetStr3([
+	1_: fixed_: rel,
+	2_: assign_: arc,
+	3_: assign_: a1,
+	set3_: assign_: set1
+])
+label(next1)
+ifVarAssign([1_: link1],,no_erase1)
+eraseElStr3([
+	1_: fixed_: set1,
+	2_: assign_: f_: arc,
+	3_: fixed_: link1
+])
+label(no_erase1)
+
+searchElStr3([
+	1_: fixed_: set1,
+	2_: assign_: arc,
+	3_: assign_: link1
+],,exit)
+
+searchSetStr3([
+	1_: fixed_: rel,
+	2_: assign_: arc,
+	3_: assign_: a2,
+	set3_: assign_: set2
+])
+
+label(next2)
+ifVarAssign([1_: link2],,no_erase2)
+eraseElStr3([
+	1_: fixed_: set2,
+	2_: assign_: f_: arc,
+	3_: fixed_: link2
+])
+label(no_erase2)
+searchElStr3([
+	1_: fixed_: set2,
+	2_: assign_: arc,
+	3_: assign_: link2
+],,next1)
+//#Тело цикла
+ifCoin([1_: fixed_: link1,2_: fixed_: link2],next2)
+searchElStr5([
+	1_: fixed_: link1,
+	2_: assign_: arc,
+	3_: assign_: a1,
+	4_: assign_: arc1,
+	5_: fixed_: 1_
+])
+searchElStr5([
+	1_: fixed_: link2,
+	2_: assign_: arc,
+	3_: assign_: a2,
+	4_: assign_: arc1,
+	5_: fixed_: 1_
+])
+ifCoin([1_: fixed_: a1,2_: fixed_: a2],,next2)
+searchElStr5([
+	1_: fixed_: link1,
+	2_: assign_: arc,
+	3_: assign_: b,
+	4_: assign_: arc1,
+	5_: fixed_: 2_
+])
+searchElStr5([
+	1_: fixed_: link2,
+	2_: assign_: arc,
+	3_: assign_: c,
+	4_: assign_: arc1,
+	5_: fixed_: 2_
+])
+genEl([1_: node_: const_: assign_: erSet])
+callReturn([
+	1_: fixed_: merge,
+	2_: fixed_: {[
+		1_: fixed_: c,
+		2_: fixed_: b
+	]}
+])
+eraseEl([1_: c],next2)
+
+label(exit)
+
+ifVarAssign([1_: erSet],,exit_at_all)
+
+eraseSetStr3([
+	1_: fixed_: rel,
+	2_: assign_: arc,
+	3_: assign_: f_: descr
+])
+eraseEl([1_: erSet])
+label(exit_at_all)
+return()
+end

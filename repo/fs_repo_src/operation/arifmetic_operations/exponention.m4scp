@@ -1,0 +1,489 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modfirst_ely
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  first_el not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: exponention.m4scp
+// Description: Файл содержит операцию возведения в степень
+/////////////////////////////////////////////////////
+// 		Author: Sergei Zalivako
+//        Date: 24.01.2011 
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "com_keynodes.scsy"
+#include "lib_search.scsy"
+#include "lib_check.scsy"
+#include "lib_gen.scsy"
+#include "lib_answer.scsy"
+#include "lib_set.scsy"
+
+program(init_op,
+[[
+	// Вызываемая SCP-программа
+	exponention;
+	// Ключевой узел, обозначающий инициированный вопрос
+	q_initiated;
+	// Событие, на которое реагирует обработчик(проведение выходящей дуги из узла)
+	catch_output_arc;
+]],
+[{
+}],
+{[
+]}
+)
+// Установка обработчика события на проведение дуги  из узла "инициированный запрос" 
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: exponention,
+	3_: fixed_: {1_: q_initiated}
+])
+
+return()	
+end
+
+
+procedure(exponention,
+[[
+	// Ключевой узел, обозначающий запрос
+	q_exponention;
+
+	// Атрибут присутствия ответа
+	rrel_answer_is_present;
+	
+	// Атрибут того, что операция выполнилась
+	rrel_operation_is_over;
+
+	// Ключевой узел отношения возведения в степень в базе знаний
+	nrel_exponention;
+	
+	// Атрибут основания степени
+	rrel_exp_base;
+	
+	// Атрибут показателя степени
+	rrel_exp_exponent;
+	
+	// Атрибут значения возведения в степень
+	rrel_exp_degree;
+	
+	// Процедура проверки единиц измерения
+	check_unit_of_measure;
+	
+	// Процедура поиска значения величины
+	search_quantity_value;
+	
+	// Процедура генерации значения величины
+	gen_quantity_value;
+	
+	// Атрибут для обозначения десятичного числа
+	rrel_decimal_number;
+	
+	// Процедура для генерации ответа
+	answer_make;
+	
+	// Процедура удаление элемента из множества
+	set_rm_el;
+	
+	// Узел, содержимым которого является число 0
+	zero =n= 0;
+	
+	// Узел, содержимым которого является число 1
+	one =n= 1;
+	
+]],
+[{
+	handler, element,
+	arcFromRequest, arcFromQuestion,
+	location, segments, checkingNode,
+	exponentionLink, exponentionLinkCopy,
+	arcForChecking, arcVar, attributeArc, nodeVar,
+	base, exponent, degree, degreeForRoot,
+	baseValue, exponentValue, degreeValue,
+	answer
+	
+}],
+{[
+	1_: in_: handler, 
+	2_: in_: element, 
+	3_: in_: arcFromQuestion, 
+	4_: in_: exponentionLink 
+]}
+)
+// Получение сегмента, в котором узел связки умножения
+sys_get_location([
+	1_: fixed_: exponentionLink,
+	2_: assign_: location
+])
+
+// Установка найденного сегмента как основного
+sys_set_default_segment([
+	1_: fixed_: location
+])
+
+//Разворачивание установленного сегмента
+sys_spin_segment([
+	1_: fixed_: location,
+	2_: assign_: segments
+])
+
+// Проверяем, что в узел запроса проведена дуга из узла "запрос степени"
+searchElStr3([
+	1_: fixed_: q_exponention,
+	2_: assign_: const_: pos_: arc_: arcFromRequest,
+	3_: fixed_: exponentionLink
+], , finishOperation)
+
+// Проверяем, что связка, в которую была проведена дуга из запроса явлется именно связкой отношения возведения в степень
+searchElStr3([
+	1_: fixed_: nrel_exponention,
+	2_: assign_: const_: pos_: actual_: arc_: arcForChecking,
+	3_: fixed_: exponentionLink
+])
+
+// Поиск связки отношения "возведение в степень*" с атрибутом "присутствует ответ_"
+// Если такой атрибут есть, то работа программы прекращается
+searchElStr5([
+	1_: fixed_: q_exponention,
+	2_: fixed_: arcFromRequest,
+	3_: fixed_: exponentionLink,
+	4_: assign_: arc_: const_: pos_: actual_: arcVar,
+	5_: fixed_: rrel_answer_is_present
+], exit)
+
+// Делаем копию связки отношения возведения в степень для проверки единиц измерения входящих в него компонентов
+searchSetStr3([
+	1_: fixed_: exponentionLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: nodeVar,
+	set3_: assign_: node_: const_: exponentionLinkCopy
+])
+
+// Проверяем единицы измерения всех компонентов отношения возведения в степень
+callReturn([
+	1_: fixed_: check_unit_of_measure,
+	2_: fixed_: {[
+		1_: exponentionCopy,
+		2_: checkingNode
+	]}
+])
+
+// Проверяем результат выполнения процедуры проверки единиц измерения
+ifVarAssign([
+	1_: checkingNode
+], , exit)
+
+// Ищем основание степени
+searchElStr5([
+	1_: fixed_: exponentionLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: baseValue,
+	4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+	5_: fixed_: rrel_exp_base
+], , exit)
+
+// Находим значение основания степени
+callReturn([
+	1_: fixed_: search_quantity_value,
+	2_: fixed_: {[
+		1_: baseValue,
+		2_: base
+	]}
+])
+
+// Проверяем значение основания степени
+ifVarAssign([
+	1_: base
+], withoutBaseGeneration)
+
+// Генерируем значение основания степени
+callReturn([
+	1_: fixed_: gen_quantity_value,
+	2_: fixed_: {[
+		1_: baseValue,
+		2_: rrel_decimal_number,
+		3_: base
+	]}
+])
+
+// Продолжение операции без генерации конструкции для основания степени
+label(withoutBaseGeneration)
+
+// Ищем показатель степени
+searchElStr5([
+	1_: fixed_: exponentionLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: exponentValue,
+	4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+	5_: fixed_: rrel_exp_exponent
+], , exit)
+
+// Находим значение показателя степени
+callReturn([
+	1_: fixed_: search_quantity_value,
+	2_: fixed_: {[
+		1_: exponentValue,
+		2_: exponent
+	]}
+])
+
+// Проверяем значение показателя степени
+ifVarAssign([
+	1_: exponent
+], withoutExponentGeneration)
+
+// Генерируем значение показателя степени
+callReturn([
+	1_: fixed_: gen_quantity_value,
+	2_: fixed_: {[
+		1_: exponentValue,
+		2_: rrel_decimal_number,
+		3_: exponent
+	]}
+])
+
+// Продолжение операции без генерации конструкции для показателя степени
+label(withoutExponentGeneration)
+
+// Ищем значение степени
+searchElStr5([
+	1_: fixed_: exponentionLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: degreeValue,
+	4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+	5_: fixed_: rrel_exp_degree
+], , exit)
+
+// Находим значение показателя степени
+callReturn([
+	1_: fixed_: search_quantity_value,
+	2_: fixed_: {[
+		1_: degreeValue,
+		2_: degree
+	]}
+])
+
+// Проверяем значение степени
+ifVarAssign([
+	1_: degree
+], withoutDegreeGeneration)
+
+// Генерируем значение степени
+callReturn([
+	1_: fixed_: gen_quantity_value,
+	2_: fixed_: {[
+		1_: degreeValue,
+		2_: rrel_decimal_number,
+		3_: degree
+	]}
+])
+
+// Продолжение операции без генерации конструкции для значения степени
+label(withoutDegreeGeneration)
+
+// Если узел основания степени не имеет содержимого, то вычисляем 
+// корень степени показателя из значения степени
+ifFormCont([
+	1_: fixed_: base
+], , baseCalculation)
+
+// Если узел показателя степени не имеет содержимого, то вычисляем 
+// логарифм значения степени по основанию
+ifFormCont([
+	1_: fixed_: exponent
+], , exponentCalculation)
+
+// Если узел значения степени не имеет содержимого, то вычисляем 
+// основание в степени показателя 
+ifFormCont([
+	1_: fixed_: degree
+], exit , degreeCalculation)
+
+// Вычисляем корень степени показателя из значения степени
+label(baseCalculation)
+
+	// Проверяем, что узел показателя степени не имеет пустого содержимого
+	ifFormCont([
+		1_: fixed_: exponent
+	], , exit)
+
+	// Проверяем, что узел значения степени не имеет пустого содержимого
+	ifFormCont([
+		1_: fixed_: degree
+	], , exit)
+
+	// Вычисляем значение показателя степени для вычисления корни
+	// Корень n-й степени вычисляется как a^(1/n)
+	div([
+		1_: assign_: node_: const_: degreeForRoot,
+		2_: fixed_: one,
+		3_: fixed_: exponent
+	])
+
+	// Вычисляем основание степени, возводя значение степени в степень, обратную показателю
+	pow([
+		1_: fixed_: base,
+		2_: fixed_: degree,
+		3_: fixed_: degreeForRoot
+	], calculationSuccess)
+	
+	//#printNl([
+	//	1_: fixed_: base
+	//], calculationSuccess)
+
+// Вычисляем логарифм значения степени по основанию
+label(exponentCalculation)
+
+	// Проверяем, что узел основания степени не имеет пустого содержимого
+	ifFormCont([
+		1_: fixed_: base
+	], , exit)
+
+	// Проверяем, что узел значения степени не имеет пустого содержимого
+	ifFormCont([
+		1_: fixed_: degree
+	], , exit)
+
+	// ============================== НАДО ВЫЧИСЛИТЬ ЛОГАРИФМ!!!!! В SCP его пока нет ==============================================
+	nop(exit)
+
+// Вычисляем основание в степени показателя
+label(degreeCalculation)
+
+	// Проверяем, что узел основания степени не имеет пустого содержимого
+	ifFormCont([
+		1_: fixed_: base
+	], , exit)
+
+	// Проверяем, что узел показателя степени не имеет пустого содержимого
+	ifFormCont([
+		1_: fixed_: exponent
+	], , exit)
+
+	// Вычисляем значение степени, возводя основание в степень показателя
+	pow([
+		1_: fixed_: degree,
+		2_: fixed_: base,
+		3_: fixed_: exponent
+	], calculationSuccess)
+	
+	//#printNl([
+	//	1_: fixed_: degree
+	//], calculationSuccess)
+
+// Вычисление осуществлено успешно
+label(calculationSuccess)
+	
+	// Генерируем факт присутствия ответа
+	genElStr5([
+		1_: fixed_: q_exponention,
+		2_: fixed_: arcFromRequest,
+		3_: fixed_: exponentionLink,
+		4_: assign_: arc_: const_: pos_: actual_: arcVar,
+		5_: fixed_: rrel_answer_is_present
+	])
+
+label(exit)
+
+// Формирование ответа на запрос степени
+label(makingAnswer)
+
+	// Генерируем узел для вывода ответа
+	genEl([
+		1_: assign_: const_: node_: answer
+	])
+		
+	// Добавляем в ответ узел запроса степени
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: q_exponention
+	])
+	
+	// Добавляем в ответ дугу из узла запроса степени
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: arcFromRequest
+	])
+	
+	// Добавляем в ответ связку запроса степени
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: exponentionLink
+	])
+	
+	// Если дуга из узла "присутствует ответ_" не проводилась
+	ifVarAssign([
+		1_: attributeArc
+	], , withoutAnswerIsPresent)
+	
+	// Добавляем в ответ узел "присутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: rrel_answer_is_present
+	])
+	
+	// Добавляем в ответ дугу из узла "присутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: attributeArc
+	])
+	
+// Создание ответа операции
+label(withoutAnswerIsPresent)
+	
+	// Генерация ответа операции
+	callReturn([
+		1_:	fixed_: answer_make,
+		2_:	fixed_: {[
+			1_: exponentionLink,
+			2_: answer
+		]}
+	])
+	
+	//#printNl([
+		//#1_: fixed_: /"Exponention answer is"/
+	//#])
+	
+	//#printEl([
+	//#	1_: answer
+	//#])
+
+	// Генерируем факт выполнения операции
+	genElStr5([
+		1_: fixed_: q_exponention,
+		2_: fixed_: arcFromRequest,
+		3_: fixed_: exponentionLink,
+		4_: assign_: arc_: const_: pos_: actual_: arcVar,
+		5_: fixed_: rrel_operation_is_over
+	])
+	
+label(finishOperation)
+
+	
+
+return()
+	
+end

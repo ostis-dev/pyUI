@@ -1,0 +1,68 @@
+import * from "scg_base.material"
+
+// pair/pos/time/var
+material scg_pair/pos/time/orient/var_Normal : scg_Normal
+{
+	technique low_2d
+	{
+		pass 0 : scg_pair_pass2d_normal
+		{
+			set $tex_name "scg_pair_pos_time_var.png"
+		}
+	}
+}
+
+material scg_pair/pos/time/orient/var_Selected : scg_Selected
+{
+	technique low_2d
+	{
+		pass 0 : scg_pair_pass2d_selected
+		{
+			set $tex_name "scg_pair_pos_time_var.png"
+		}
+	}
+}
+
+material scg_pair/pos/time/orient/var_Highlighted : scg_Highlighted
+{
+	technique low_2d
+	{
+		pass 0 : scg_pair_pass2d_highlighted
+		{
+			set $tex_name "scg_pair_pos_time_var.png"
+		}
+	}
+}
+
+material scg_pair/pos/time/orient/var_WasInMemory : scg_WasInMemory
+{
+	technique low_2d
+	{
+		pass 0 : scg_pair_pass2d_wasinmemory
+		{
+			set $tex_name "scg_pair_pos_time_var.png"
+		}
+	}
+}
+
+material scg_pair/pos/time/orient/var_NewInMemory : scg_NewInMemory
+{
+	technique low_2d
+	{
+		pass 0 : scg_pair_pass2d_newinmemory
+		{
+			set $tex_name "scg_pair_pos_time_var.png"
+		}
+	}
+}
+
+material scg_pair/pos/time/orient/var_Merged : scg_Merged
+{
+	technique low_2d
+	{
+		pass 0 : scg_pair_pass2d_merged
+		{
+			set $tex_name "scg_pair_pos_time_var.png"
+		}
+	}
+}

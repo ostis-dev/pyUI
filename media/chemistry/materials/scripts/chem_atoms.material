@@ -1,0 +1,52 @@
+material chemistry_atom_H
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.5 0.5 0.5
+			depth_write on
+			shading phong
+		}
+	}
+}
+
+material chemistry_atom_O
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.5 0.0 0.0 
+			depth_write on
+		}
+	}
+}
+
+material chemistry_atom_C
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 1.0 0.5 0.25
+			depth_write on
+		}
+	}
+}
+
+material chemistry_atom_N
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.5 0.0 1.0
+			depth_write on
+		}
+	}
+}

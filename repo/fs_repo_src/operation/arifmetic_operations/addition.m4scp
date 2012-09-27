@@ -1,0 +1,648 @@
+
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modfirst_ely
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  first_el not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: addiotion.m4scp
+// Description: Файл содержит операцию сложения
+/////////////////////////////////////////////////////
+// 		Author: Sergei Zalivako
+//        Date: 24.01.2011 
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "com_keynodes.scsy"
+#include "lib_search.scsy"
+#include "lib_check.scsy"
+#include "lib_gen.scsy"
+#include "lib_answer.scsy"
+#include "lib_set.scsy"
+
+
+program(init_op,
+[[
+	// Вызываемая SCP-программа
+	addition;	
+	// Ключевой узел, обозначающий инициированный вопрос
+	q_initiated;
+	// Событие, на которое реагирует обработчик(проведение выходящей дуги из узла)
+	catch_output_arc;
+]],
+[{
+}],
+{[
+]}
+)
+// Установка обработчика события на проведение дуги  из узла "инициированный запрос" 
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: addition,
+	3_: fixed_: {1_: q_initiated}
+])
+
+return()
+	
+end
+
+procedure(addition,
+[[
+	// Ключевой узел, обозначающий запрос
+	q_addition;
+
+	// Атрибут присутствия ответа
+	rrel_answer_is_present;
+	
+	// Атрибут того, что операция выполнилась
+	rrel_operation_is_over;
+
+	// Ключевой узел отношения сложения в базе знаний
+	nrel_addition;
+	
+	// Процедура проверки единиц измерения
+	check_unit_of_measure;
+	
+	// Процедура поиска значения величины
+	search_quantity_value;
+	
+	// Процедура генерации значения величины
+	gen_quantity_value;
+	
+	// Атрибут для обозначения десятичного числа
+	rrel_decimal_number;
+	
+	// Процедура для генерации ответа
+	answer_make;
+	
+	// Процедура удаление элемента из множества
+	set_rm_el;
+		
+	// Узел, содержимым которого является число 0
+	zero =n= 0;
+	
+	// Узел, содержимым которого является число 1
+	one =n= 1;
+	
+]],
+[{
+	handler, element,
+	arcFromRequest, arcFromQuestion, 
+	location, segments,
+	additionLink,
+	arcForChecking, arcVar, attributeArc, nodeVar, checkingNode,
+	sumResult, summandsLink, summandsLinkCopy, sumValue,
+	sumAccumulationNode, currentSummand, currentValue,
+	wrongSummandsCount,
+	difAccumulationNode, difValue,
+	answer
+}],
+{[
+	1_: in_: handler, 
+	2_: in_: element, 
+	3_: in_: arcFromQuestion, 
+	4_: in_: additionLink
+]}
+)
+// Получение сегмента, в котором находится узел связки запроса сложения
+sys_get_location([
+	1_: fixed_: additionLink,
+	2_: assign_: location
+])
+
+// Установка найденного сегмента как основного
+sys_set_default_segment([
+	1_: fixed_: location
+])
+
+//Разворачивание установленного сегмента
+sys_spin_segment([
+	1_: fixed_: location,
+	2_: assign_: segments
+])
+
+// Проверяем, что в узел запроса проведена дуга из узла "запрос сложения величин"
+searchElStr3([
+	1_: fixed_: q_addition,
+	2_: assign_: const_: pos_: arc_: arcFromRequest,
+	3_: fixed_: additionLink
+], , finishOperation)
+
+// Проверяем, что связка, в которую была проведена дуга из запроса явлется именно связкой отношения сложения
+searchElStr3([
+	1_: fixed_: nrel_addition,
+	2_: assign_: const_: pos_: actual_: arc_: arcForChecking,
+	3_: fixed_: additionLink
+])
+
+// Поиск связки отношения "сложение*" с атрибутом "присутствует ответ_"
+// Если такой атрибут есть, то работа программы прекращается
+searchElStr5([
+	1_: fixed_: q_addition,
+	2_: fixed_: arcFromRequest,
+	3_: fixed_: additionLink,
+	4_: assign_: arc_: const_: pos_: actual_: arcVar,
+	5_: fixed_: rrel_answer_is_present
+], exit)
+
+// Ищем узел, который является множеством слагаемых, входящих в сумму
+searchElStr5([
+	1_: fixed_: additionLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: summandsLink,
+	4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+	5_: fixed_: 1_
+], , exit)
+
+// Ищем узел, который должен содержать значение суммы
+searchElStr5([
+	1_: fixed_: additionLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: sumValue,
+	4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+	5_: fixed_: 2_
+], , exit)
+
+// Находим значение суммы
+callReturn([
+	1_: fixed_: search_quantity_value,
+	2_: fixed_: {[
+		1_: sumValue,
+		2_: sumResult
+	]}
+])
+
+// Проверяем значение суммы
+ifVarAssign([
+	1_: sumResult
+], withoutSumResultGeneration)
+
+// Генерируем значение суммы
+callReturn([
+	1_: fixed_: gen_quantity_value,
+	2_: fixed_: {[
+		1_: sumValue,
+		2_: rrel_decimal_number,
+		3_: sumResult
+	]}
+])
+
+// Продолжение операции без генерации конструкции для значения суммы
+label(withoutSumResultGeneration)
+
+// Делаем копию множества слагаемых
+searchSetStr3([
+	1_: fixed_: summandsLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: nodeVar,
+	set3_: assign_: const_: node_: summandsLinkCopy
+])
+
+// Проверяем единицы измерения всех слагаемых
+callReturn([
+	1_: fixed_: check_unit_of_measure,
+	2_: fixed_: {[
+		1_: summandsLinkCopy,
+		2_: checkingNode
+	]}
+])
+
+// Проверяем результат выполнения процедуры проверки единиц измерения
+ifVarAssign([
+	1_: checkingNode
+], , exit)
+
+// Делаем копию множества слагаемых в связи с тем, что предыдущая копия использовалась процедурой проверки единиц измерения
+searchSetStr3([
+	1_: fixed_: summandsLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: nodeVar,
+	set3_: assign_: const_: node_: summandsLinkCopy
+])
+
+// Если в узле суммы есть содержимое, то выполняем операцию суммы, в противном случае - разности
+ifFormCont([
+	1_: fixed_: sumResult
+], differenceOperation, additionOperation )
+
+// Выполнение операции суммы
+label(additionOperation)
+
+	// Обнуляем содержимое узла для накопления суммы
+	add([
+		1_: assign_: node_: const_: sumAccumulationNode,
+		2_: fixed_: zero,
+		3_: fixed_: zero
+	])
+
+	// Просматриваем узлы, являющиеся слагаемыми
+	label(summandsView)
+
+		// Находим очередное слагаемое из суммы
+		searchElStr3([
+			1_: fixed_: summandsLinkCopy,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: node_: const_: currentValue
+		], , additionOperationSuccess)
+
+		// Удаляем дугу к очередному слагаемому
+		eraseEl([
+			1_: fixed_: f_: arcVar
+		])
+		
+		// Находим значение очередного слагаемого
+		callReturn([
+			1_: fixed_: search_quantity_value,
+			2_: fixed_: {[
+				1_: currentValue,
+				2_: currentSummand
+			]}
+		])
+		
+		// Проверяем значение очередного слагаемого
+		ifVarAssign([
+			1_: currentSummand
+		], withoutCurrentSummandGeneration)
+		
+		// Генерируем значение очередного слагаемого
+		callReturn([
+			1_: fixed_: gen_quantity_value,
+			2_: fixed_: {[
+				1_: currentValue,
+				2_: rrel_decimal_number,
+				3_: currentSummand
+			]}
+		])
+
+		// Продолжение операции без генерации конструкции для значения очередного слагаемого
+		label(withoutCurrentSummandGeneration)
+
+		// Если узел не имеет содержимого, то заканчиваем обработку слагаемых
+		ifFormCont([
+			1_: fixed_: currentSummand
+		], , cleanCopiesAfterAddition)
+
+		// Добавляем текущее слагаемое в сумму
+		add([
+			1_: fixed_: sumAccumulationNode,
+			2_: fixed_: sumAccumulationNode,
+			3_: fixed_: currentSummand
+		], summandsView)
+
+		// Операция сложения завершилась успешно
+		label(additionOperationSuccess)
+
+			// Добавляем содержимое, накопленной суммы в узел, где хранится сумма
+			add([
+				1_: fixed_: sumResult,
+				2_: fixed_: zero,
+				3_: fixed_: sumAccumulationNode
+			])
+		
+			// Генерируем факт присутствия ответа
+			genElStr5([
+				1_: fixed_: q_addition,
+				2_: fixed_: arcFromRequest,
+				3_: fixed_: additionLink,
+				4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+				5_: fixed_: rrel_answer_is_present
+			])
+
+		// Удаляем созданные временные узлы
+		label(cleanCopiesAfterAddition)
+
+			// Удаляем узел, в котором накапливалась сумма
+			eraseEl([
+				1_: fixed_: f_: sumAccumulationNode
+			])
+
+			// Удаляем копию множества слагаемых
+			eraseEl([
+				1_: fixed_: f_: summandsLinkCopy
+			], exit, exit)
+
+// Выполнение операции разности
+label(differenceOperation)
+
+	// Обнуляем количество невычисленных слагаемых
+	add([
+		1_: assign_: node_: const_: wrongSummandsCount,
+		2_: fixed_: zero,
+		3_: fixed_: zero
+	])
+
+	// Просмотр слагаемых для нахождения того, которое не вычислено
+	label(wrongSummandsView)
+
+		// Находим очередное слагаемое из суммы
+		searchElStr3([
+			1_: fixed_: summandsLinkCopy,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: node_: const_: currentValue
+		], , makeDifference)
+
+		// Удаляем дугу к очередному слагаемому
+		eraseEl([
+			1_: fixed_: f_: arcVar
+		])
+		
+		// Находим значение очередного слагаемого
+		callReturn([
+			1_: fixed_: search_quantity_value,
+			2_: fixed_: {[
+				1_: currentValue,
+				2_: currentSummand
+			]}
+		])
+		
+		// Проверяем значение очередного слагаемого
+		ifVarAssign([
+			1_: currentSummand
+		], withoutCurrentSummandForDifGeneration)
+		
+		// Генерируем значение очередного слагаемого
+		callReturn([
+			1_: fixed_: gen_quantity_value,
+			2_: fixed_: {[
+				1_: currentValue,
+				2_: rrel_decimal_number,
+				3_: currentSummand
+			]}
+		])
+
+		// Продолжение операции без генерации конструкции для значения очередного слагаемого
+		label(withoutCurrentSummandForDifGeneration)
+	
+		// Если узел не имеет содержимого, то увеличиваем число слагаемых, содержимое которых не вычислено
+		ifFormCont([
+			1_: fixed_: currentSummand
+		], wrongSummandsView)
+
+		// Находим дугу от связки слагаемых к неизвестному слагаемому
+		searchElStr3([
+			1_: fixed_: summandsLink,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: currentValue
+		])
+
+		// Используя дугу, найденную в предыдущем операторе заносим невычисленное слагаемое в узел накопления разности
+		searchElStr3([
+			1_: fixed_: summandsLink,
+			2_: fixed_: arcVar,
+			3_: assign_: const_: node_: difValue
+		])
+		
+		// Находим значение узла накопления разности
+		callReturn([
+			1_: fixed_: search_quantity_value,
+			2_: fixed_: {[
+				1_: difValue,
+				2_: difAccumulationNode
+			]}
+		])
+		
+		// Проверяем значение узла накопления разности
+		ifVarAssign([
+			1_: difAccumulationNode
+		], withoutDifAccumulationNodeGeneration)
+		
+		// Генерируем значение узла накопления разности
+		callReturn([
+			1_: fixed_: gen_quantity_value,
+			2_: fixed_: {[
+				1_: difValue,
+				2_: rrel_decimal_number,
+				3_: difAccumulationNode
+			]}
+		])
+
+		// Продолжение операции без генерации конструкции для значения узла накопления разности
+		label(withoutDifAccumulationNodeGeneration)
+		
+		// Увеличиваем число слагаемых, содержимое которых не вычислено
+		add([
+			1_: fixed_: wrongSummandsCount,
+			2_: fixed_: wrongSummandsCount,
+			3_: fixed_: one
+		])
+
+		// Если число слагаемых, содержимое которых не вычислено больше 1, то прекращаем просмотр слагаемых, 
+		// В противном случае - продолжаем просмотр слагаемых
+		ifGr([
+			1_: fixed_: wrongSummandsCount,
+			2_: fixed_: one
+		], cleanCopiesAfterDifference, wrongSummandsView)
+
+	label(makeDifference)
+
+		// Проверяем, что есть хоть одно неизвестное слагаемое
+		ifEq([
+			1_: fixed_: wrongSummandsCount,
+			2_: fixed_: zero
+		], cleanCopiesAfterDifference)
+
+		// Делаем копию множества слагаемых
+		searchSetStr3([
+			1_: fixed_: summandsLink,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: node_: const_: nodeVar,
+			set3_: assign_: const_: node_: summandsLinkCopy
+		])
+
+		// Заносим в узел накопления разности сумму всех слагаемых
+		add([
+			1_: fixed_: difAccumulationNode,
+			2_: fixed_: sumResult,
+			3_: fixed_: zero
+		])
+
+		// Находим дугу, идущую от копии связки слагаемых к узлу накопления разности
+		searchElStr3([
+			1_: fixed_: summandsLinkCopy,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: difValue
+		])
+
+		// Удаляем найденную дугу
+		eraseEl([
+			1_: fixed_: f_: arcVar
+		])
+
+		// Просматриваем все вычитаемые
+		label(subtractsView)
+
+			// Находим дугу, идущую от копии связки слагаемых к узлу накопления разности
+			searchElStr3([
+				1_: fixed_: summandsLinkCopy,
+				2_: assign_: arc_: const_: pos_: actual_: arcVar,
+				3_: assign_: node_: const_: currentValue
+			], , differenceOperationSuccess)
+
+			// Удаляем найденную дугу
+			eraseEl([
+				1_: fixed_: f_: arcVar
+			])
+			
+			// Находим значение очередного слагаемого
+			callReturn([
+				1_: fixed_: search_quantity_value,
+				2_: fixed_: {[
+					1_: currentValue,
+					2_: currentSummand
+				]}
+			])
+			
+			// Проверяем значение очередного слагаемого
+			ifVarAssign([
+				1_: currentSummand
+			], withoutCurrentSummandForViewGeneration)
+			
+			// Генерируем значение очередного слагаемого
+			callReturn([
+				1_: fixed_: gen_quantity_value,
+				2_: fixed_: {[
+					1_: currentValue,
+					2_: rrel_decimal_number,
+					3_: currentSummand
+				]}
+			])
+
+			// Продолжение операции без генерации конструкции для значения очередного слагаемого
+			label(withoutCurrentSummandForViewGeneration)
+			
+			// Отнимаем текущее слагаемое от накопленной разности
+			sub([
+				1_: fixed_: difAccumulationNode,
+				2_: fixed_: difAccumulationNode,
+				3_: fixed_: currentSummand
+			], subtractsView)
+
+			label(differenceOperationSuccess)
+				
+				//#printNl([
+				//	1_: fixed_: difAccumulationNode
+				//])
+				
+				// Генерируем факт присутствия ответа
+				genElStr5([
+					1_: fixed_: q_addition,
+					2_: fixed_: arcFromRequest,
+					3_: fixed_: additionLink,
+					4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+					5_: fixed_: rrel_answer_is_present
+				])
+
+		label(cleanCopiesAfterDifference)
+
+			// Удаляем узел, в котором считалось число невычисленных слагаемых
+			eraseEl([
+				1_: fixed_: f_: wrongSummandsCount
+			])
+
+			// Удаляем копию множества слагаемых
+			eraseEl([
+				1_: fixed_: f_: summandsLinkCopy
+			], exit)
+
+label(exit)
+
+// Формирование ответа на запрос сложения величин
+label(makingAnswer)
+
+	// Генерируем узел для вывода ответа
+	genEl([
+		1_: assign_: const_: node_: answer
+	])
+		
+	// Добавляем в ответ узел запроса сложения
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: q_addition
+	])
+	
+	// Добавляем в ответ дугу из узла запроса сложения
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: arcFromRequest
+	])
+	
+	// Добавляем в ответ связку запроса сложения
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: additionLink
+	])
+	
+	// Если дуга из узла "присутствует ответ_" не проводилась
+	ifVarAssign([
+		1_: attributeArc
+	], , withoutAnswerIsPresent)
+	
+	// Добавляем в ответ узел "присутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: rrel_answer_is_present
+	])
+	
+	// Добавляем в ответ дугу из узла "присутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: attributeArc
+	])
+	
+// Создание ответа операции
+label(withoutAnswerIsPresent)
+	
+	// Генерация ответа операции
+	callReturn([
+		1_:	fixed_: answer_make,
+		2_:	fixed_: {[
+			1_: additionLink,
+			2_: answer
+		]}
+	])
+	
+	printNl([
+		1_: fixed_: /"Addition answer is"/
+	])
+	
+	//#printEl([
+		//#1_: answer
+	//#])
+
+	// Генерируем факт выполнения операции
+	genElStr5([
+		1_: fixed_: q_addition,
+		2_: fixed_: arcFromRequest,
+		3_: fixed_: additionLink,
+		4_: assign_: arc_: const_: pos_: actual_: arcVar,
+		5_: fixed_: rrel_operation_is_over
+	])
+	
+label(finishOperation)
+	
+return()
+	
+end

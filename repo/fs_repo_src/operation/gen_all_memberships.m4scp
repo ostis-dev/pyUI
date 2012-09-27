@@ -1,0 +1,284 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: gen_all_memberships.m4scp
+// Description: File contains operation to
+//			generate all accesory links for objects
+//			that has accessory to subclass of some class
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 11.01.11
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+
+program(init_op,
+[[	
+	//#req = "/seb/planimetry/запрос истинности высказыания";
+	q_gen_all_accessory_links;
+	catch_output_arc;
+	//#here=/"I am here"/;
+]],
+[{
+	nodeVar
+}],
+{[
+]}
+)
+//#printNl([1_: here])
+
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: gen_all_memberships,
+	3_: fixed_: {1_: q_gen_all_accessory_links},
+	4_: assign_: nodeVar
+])
+
+//#printNl([1_: here])
+
+return()
+end
+
+procedure(gen_all_memberships,
+[[	
+	//узел для определения отношения
+	group_transitive_relation;
+	q_gen_all_accessory_links;
+	rrel_answer_is_present;
+	one = 1_;
+	two = 2_;
+	//#here2=/"And now here"/;
+]],
+[{
+	els,sheet,u,arc,arc1,arc2,n,n1,n2,elsels,el,ponjatie,otnoshenie,star,st,en,vse_ontoshenia,delta,nachalo,dell,handler,element,seg,segments
+}],
+{[
+	//#1_:in_: els,	2_:in_: sheet
+	1_: in_: handler,
+	2_: in_: element,
+	3_: in_: arc,
+	4_: in_: els
+]}
+)
+sys_get_location([1_: element,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+//генерация узла u для множества выходных элементов
+genEl([1_:assign_:node_:u])
+
+//копирование множества входных узлов (узел понятия и узел отношения) во вспомогательное множество elsels
+searchSetStr3([
+	1_:fixed_:node_:els,
+	2_:assign_:arc_:arc,
+	3_:assign_:node_:n1,
+	set3_:assign_:node_:elsels
+])
+
+//поиск узла отношения и понятия
+
+//поиск узла (otnoshenie) во вспомогательном множестве входных узлов elsels с запоминанием дуги arc
+searchElStr3([
+	1_:fixed_:node_:elsels,
+	2_:assign_:arc_:arc,
+	3_:assign_:node_:otnoshenie
+])
+
+//поиск дуги принадлежности найденного узла (otnoshenie) множеству отношений r
+//если дуга принадлежности не найдена, то переход по ссылке el
+searchElStr3([
+	1_:fixed_:node_:group_transitive_relation,
+	2_:assign_:arc_:arc1,
+	3_:fixed_:node_:otnoshenie
+],,el)
+
+//если дуга принадлежности найдена, то найденный узел (otnoshenie) - это узел отношения
+//удаление дуги принадлежности найденного узла отношения вспомогательному множеству входных узлов elsels
+eraseElStr3([
+	1_:fixed_:node_:elsels,
+	2_:assign_:arc_:f_:arc,
+	3_:fixed_:node_:otnoshenie
+])
+
+//поиск узла (ponjatie) во вспомогательном множестве входных узлов elsels (это узел понятия)
+//если узел найден, то переход по ссылке star
+searchElStr3([
+	1_:fixed_:node_:elsels,
+	2_:assign_:arc_:arc,
+	3_:assign_:node_:ponjatie
+],star)
+
+label(el)
+
+//если дуга принадлежности не найдена, то
+//поиск узла (ponjatie) во вспомогательном множестве входных узлов elsels по запомненной дуге arc (это узел понятия)
+searchElStr3([
+	1_:fixed_:node_:elsels,
+	2_:fixed_:arc_:arc,
+	3_:assign_:node_:ponjatie
+])
+
+//удаление дуги принадлежности найденного узла поянтия вспомогательному множеству входных узлов elsels
+eraseElStr3([
+	1_:fixed_:node_:elsels,
+	2_:assign_:arc_:f_:arc,
+	3_:fixed_:node_:ponjatie
+])
+
+//поиск узла (otnoshenie) во вспомогательном множестве входных узлов elsels (это узел отношения)
+searchElStr3([
+	1_:fixed_:node_:elsels,
+	2_:assign_:arc_:arc,
+	3_:assign_:node_:otnoshenie
+])
+
+label(star)
+
+//копирование множества третьих узлов в трехэлементной конструкции,
+//первый элемент которой узел отношения, во вспомогательное множество vse_ontoshenia
+searchSetStr3([
+	1_:fixed_:node_:otnoshenie,
+	2_:assign_:arc_:arc,
+	3_:assign_:node_:n1,
+	set3_:assign_:node_:vse_ontoshenia
+])
+
+label(nachalo)
+
+//копирование множества третьих узлов в трехэлементной конструкции, первый элемент
+//которой вспомогательное множество vse_ontoshenia, во вспомогательное множество n.
+//Если копирование не удалось, т.е. множетсво vse_ontoshenia пустое, то переход по ссылке en
+searchSetStr3([
+	1_:fixed_:node_:vse_ontoshenia,
+	2_:assign_:arc_:arc,
+	3_:assign_:node_:n1,
+	set3_:assign_:node_:n
+],,en)
+
+label(st)
+
+//поиск узла (n1) во вспомогательном множестве n.
+//Если поиск не удался, т.е. множетсво n пустое, то переход по ссылке en
+searchElStr3([
+	1_:fixed_:node_:n,
+	2_:assign_:arc_:arc,
+	3_:assign_:node_:n1
+],,en)
+
+//удаление дуги принадлежности найденного узла n1 вспомогательному множеству n
+eraseElStr3([
+	1_:fixed_:node_:n,
+	2_:assign_:arc_:f_:arc,
+	3_:fixed_:node_:n1
+])
+
+//поиск пятиэлементной конструкции, в которой первый
+//элемент - найденный узел n1, пятый - атрибут 2_,
+//с запоминанием третьего элемента - множество (delta)
+searchElStr5([
+	1_:fixed_:node_:n1,
+	2_:assign_:arc_:arc1,
+	3_:assign_:node_:delta,
+	4_:assign_:arc_:arc2,
+	5_:fixed_:node_:two
+])
+ifVarAssign([1_: delta],,st)
+
+//поиск дуги принадлежности узла понятия запомненному множеству delta.
+//Если поиск не удался, то переход по ссылке st
+searchElStr3([
+	1_:fixed_:node_:delta,
+	2_:assign_:arc_:arc,
+	3_:fixed_:node_:ponjatie
+],,st)
+
+//поиск пятиэлементной конструкции, в которой первый
+//элемент - найденный узел n1, пятый - атрибут 1_,
+//с запоминанием третьего элемента - узла (n2)
+searchElStr5([
+	1_:fixed_:node_:n1,
+	2_:assign_:arc_:arc1,
+	3_:assign_:node_:n2,
+	4_:assign_:arc_:arc2,
+	5_:fixed_:node_:one
+])
+//-------------
+//поиск дуги принадлежности из узла n2 в узел понятия
+searchElStr3([
+	1_:fixed_:node_:n2,
+	2_:assign_:arc_:arc1,
+	3_:fixed_:node_:ponjatie
+],dell)
+
+//генерация дуги принадлежности из узла n2 в узел понятия
+genElStr3([
+	1_:fixed_:node_:n2,
+	2_:assign_:arc_:arc1,
+	3_:fixed_:node_:ponjatie
+])
+
+//------------для проверки правильности вывода
+//#genElStr3([
+	//#1_:fixed_:node_:u,
+	//#2_:assign_:arc_:arc,
+	//#3_:fixed_:node_:n2
+//#])
+
+//#genElStr3([
+//#	1_:fixed_:node_:u,
+//#	2_:assign_:arc_:arc,
+//#	3_:fixed_:arc_:arc1
+//#])
+//------------для проверки правильности вывода
+
+label(dell)
+
+//удаление дуги принадлежности из узла vse_ontoshenia в узел n1
+eraseElStr3([
+	1_:fixed_:node_:vse_ontoshenia,
+	2_:assign_:arc_:f_:arc,
+	3_:fixed_:node_:n1
+],nachalo)
+
+label(en)
+
+searchElStr3([
+	1_: fixed_: q_gen_all_accessory_links,
+	2_: assign_: arc,
+	3_: fixed_: els
+])
+
+genElStr5([
+	1_: fixed_: q_gen_all_accessory_links,
+	2_: fixed_: arc,
+	3_: fixed_: els,
+	4_: assign_: arc1,
+	5_: fixed_: rrel_answer_is_present
+])
+
+//вывод выходного множества элементов
+//#ui_output([1_:fixed_: sheet, 2_:fixed_:u])
+
+return()
+end

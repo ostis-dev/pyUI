@@ -1,0 +1,478 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+#include "scp_keynodes.scsy"
+#include "ui_keynodes.scsy"
+
+procedure(local_atr_ui,
+[[
+	f_search = "/operation/local_atr/local_atr";
+	ui_Output;		// процедура вывода конструкций пользователю
+]],
+[{
+	wnd, selected_el, sheet, answer_reciever, 
+	arc, target, result_set, e
+}],
+{[
+	1_: in_: selected_el,
+	2_: in_: sheet,
+	3_: in_: answer_reciever
+]}
+)
+//# Получение целевого объекта
+searchElStr3([
+	1_: fixed_: selected_el,
+	2_: assign_: arc_: pos_: const_: arc,
+	3_: assign_: node_: target
+	])
+	
+genElStr3([
+	1_: assign_: node_: const_: result_set,
+	2_: assign_: arc_: pos_: const_: arc,
+	3_: fixed_: target
+	])
+	
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: result_set
+	]}
+])	
+	
+callReturn([
+	1_: fixed_: f_search,
+	2_: fixed_: {[
+		1_: fixed_: target,
+		2_: fixed_: answer_reciever
+		]}
+	], e)
+
+return()
+end
+
+
+procedure(local_atr,
+[[	
+	f_search_rec = "/operation/local_atr/local_atr_rec";
+	ui_Output;		// процедура вывода конструкций пользователю
+	relation = "/seb/planimetry/декомпозиция*";
+	main_semantic = "/operation/search_semantic/binrel_by_target_rel";
+]],
+[{
+	target, result_set, answer_reciever,
+	e, node1, node2, arc1, arc2, arc3, set1, set2	
+}],
+{[
+	1_: in_: target,
+	2_: in_: out_: answer_reciever
+]}
+)
+
+genElStr3([
+	1_: assign_: node_: const_: result_set,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: target
+	])
+
+genEl([1_: assign_: node_: const_: node1])
+genEl([1_: assign_: node_: const_: node2])
+	
+callReturn([ 
+	1_: fixed_: main_semantic,
+	2_: fixed_: {[
+		1_: target,
+		2_: relation,
+		3_: result_set,
+		4_: node1,
+		5_: node2
+	]}
+	], e)
+
+/* рекурсивный проход подмножеств указанного высказывания */
+callReturn([
+	1_: fixed_: f_search_rec,
+	2_: fixed_: {[
+		1_: fixed_: target,
+		2_: fixed_: answer_reciever,
+		3_: fixed_: result_set
+		]}
+	], e)
+
+label(some_error)
+
+return()
+end
+
+procedure(local_atr_rec,
+[[	
+	rel_ = "/info/stype_bin_orient_norole_rel";
+	family_ = "/info/stype_concept_norel";
+	struct_ = "/info/stype_struct";
+	subj_ = "/info/stype_ext_obj_abstract";	
+	attr_ = "/info/stype_bin_orient_role_rel";
+	
+	f_search_rec = "/operation/local_atr/local_atr_rec";
+	ui_Output;		// процедура вывода конструкций пользователю
+]],
+[{
+	target, result_set, answer_reciever,
+	e, node_set, tmp,
+	node1, node2, arc1, arc2, arc3, set1, set2	
+}],
+{[
+	1_: in_: target,
+	2_: in_: out_: answer_reciever,
+	3_: in_: out_: result_set
+]}
+)
+//#genElStr3([
+//#	1_: assign_: node_: const_: result_set,
+//#	2_: assign_: arc_: pos_: const_: arc1,
+//#	3_: fixed_: target
+//#	])
+genEl([1_: assign_: node_: const_: tmp])
+
+genEl([1_: assign_: node_: const_: node_set])
+
+/* просмотр надмножеств указанного объекта.
+указанный объект может быть как дугой так и узлом */
+searchSetStr3([
+	1_: assign_: node_: const_: node1,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: target,
+	set1_: assign_: set1
+	],,end_up,end_up)
+	
+label(beg_up)
+
+	searchElStr3([
+		1_: fixed_: set1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node_: const_: node1
+		],,end_up)
+		
+	eraseEl([1_: fixed_: arc1])
+	
+	/* проверяем полученный объект на пренадлежность к 
+	интересующему нас классу	*/
+	searchElStr3([
+		1_: fixed_: rel_,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],add_up)
+		
+	searchElStr3([
+		1_: fixed_: attr_,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],add_up)
+	
+	searchElStr3([
+		1_: fixed_: family_,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],add_up)
+		
+	searchElStr3([
+		1_: fixed_: struct_,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],add_up)
+		
+	searchElStr3([
+		1_: fixed_: subj_,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],add_up,beg_up,beg_up)
+	
+	/* переход к началу цикла */
+	
+	label(add_up)
+	
+	/* поиск дуги связывающей указанный узел и целевой*/
+	searchElStr3([
+		1_: fixed_: node1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: target
+		])
+	
+	/* добавление в результат */
+	genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc2, 3_: fixed_: node1])
+	genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc2, 3_: fixed_: arc1]
+	,beg_up,beg_up,beg_up)
+
+label(end_up)
+
+searchSetStr3([
+	1_: fixed_: tmp,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node1,
+	set3_: fixed_: result_set
+	])
+
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: tmp
+	]}
+])	
+
+genEl([1_: assign_: node_: const_: tmp])
+
+/* просмотр подмножеств и добавление их в очередь на вывод 
+этим элементом может оказаться и дуга*/
+searchSetStr3([
+	1_: fixed_: target,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node1,
+	set3_: assign_: set1
+	],,error_,error_)
+	
+label(beg_sort_ups)
+
+	searchElStr3([
+		1_: fixed_: set1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node1
+		],,end_sort_ups,end_sort_ups)
+		
+	eraseEl([1_: fixed_: arc1])
+	
+	/* проверяем входит ли полученный объект в результирующее множество */
+	searchElStr3([
+		1_: fixed_: result_set,
+		2_: assign_: arc_: pos_: const_: arc2,
+		3_: fixed_: node1
+		],no_to_proc)
+		
+	/* добавление в результат */
+	genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: node1])
+		
+	/* добавляемый в очередь узел не доожен быть отрибутивным, отношением, семейством и т.д. */
+	searchElStr3([
+		1_: fixed_: rel_,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],no_to_proc)
+		
+	searchElStr3([
+		1_: fixed_: attr_,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],no_to_proc)
+	
+	searchElStr3([
+		1_: fixed_: family_,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],no_to_proc)
+		
+	searchElStr3([
+		1_: fixed_: subj_,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],no_to_proc)
+		
+	/* добавление очередь на обработку */
+	genElStr3([1_: fixed_: node_set, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: node1])
+	
+	label(no_to_proc)
+	
+	/* поиск дуги связывающей ук объект с целевым объектом*/
+	searchElStr3([
+		1_: fixed_: target,
+		2_: assign_: pos_: arc_: const_: arc1,
+		3_: fixed_: node1
+		],,beg_sort_ups,beg_sort_ups)
+	
+	/* добавление в результат и очередь на обработку */
+	genElStr3([1_: fixed_: node_set, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: arc1])
+	genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: arc1]
+	,beg_sort_ups,beg_sort_ups,beg_sort_ups)
+
+label(end_sort_ups)
+
+searchSetStr3([
+	1_: fixed_: tmp,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node1,
+	set3_: fixed_: result_set
+	])
+
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: tmp
+	]}
+])
+
+genEl([1_: assign_: node_: const_: tmp])
+
+/* просмотр всех выходящих связок отношений */
+
+/* ищем все входящие дуги с атр. 2_,
+ это будут  входящие отношения
+  target <== _x */
+searchSetStr5([
+	1_: assign_: node_: const_: node1,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: target,
+	4_: assign_: arc_: pos_: const_: arc2,
+	5_: fixed_: 1_,
+	set1_: assign_: set1
+	],,no_rel,no_rel)
+	
+genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: 1_])
+genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: 2_])
+
+/* просмотр найденых связок отношений */
+label(beg_relations_for)
+	
+	searchElStr3([
+		1_: fixed_: set1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node_: const_: node1
+		],,no_rel,no_rel)
+		
+	eraseEl([1_: fixed_: arc1])
+	
+	/* ищем дуги связки отношения */
+	searchElStr5([
+		1_: fixed_: node1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: target,
+		4_: assign_: arc_: pos_: const_: arc2,
+		5_: fixed_: 1_
+		],,beg_relations_for,beg_relations_for)
+		
+	/* добавляем в результат */
+	genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: arc1])
+	genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: node1])
+	genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: arc2])
+
+	/* ищем вторую дугу связки отношения */
+	searchElStr5([
+		1_: fixed_: node1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node_: const_: node2,
+		4_: assign_: arc_: pos_: const_: arc2,
+		5_: fixed_: 2_
+		],,beg_relations_for,beg_relations_for)
+		
+	/* добавляем в результат */
+	genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: arc1])
+	genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: node2])
+	genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: arc2])
+
+	/* добавляем в очередь обработки объект связанный с целевым связкой отношения */
+	genElStr3([1_: fixed_: node_set, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: node2])
+		
+	/* ищем узел отношения обрабатываемой связки */
+	searchSetStr3([
+		1_: assign_: node_: const_: node2,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1,
+		set1_: assign_: set2
+		],,beg_relations_for,beg_relations_for)
+		
+	/* перебираем узлы и оставляем только отношения */
+	label(beg_rel_local)
+
+		searchElStr3([
+			1_: fixed_: set2,
+			2_: assign_: arc_: pos_: const_: arc1,
+			3_: assign_: node_: const_: node2
+			],,end_rel_local,end_rel_local)
+		
+		eraseEl([1_: fixed_: arc1])
+		
+		searchElStr3([
+			1_: fixed_: rel_,
+			2_: assign_: arc_: pos_: const_: arc1,
+			3_: fixed_: node2
+			],,beg_rel_local,beg_rel_local)
+			
+		searchElStr3([
+			1_: fixed_: node2,
+			2_: assign_: arc_: pos_: const_: arc1,
+			3_: fixed_: node1
+			])
+		
+		genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: arc1])
+		genElStr3([1_: fixed_: tmp, 2_: assign_: arc_: pos_: const_: arc3, 3_: fixed_: node2])
+			
+	label(end_rel_local)
+	
+	printNl([1_: /""/],beg_relations_for,beg_relations_for,beg_relations_for)
+	
+label(no_rel)
+
+searchSetStr3([
+	1_: fixed_: tmp,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node1,
+	set3_: fixed_: result_set
+	])
+
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: tmp
+	]}
+	])
+
+genEl([1_: assign_: node_: const_: tmp])
+
+/* отправка всех найденых узлов на обработку */
+label(beg_call)
+
+	searchElStr3([
+		1_: fixed_: node_set,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node1
+		],,end_call,end_call)
+		
+	eraseEl([1_: fixed_: arc1])
+	
+	callReturn([
+	1_: fixed_: f_search_rec,
+	2_: fixed_: {[
+		1_: fixed_: node1,
+		2_: fixed_: answer_reciever,
+		3_: fixed_: result_set
+		]}
+	], e)
+	
+	printEl([1_: /""/],beg_call,beg_call,beg_call)
+
+label(end_call)
+	
+label(error_)	
+
+return()
+end

@@ -1,0 +1,124 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: menu_modify_handler.m4scp
+// Description: File contains operation for add child command
+//				into noatom command
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich, Sergei Startsev, Sergei Zalivako, Olga Savelieva
+//        Date: 05.12.11
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_ui.scsy"
+
+program(init_op,
+[[	
+	q_initiated;
+	catch_output_arc;
+	run_op;
+]],
+[{
+}],
+{[
+]}
+)
+/////////////////////////////////////////////////////
+// Setting handler for command add operation
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: run_op,
+	3_: fixed_: {1_: q_initiated}
+])
+
+return()
+end()
+
+// procedure, that process question and make answer
+procedure(run_op,
+[[
+	q_add_child_command;
+	ui_add_child_command_proc;
+]],
+[{
+	// input params
+	descr, element, arc, question_node,
+	// other
+	segment, t_seg, parent, arc1, child
+}],
+{[
+	1_: in_: descr,
+	2_: in_: element,
+	3_: in_: arc,
+	4_: in_: question_node
+]}
+)
+
+sys_get_location([1_: fixed_: question_node, 2_: assign_: segment])	
+sys_spin_segment([1_: fixed_: segment, 2_: assign_: t_seg])
+sys_set_default_segment([1_: fixed_: segment])
+
+//#//#printEl([1_: fixed_: q_add_child_command])
+
+/////////////////////////////////////////////////////
+//# Checking operation start full condition
+searchElStr3([
+	1_: fixed_: q_add_child_command,
+	2_: assign_: pos_: const_: arc_: arc,
+	3_: fixed_: question_node
+],,finish_op)
+
+/////////////////////////////////////////////////////
+//# Get parent command
+searchElStr5([
+	1_: fixed_: question_node,
+	2_: assign_: pos_: const_: arc_: arc,
+	3_: assign_: node_: const_: parent,
+	4_: assign_: pos_: const_: arc_: arc1,
+	5_: fixed_: 1_
+],,finish_op)
+
+/////////////////////////////////////////////////////
+//# Get child command
+searchElStr5([
+	1_: fixed_: question_node,
+	2_: assign_: pos_: const_: arc_: arc,
+	3_: assign_: node_: const_: child,
+	4_: assign_: pos_: const_: arc_: arc1,
+	5_: fixed_: 2_
+],,finish_op)
+
+//# call procedure to append child command into parent
+callReturn([
+	1_:	fixed_: ui_add_child_command_proc,
+	2_: fixed_: {[
+			1_: fixed_: parent,
+			2_: fixed_: child
+		]}
+	])
+
+label(finish_op)
+	
+return()
+end()

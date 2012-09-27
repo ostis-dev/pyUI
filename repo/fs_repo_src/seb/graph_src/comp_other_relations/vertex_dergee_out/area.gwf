@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<GWF version="1.6">
+    <staticSector>
+        <node type="node/const/attribute" idtf="вершина_" shapeColor="0" id="29932744" parent="0" left="0" top="0" right="66" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="575.5" y="416.5" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/relation" idtf="полустепень исхода вершины*" shapeColor="0" id="30806424" parent="0" left="0" top="0" right="189" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="270.5" y="420.5" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/asymmetry" idtf="" shapeColor="0" id="30842528" parent="0" x="432.5" y="375.5" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/relation" idtf="область определения*" shapeColor="0" id="30578016" parent="0" left="0" top="0" right="140" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="362.5" y="272.5" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="30301192" parent="0" id_b="30842528" id_e="29932744" b_x="432.5" b_y="375.5" e_x="575.5" e_y="416.5" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="30640576" parent="0" id_b="30578016" id_e="13352832" b_x="362.5" b_y="272.5" e_x="216.5" e_y="114.5" dotBBalance="0" dotEBalance="0.427094">
+            <points/>
+        </arc>
+        <pair type="pair/const/orient" idtf="" shapeColor="0" id="13352832" parent="0" id_b="30842528" id_e="30806424" b_x="432.5" b_y="375.5" e_x="270.5" e_y="420.5" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+    </staticSector>
+</GWF>

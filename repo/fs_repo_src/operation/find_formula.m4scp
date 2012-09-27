@@ -1,0 +1,452 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: find_formula.m4scp
+// Description: File contains operation to find formula
+//			to calculate requested variable value
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 11.01.11
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_search.scsy"
+#include "lib_gen.scsy"
+#include "lib_answer.scsy"
+
+program(init_op,
+[[
+	catch_output_arc;
+//#	here=/"\n\nHandler setted!\n\n"/;
+]],
+[{
+	nodeVar
+}],
+{[
+]}
+)
+
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: find_formula,
+	3_: fixed_: {1_: q_initiated},
+	4_: assign_: nodeVar
+])
+
+return()
+end
+
+procedure(find_formula,
+[[
+	pattern=[_right->>__node;_left->>__node;_rel->>>{.. 1_::: __node, 2_::: __node2..};];
+	rrel_answer_is_absent;
+	rrel_answer_is_present;
+	rrel_formula_is_absent;
+	q_production;
+	q_gen_all_accessory_links;
+	nrel_inclusion;
+	q_var_value;
+	question;
+	nrel_impl;
+	nrel_value;
+	answer_make;
+	q_initiated;
+	nrel_statements_about_class;
+	search_bin_pair_begin_proc;
+	search_bin_pair_begin_except_rel;
+	catch_output_arc;
+	here=/"\n\nI have entered FIND FORMULA\n\n"/;
+	exited=/"\n\nI have exited FIND FORMULA\n\n"/;
+	calc_req_pattern=[nrel_answer->>{. 1_:: _node, 2_:: _res.};_q_arc=(q_calculation->>_q_req);_node->>q_calculation;_node->>_q_arc;_node->>_q_req;];
+]],
+[{
+	inputarc,arc,arc1,value,handler,element,seg,segments,temp,attr,obj,rel,class,classes,stat,elem,left,right,temp1,
+	input_value,v_v_arc,answer,pr_arc,theory,old_right,new_elem,q_arc,q_req,res
+}],
+{[
+	1_: in_: handler,
+	2_: in_: element,
+	3_: in_: inputarc,
+	4_: in_: input_value
+]}
+)
+sys_get_location([1_: input_value,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+//#//#printEl([1_: rrel_answer_is_absent])
+//#//#printEl([1_: inputarc])
+
+searchElStr3([
+	1_: fixed_:  q_var_value,
+	2_: assign_: const_: pos_: v_v_arc,
+	3_: fixed_: input_value
+],,exit)
+searchElStr5([
+	1_: fixed_: q_var_value,
+	2_: fixed_: v_v_arc,
+	3_: fixed_: input_value,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_absent
+],,exit)
+searchElStr5([
+	1_: fixed_: q_var_value,
+	2_: fixed_: v_v_arc,
+	3_: fixed_: input_value,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_formula_is_absent
+],exit)
+
+printNl([1_: here])
+searchElStr3([
+	1_: fixed_:  input_value,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: const_: value
+],,exit)
+
+eraseEl([1_: inputarc])
+
+callReturn([
+	1_: fixed_: search_bin_pair_begin_except_rel,
+	2_: fixed_:
+		{[
+			1_: fixed_: value,
+			2_: fixed_: nrel_value,
+			3_: assign_: obj,
+			4_: assign_: rel
+		]}
+])
+ifVarAssign([1_: obj],,gen_wrong)
+////////////////////////////////
+// запуск операции генерации транзитивных связок
+genEl([1_: node_: const_: assign_: temp])
+genElStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: obj
+])
+genElStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: nrel_inclusion
+])
+genElStr3([
+	1_: fixed_: q_gen_all_accessory_links,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: temp
+])
+
+label(wait1)
+
+sys_wait([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: {1_: rrel_answer_is_present}
+])
+searchElStr5([
+	1_: fixed_: q_gen_all_accessory_links,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: temp,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_present
+],,wait1)
+
+searchSetStr3([
+	1_: assign_: const_: node_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: obj,
+	set1_: assign_: classes
+],,exit)
+
+label(next_class)
+ifVarAssign([1_: class],,no_erase_class)
+eraseElStr3([
+	1_: fixed_: classes,
+	2_: assign_: f_: arc,
+	3_: fixed_: class
+])
+label(no_erase_class)
+
+searchElStr3([
+	1_: fixed_: classes,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: class
+],,gen_wrong)
+
+//#//#printEl([1_: class])
+
+callReturn([
+	1_: fixed_: search_bin_pair_begin_proc,
+	2_: fixed_:
+		{[
+			1_: fixed_: class,
+			2_: fixed_: nrel_statements_about_class,
+			3_: assign_: temp
+		]}
+])
+
+ifVarAssign([1_: temp],,next_class)
+searchSetStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: arc1,
+	set3_: assign_: stat
+])
+label(next_elem)
+ifVarAssign([1_: elem],,no_erase_elem)
+eraseElStr3([
+	1_: fixed_: stat,
+	2_: assign_: f_: arc,
+	3_: fixed_: elem
+])
+label(no_erase_elem)
+
+searchElStr3([
+	1_: fixed_: stat,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: elem
+],,next_class)
+//#printEl([1_: elem])
+searchElStr3([
+	1_: fixed_: nrel_impl,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: elem
+],,next_elem)
+searchElStr5([
+	1_: fixed_: elem,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: const_: node_: left,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 1_
+],,next_elem)
+searchElStr5([
+	1_: fixed_: elem,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: const_: node_: old_right,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 2_
+],,next_elem)
+callReturn([
+	1_: fixed_: gen_conjunction_union,
+	2_: fixed_:
+		{[
+			1_: fixed_: old_right,
+			2_: assign_: right
+		]}
+])
+ifVarAssign([1_: right],,next_elem)
+varAssign([1_: new_elem, 2_: elem])
+ifCoin([1_: right,2_: old_right],nogen)
+callReturn([
+	1_: fixed_: search_stat_theory,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: elem,
+			2_: assign_: theory
+		]}
+])
+ifVarAssign([1_: theory],,gen_wrong_result)
+callReturn([
+	1_: fixed_: gen_impl_link,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: left,
+			2_: fixed_: right,
+			3_: fixed_: theory,
+			4_: assign_: new_elem
+		]}
+])
+label(nogen)
+
+searchElStr3([
+	1_: fixed_: right,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: rel
+],,next_elem)
+
+//#printNl([1_: /"LEFT:"/])
+//#//#printEl([1_: left])
+
+//#printNl([1_: /"TEMP"/])
+//#//#printEl([1_: temp])
+sys_search([
+	1_: fixed_: pattern,
+	2_: fixed_: {
+		{1_: __node, 2_: temp}
+	},
+	3_: fixed_: {
+		{1_: _rel, 2_: rel}, {1_: _left, 2_: left}, {1_: _right, 2_: right}
+	}
+],,next_elem)
+
+sys_search([
+	1_: left,
+	3_: fixed_: {
+		{1_: temp, 2_: obj}
+	}
+],,next_elem)
+//#nop(next_elem)
+
+genEl([1_: const_: node_: assign_: temp])
+genElStr3([
+	1_: assign_: node_: const_: temp,
+	2_: assign_: const_ : pos_: arc,
+	3_: assign_: node_: const_: temp1
+])
+genElStr3([
+	1_: fixed_: temp1,
+	2_: assign_: const_ : pos_: arc,
+	3_: fixed_: obj
+])
+genElStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_ : pos_: arc,
+	3_: fixed_: new_elem
+])
+genElStr3([
+	1_: fixed_: question,
+	2_: assign_: const_ : pos_: arc,
+	3_: fixed_: temp
+])
+genElStr3([
+	1_: fixed_: q_production,
+	2_: assign_: const_ : pos_: pr_arc,
+	3_: fixed_: temp
+])
+//#printNl([1_: /"FF has genered good"/])
+genElStr3([
+	1_: assign_: node_: const_: answer,
+	2_: assign_: pos_: const_: arc,
+	3_: fixed_: temp
+])
+genElStr3([
+	1_: fixed_: answer,
+	2_: assign_: pos_: const_: arc,
+	3_: fixed_: q_production
+])
+genElStr3([
+	1_: fixed_: answer,
+	2_: assign_: pos_: const_: arc,
+	3_: fixed_: pr_arc
+])
+
+/////////////////////////////////////////////////////
+// Call of the answer making procedure
+callReturn([
+	1_:	fixed_: answer_make,
+	2_:	fixed_: {[
+			1_: value,
+			2_: answer
+		]}
+	]
+)
+genElStr3([
+	1_: fixed_: q_initiated,
+	2_: assign_: const_ : pos_: arc,
+	3_: fixed_: temp
+])
+
+label(wait)
+sys_wait([
+	1_: fixed_: catch_input_arc,
+	2_: fixed_: {1_: pr_arc}
+])
+searchElStr5([
+	1_: fixed_: q_production,
+	2_: fixed_: pr_arc,
+	3_: fixed_: temp,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_absent
+],next_elem)
+searchElStr5([
+	1_: fixed_: q_production,
+	2_: fixed_: pr_arc,
+	3_: fixed_: temp,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_present
+],,wait)
+
+sys_search([
+	1_: fixed_: calc_req_pattern,
+	2_: fixed_: {
+		{1_: _q_arc, 2_: assign_: q_arc}, {1_: _q_req, 2_: assign_: q_req}
+	},
+	3_: fixed_: {
+		{1_: _res, 2_: temp}
+	}
+])
+
+label(wait2)
+sys_wait([
+	1_: fixed_: catch_input_arc,
+	2_: fixed_: {1_: q_arc}
+])
+searchElStr5([
+	1_: fixed_: q_calculation,
+	2_: fixed_: q_arc,
+	3_: fixed_: q_req,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_absent
+],next_elem)
+searchElStr5([
+	1_: fixed_: q_calculation,
+	2_: fixed_: q_arc,
+	3_: fixed_: q_req,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_present
+],gen_good_result,wait2)
+
+label(gen_good_result)
+
+eraseEl([1_: fixed_: v_v_arc])
+genElStr3([
+	1_: fixed_: q_var_value,
+	2_: assign_: const_: pos_: v_v_arc,
+	3_: fixed_: input_value
+])
+genElStr3([
+	1_: fixed_: q_initiated,
+	2_: assign_: const_: pos_: v_v_arc,
+	3_: fixed_: input_value
+],exit,exit)
+
+label(gen_wrong)
+
+//#printNl([1_: /"FF has genered wrong"/])
+genElStr5([
+	1_: fixed_: q_var_value,
+	2_: fixed_:	v_v_arc,
+	3_: fixed_: input_value,
+	4_: assign_: const_ : pos_: arc1,
+	5_: fixed_: rrel_formula_is_absent
+])
+genElStr3([
+	1_: fixed_: q_initiated,
+	2_: assign_: const_ : pos_: arc,
+	3_: fixed_: input_value
+])
+
+label(exit)
+printNl([1_: exited])
+return()
+end

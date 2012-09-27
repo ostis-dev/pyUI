@@ -1,0 +1,117 @@
+VERSION=1.0
+N=47   L=68   
+I=0    W=!NULL               
+I=1    W=!NULL               
+I=2    W=SENT-START          
+I=3    W=VYVESCI             
+I=4    W=DJEKAMPAZICYJU      
+I=5    W=!NULL               
+I=6    W=VYJAVU              
+I=7    W=SEMANTYCHNAE        
+I=8    W=NAVAKOLLE           
+I=9    W=PANJACCJA           
+I=10   W=TLUMACHJENNE        
+I=11   W=SHEMU               
+I=12   W=DACHYNENNJA         
+I=13   W=PRYVESCI            
+I=14   W=PRYKLAD             
+I=15   W=BISEKTRYSY          
+I=16   W=!NULL               
+I=17   W=GEAMETRYCHNAJ       
+I=18   W=FIGURY              
+I=19   W=KVADRATA            
+I=20   W=TROHVUGOL'NIKA      
+I=21   W=AKRUZHNASCI         
+I=22   W=GEAMETRYCHNAGA      
+I=23   W=CELA                
+I=24   W=DYSKRJETNAJ         
+I=25   W=GEAMETRYCHNAJ       
+I=26   W=FIGURY              
+I=27   W=PRASTORY            
+I=28   W=PARALELAGRAMA       
+I=29   W=JAKIJA              
+I=30   W=SINONIMY            
+I=31   W=ISNUJUC'            
+I=32   W=U                   
+I=33   W=BISEKTRYSY          
+I=34   W=GEAMETRYCHNAJ       
+I=35   W=FIGURY              
+I=36   W=KVADRATA            
+I=37   W=TROHVUGOL'NIKA      
+I=38   W=AKRUZHNASCI         
+I=39   W=GEAMETRYCHNAGA      
+I=40   W=CELA                
+I=41   W=DYSKRJETNAJ         
+I=42   W=GEAMETRYCHNAJ       
+I=43   W=FIGURY              
+I=44   W=PRASTORY            
+I=45   W=PARALELAGRAMA       
+I=46   W=SENT-END            
+J=0     S=46   E=1    
+J=1     S=0    E=2    
+J=2     S=2    E=3    
+J=3     S=3    E=4    
+J=4     S=4    E=5    
+J=5     S=6    E=5    
+J=6     S=9    E=5    
+J=7     S=10   E=5    
+J=8     S=12   E=5    
+J=9     S=14   E=5    
+J=10    S=3    E=6    
+J=11    S=3    E=7    
+J=12    S=7    E=8    
+J=13    S=8    E=9    
+J=14    S=3    E=10   
+J=15    S=3    E=11   
+J=16    S=11   E=12   
+J=17    S=2    E=13   
+J=18    S=13   E=14   
+J=19    S=5    E=15   
+J=20    S=15   E=16   
+J=21    S=18   E=16   
+J=22    S=19   E=16   
+J=23    S=20   E=16   
+J=24    S=21   E=16   
+J=25    S=23   E=16   
+J=26    S=26   E=16   
+J=27    S=27   E=16   
+J=28    S=28   E=16   
+J=29    S=33   E=16   
+J=30    S=35   E=16   
+J=31    S=36   E=16   
+J=32    S=37   E=16   
+J=33    S=38   E=16   
+J=34    S=40   E=16   
+J=35    S=43   E=16   
+J=36    S=44   E=16   
+J=37    S=45   E=16   
+J=38    S=5    E=17   
+J=39    S=17   E=18   
+J=40    S=5    E=19   
+J=41    S=5    E=20   
+J=42    S=5    E=21   
+J=43    S=5    E=22   
+J=44    S=22   E=23   
+J=45    S=5    E=24   
+J=46    S=24   E=25   
+J=47    S=25   E=26   
+J=48    S=5    E=27   
+J=49    S=5    E=28   
+J=50    S=2    E=29   
+J=51    S=29   E=30   
+J=52    S=30   E=31   
+J=53    S=31   E=32   
+J=54    S=32   E=33   
+J=55    S=32   E=34   
+J=56    S=34   E=35   
+J=57    S=32   E=36   
+J=58    S=32   E=37   
+J=59    S=32   E=38   
+J=60    S=32   E=39   
+J=61    S=39   E=40   
+J=62    S=32   E=41   
+J=63    S=41   E=42   
+J=64    S=42   E=43   
+J=65    S=32   E=44   
+J=66    S=32   E=45   
+J=67    S=16   E=46   

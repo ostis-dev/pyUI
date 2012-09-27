@@ -1,0 +1,13 @@
+material Back/Space
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			depth_write off
+		
+			ambient 1.0 1.0 1.0
+			diffuse 0.0 0.0 0.0
+		}
+	}
+}

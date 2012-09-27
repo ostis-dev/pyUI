@@ -1,0 +1,244 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: all_output.m4scp
+// Description: File contains procedure to find
+//				all output pairs to specified element
+/////////////////////////////////////////////////////
+// 		Author: Denis Koronchik
+//        Date: 28.11.10
+////////////////////////////////////////////////////
+// 		Author: Sergei Zalivako
+// 	  Date: 08.02.10
+// Modification: Рассмотрен случай, когда конец выходящей дуги является дугой.в
+
+
+#include "scp_keynodes.scsy"
+#include "ui_keynodes.scsy"
+#include "lib_segment.scsy"
+#include "lib_set.scsy"
+
+/*!
+	Procedure to find all input arcs for specified element
+	
+	@result	Result contains all output positive arcs with end elements.
+*/
+procedure(all_output_pos_arcs,
+[[	
+	segment_open;	// procedure for segment opening
+	set_merge;		// procedure for merging two sets
+]],
+[{
+	// input params
+	element,
+	// output params
+	result,
+	// other variables
+	segment, t_seg, e1, e2, viewedElements, arc, arc_beg, arc_end, arc1
+}],
+{[
+	1_: in_: element,	// element to search all output positive arcs
+	2_: in_: result	// all founded elements will be append into this set (set must be existing)
+]}
+)
+
+// trying to get segment, where element locate
+sys_get_location([1_: fixed_: element, 2_: assign_: segment])
+sys_spin_segment([1_: fixed_: segment, 2_: assign_: t_seg])
+
+/* need to set segment that contains result node as default to generate answer in it */
+sys_get_location([1_: fixed_: result, 2_: assign_: segment])	
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+searchSetStr3([
+	1_: fixed_: element,
+	2_: assign_: arc_: e2,
+    3_: assign_: e1,
+	set3_: assign_: const_: node_: viewedElements
+])
+
+label(viewElements)
+
+	searchElStr3([
+		1_: fixed_: viewedElements,
+		2_: assign_: arc_: e2,
+		3_: assign_: arc_: arc
+	], arcProcess)
+	
+	searchElStr3([
+		1_: fixed_: viewedElements,
+		2_: assign_: arc_: e2,
+		3_: assign_: node_: e1
+	], , exit)
+	
+	eraseEl([
+		1_: fixed_: f_: e2
+	])
+	
+	genElStr3([
+		1_: fixed_: result,
+		2_: assign_: arc_: e2,
+		3_: fixed_: e1
+	])
+	
+	searchElStr3([
+		1_: fixed_: element,
+		2_: assign_: arc_: arc,
+		3_: fixed_: e1
+	])
+	
+	genElStr3([
+		1_: fixed_: result,
+		2_: assign_: arc_: e2,
+		3_: fixed_: arc
+	], viewElements, viewElements)
+	
+	label(arcProcess)
+	
+		eraseEl([
+			1_: fixed_: f_: e2
+		])
+		
+		genElStr3([
+			1_: fixed_: result,
+			2_: assign_: arc_: e2,
+			3_: fixed_: arc
+		])
+		
+		callReturn([
+			1_:	fixed_: add_arc,
+			2_:	fixed_: {[
+				1_: arc,
+				2_: result
+			]}
+		])
+		
+		searchElStr3([
+			1_: fixed_: element,
+			2_: assign_: arc_: arc1,
+			3_: fixed_: arc
+		])
+		
+		genElStr3([
+			1_: fixed_: result,
+			2_: assign_: arc_: e2,
+			3_: fixed_: arc1
+		], viewElements, viewElements)
+		
+
+label(exit)
+
+	eraseEl([
+		1_: fixed_: viewedElements
+	])
+//! FIXME: close segment and erase t_seg
+
+return()
+end()
+
+/*!
+	Procedure to add arc with begin and end elements
+	
+	@result	Result contains all output positive arcs with end elements.
+*/
+procedure(add_arc,
+[[	
+	
+]],
+[{
+	// input params
+	addedArc,
+	// output params
+	result, 
+	// other variables
+	arc_beg, arc_end, arc
+}],
+{[
+	1_: in_: addedArc,
+	2_: in_: result
+]}
+)
+
+searchElStr3([
+	1_: assign_: node_: arc_beg,
+	2_: fixed_: addedArc,
+	3_: assign_: arc_: arc_end
+], arcFound)
+
+searchElStr3([
+	1_: assign_: node_: arc_beg,
+	2_: fixed_: addedArc,
+	3_: assign_: arc_end
+], , exit_add)
+
+genElStr3([
+	1_: fixed_: result, 
+	2_: assign_: arc_: arc,
+	3_: fixed_: arc_beg
+])
+
+genElStr3([
+	1_: fixed_: result, 
+	2_: assign_: arc_: arc,
+	3_: fixed_: addedArc
+])
+
+genElStr3([
+	1_: fixed_: result, 
+	2_: assign_: arc_: arc,
+	3_: fixed_: arc_end
+], exit_add, exit_add)
+
+label(arcFound)
+	callReturn([
+		1_:	fixed_: add_arc,
+		2_:	fixed_: {[
+			1_: arc_end,
+			2_: result
+		]}
+	])
+	
+	genElStr3([
+		1_: fixed_: result, 
+		2_: assign_: arc_: arc,
+		3_: fixed_: arc_beg
+	])
+
+	genElStr3([
+		1_: fixed_: result, 
+		2_: assign_: arc_: arc,
+		3_: fixed_: addedArc
+	])
+
+	genElStr3([
+		1_: fixed_: result, 
+		2_: assign_: arc_: arc,
+		3_: fixed_: arc_end
+	], exit_add, exit_add)
+	
+label(exit_add)
+
+return()
+end()

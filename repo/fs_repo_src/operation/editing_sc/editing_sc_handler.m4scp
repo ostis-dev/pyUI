@@ -1,0 +1,80 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: editing_sc_handler.m4scp
+// Description: File contains program to set handlers
+//				for edintg sc constructions
+//                                      operations
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich, Sergei Startsev, Sergei Zalivako, Olga Savelieva
+//        Date: 05.12.11
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_answer.scsy"
+
+program(init_op,
+[[	
+	q_initiated;
+	proc1="/operation/editing_sc/construct_start/construct_start";
+	proc2="/operation/editing_sc/erase_set_elements_start/erase_set_elements_start";
+	proc3="/operation/editing_sc/element_content_subroutine_start/element_content_subroutine_start";
+	catch_output_arc;
+]],
+[{
+	nodeVar1,nodeVar2,nodeVar3
+}],
+{[
+]}
+)
+
+/////////////////////////////////////////////////////
+// Setting handler for generiting SC construction operation
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: proc1,
+	3_: fixed_: {1_: q_initiated},
+	4_: assign_: nodeVar1
+])
+
+/////////////////////////////////////////////////////
+// Setting handler for erasing set elements operation
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: proc2,
+	3_: fixed_: {1_: q_initiated},
+	4_: assign_: nodeVar2
+])
+
+/////////////////////////////////////////////////////
+// Setting handler for element content subroutine operation
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: proc3,
+	3_: fixed_: {1_: q_initiated},
+	4_: assign_: nodeVar3
+])
+
+return()
+end

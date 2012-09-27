@@ -1,0 +1,238 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+
+#include "scp_keynodes.scsy"
+#include "nsm_keynodes.scsy"
+#include "ui_keynodes.scsy"
+
+procedure(run_nsm_command,
+[[
+	1_; 2_;
+	goals;
+	confirmed_;
+    store_in_one_;
+    active_;
+    search_;
+	searched_;
+	Result;
+	run_nsm_command_beg = /"...nsm command running begin...\n"/;
+	run_nsm_command_end = /"...nsm command running end...\n"/;
+	ui_Output;		// процедура вывода конструкций пользователю
+]],
+[{
+	elmn, link, arc, arc2, segment, set, nsmCommand, arc4, selectedEls, outputDescr,
+	goal, arc2, arc4, goalArc, searchResult, 
+	searchResultToOutput, //# множество результатов поиска для вывода на экран
+	concreteSearchResult, //# конкретный результат поиска
+	resultPair, //# кортеж соответствия элемента шаблона и результата
+	foundedElement //# первый элемент resultPair
+}],
+[{
+	1_: in_: elmn,
+	2_: in_: node,
+	3_: in_: arc,
+	4_: in_: link
+}])
+
+printNl([1_: fixed_: run_nsm_command_beg])
+
+sys_get_location([1_: fixed_: link, 2_: assign_: segment])
+sys_spin_segment([1_: fixed_: segment, 2_: assign_: set])
+
+eraseEl([1_: fixed_: f_: set])
+
+ifType([1_: fixed_: actual_: pos_: const_: arc],, finish_run_nsm_command)
+
+searchElStr5([
+	1_: fixed_: link,
+	2_: assign_: const_: actual_: pos_: arc2,
+	3_: assign_: nsmCommand,
+	4_: assign_: const_: actual_: pos_: arc4,
+	5_: fixed_: 1_
+],, finish_run_nsm_command)
+
+searchElStr5([
+	1_: fixed_: link,
+	2_: assign_: const_: actual_: pos_: arc2,
+	3_: assign_: selectedEls,
+	4_: assign_: const_: actual_: pos_: arc4,
+	5_: fixed_: 2_
+],, finish_run_nsm_command)
+
+searchElStr5([
+	1_: fixed_: link,
+	2_: assign_: const_: actual_: pos_: arc2,
+	3_: assign_: outputDescr,
+	4_: assign_: const_: actual_: pos_: arc4,
+	5_: fixed_: 3_
+],, finish_run_nsm_command)
+
+genEl([1_: assign_: node_: const_: goal])
+
+genElStr3([
+    1_: fixed_: goal,
+    2_: assign_: arc_: const_: pos_: goalArc,
+    3_: fixed_: selectedEls
+])
+
+genElStr3([
+    1_: fixed_: nsmCommand,
+    2_: assign_: arc_: const_: pos_: arc2,
+    3_: fixed_: goalArc
+])
+
+genElStr3([
+    1_: fixed_: goals,
+    2_: assign_: arc_: const_: pos_: arc2,
+    3_: fixed_: goal
+])
+
+genElStr3([
+    1_: fixed_: active_,
+    2_: assign_: arc_: const_: pos_: arc2,
+    3_: fixed_: goalArc
+])
+
+genElStr3([
+    1_: fixed_: search_,
+    2_: assign_: arc_: const_: pos_: arc2,
+    3_: fixed_: goalArc
+])
+
+//# TODO: временное решение для ожидания результата
+label(wait_confirmed)
+	searchElStr3([
+		1_: fixed_: confirmed_,
+		2_: assign_: arc2,
+		3_: fixed_: goalArc
+	],, wait_confirmed)
+
+label(next_probably_search_result)
+	searchElStr3([
+		1_: assign_: node_: const_: searchResult,
+		2_: assign_: arc_: const_: pos_: arc2,
+		3_: fixed_: goalArc
+	])
+	
+	eraseEl([1_: fixed_: f_: arc2])
+	
+	searchElStr3([
+		1_: fixed_: Result,
+		2_: assign_: arc_: const_: pos_: arc4,
+		3_: fixed_: searchResult
+	], result_found)
+	
+nop(next_probably_search_result)
+
+
+label(result_found)
+eraseEl([1_: fixed_: f_: goal])
+
+//# Создаем множество для вывода на экран
+genEl([1_: assign_: node_: const_: searchResultToOutput])
+//# Добавляем выделенные элементы в множество, которое выводиться на экран
+searchSetStr3([
+	1_: fixed_: selectedEls,
+	2_: assign_: arc_: const_: pos_: arc2,
+	3_: assign_: const_: elmn,
+	set3_: fixed_: searchResultToOutput
+])
+
+//# Перебираем каждый конкретный результат поиска
+label(next_concrete_search_result)
+	
+	callReturn([ 
+		1_: fixed_: ui_Output,
+		2_: fixed_: {[
+			1_: outputDescr,
+			2_: searchResultToOutput
+		]}
+	])
+	
+	searchElStr3([
+		1_: fixed_: searchResult,
+		2_: assign_: arc_: const_: pos_: arc2,
+		3_: assign_: node_: const_: concreteSearchResult
+	],, all_concrete_results_processed)
+	
+	eraseEl([1_: fixed_: f_: arc2])
+	
+	//# Создаем множество для вывода на экран
+	genEl([1_: assign_: node_: const_: searchResultToOutput])
+	
+	//# Перебираем пары соответствия в конкретном результате поиска
+	label(next_result_pair)
+		
+		searchElStr3([
+			1_: fixed_: concreteSearchResult,
+			2_: assign_: arc_: const_: pos_: arc2,
+			3_: assign_: node_: const_: resultPair
+		],, next_concrete_search_result)
+		
+		eraseEl([1_: fixed_: f_: arc2])
+		
+		//# Первым элементом пары соответствия является найденный элемент
+		searchElStr5([
+			1_: fixed_: resultPair,
+			2_: assign_: arc_: const_: pos_: arc2,
+			3_: assign_: foundedElement,
+			4_: assign_: arc_: const_: pos_: arc4,
+			5_: fixed_: 2_
+		])
+		
+		//# Удаляем найденную пару соответствия
+		eraseEl([1_: fixed_: f_: resultPair])
+		
+		//# Добавляем найденный элемент в множество для вывода на экран,
+		genElStr3([
+			1_: fixed_: searchResultToOutput,
+			2_: assign_: arc_: const_: pos_: arc2,
+			3_: fixed_: foundedElement
+		])
+	
+	nop(next_result_pair)
+	
+nop(next_concrete_search_result)
+
+label(all_concrete_results_processed)	
+
+//# elmn имеет значение, поэтому очистим переменнуб перед поиском
+//# varErase([1_: elmn])
+
+//# Добавляем выделенные элементы в множество, которое выводится на экран
+//# searchSetStr3([
+//# 	1_: fixed_: selectedEls,
+//# 	2_: assign_: arc_: const_: pos_: arc2,
+//# 	3_: assign_: node_: const_: elmn,
+//# 	set3_: fixed_: searchResultToOutput
+//# ])
+
+label(finish_run_nsm_command)
+	
+printNl([1_: fixed_: run_nsm_command_end])
+
+return()
+
+end

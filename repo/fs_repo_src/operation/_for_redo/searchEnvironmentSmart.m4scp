@@ -1,0 +1,532 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+///////////////////////////////////////////////////////////////////////////////
+//	Реализация NSM-команды поиска окрестности элемента
+//
+//
+//
+#include "scp_keynodes.scsy"
+//#include "../seb/planimetry.scsy"
+//#include "info.scsy"
+
+
+procedure(searchEnvironmentSmartSCg,
+[[	
+	openElemEnv = "/operation/searchEnvironmentSmart/openElemEnv";
+	SCgSheet = "/proc/agents/shell/keynode/SCgSheet";
+	layout =c= /"logical"/;
+	sheet_title =c= /"Окрестность SC-элемента"/;
+	seb_segment = "/seb/META/planimetry";
+	set_c="/seb/planimetry/set_b";
+	set_b="/seb/planimetry/set_b";
+	set_a="/seb/planimetry/set_a";
+]],
+[{
+	elmnt, segment,
+	sheet,
+	set_result,
+	set1, set2,
+	rv,
+	//логические переменные
+	e1, e2, e3, e4, e5, arc, node
+}],
+{[
+	1_: in_: elmnt
+]}
+)
+
+	
+searchElStr3([
+	1_: fixed_: elmnt,
+	2_:	assign_: e2,
+	3_: assign_:  elmnt,
+], , end_program)
+	
+genEl([1_: node_: const_: set_result ])
+	
+//рекурсивно обойти все элементы
+callReturn([
+	1_: fixed_: openElemEnv,
+	2_: fixed_: {[ 1_: elmnt, 2_: set_result ]}
+], rv)
+
+printEl([1_: set_result])
+/////////////////////////////////////////////////////////////////////////////
+
+ui_sheet_create([ 1_:  assign_: sheet,
+	          2_:  fixed_: SCgSheet,
+	          3_:  fixed_: sheet_title,
+	          4_:  fixed_: layout
+	          ])
+
+ui_output([
+        1_: fixed_: sheet,
+        2_: fixed_: set_result
+])
+
+label(end_program)
+return()
+end
+
+procedure(searchEnvironmentSmart,
+[[	
+	openElemEnv = "/operation/searchEnvironmentSmart/openElemEnv";
+	SCsSheet = "/proc/agents/shell/keynode/SCsSheet";
+	layout =c= /"logical"/;
+	sheet_title =c= /"Окрестность SC-элемента"/;
+	seb_segment = "/seb/META/planimetry";
+	set_c="/seb/planimetry/set_b";
+	set_b="/seb/planimetry/set_b";
+	set_a="/seb/planimetry/set_a";
+]],
+[{
+	elmnt, segment,
+	sheet,
+	set_result,
+	set1, set2,
+	rv,
+	//логические переменные
+	e1, e2, e3, e4, e5, arc, node
+}],
+{[
+	1_: in_: elmnt
+]}
+)
+
+	
+searchElStr3([
+	1_: fixed_: elmnt,
+	2_:	assign_: e2,
+	3_: assign_:  elmnt,
+], , end_program2)
+	
+genEl([1_: node_: const_: set_result ])
+	
+//рекурсивно обойти все элементы
+callReturn([
+	1_: fixed_: openElemEnv,
+	2_: fixed_: {[ 1_: elmnt, 2_: set_result ]}
+], rv)
+printEl([1_: set_result])
+/////////////////////////////////////////////////////////////////////////////
+
+ui_sheet_create([ 1_:  assign_: sheet,
+	          2_:  fixed_: SCsSheet,
+	          3_:  fixed_: sheet_title,
+	          4_:  fixed_: layout
+	          ])
+
+ui_output([
+        1_: fixed_: sheet,
+        2_: fixed_: set_result
+])
+
+label(end_program2)
+return()
+end
+
+
+///////////////////////////////////////////////////////////////////////////////
+//	Рекурсивно открывает окрестность заданного элемента.
+//
+
+procedure(openElemEnv,
+[[
+	openElemEnv = "/operation/searchEnvironmentSmart/openElemEnv";
+	addInOut = "/operation/searchEnvironmentSmart/addInOut";
+	seb_segment = "/seb/META/planimetry";
+	tuple, attr, struct, family;
+	msgcontinue = /"...continue (skip)...\n"/;
+	yesarcs = /"...arc found...\n"/;
+	yesattrs = /"...attr found...\n"/;
+	nextattr = /"...next attr...\n"/;
+	limiter;
+	attr;
+]],
+[{
+	elmnt2, set_checked, set_tocheck,
+	set1, set2, rv,
+	segment,
+	e1, e2,e3,e4,e5,e6,e7,
+	elmnt, while_elem, while_arc, result, result2, result3, result_nodes,
+	attr1, attr2,
+	attrs
+}],
+{[
+	1_: in_: elmnt,
+	2_: in_: out_: result
+]}
+)
+
+genEl([1_: node_: const_: set_tocheck ])
+genEl([1_: node_: const_: set_checked ])
+
+printEl([1_: elmnt])
+callReturn([
+	1_: fixed_: addInOut,
+	2_: fixed_: {[ 1_: elmnt, 2_: set_tocheck ]}
+], rv)
+printEl([1_: set_tocheck])
+	
+genElStr3([1_: fixed_: set_checked, 2_: assign_: e1, 3_: fixed_: elmnt])
+genElStr3([1_: fixed_: result, 2_: assign_: e1, 3_: fixed_: elmnt])
+
+/////////////
+//cycle begins
+//call addInOut for every element in set_tocheck queue
+label(begin_while)
+searchElStr3([
+	1_: fixed_: set_tocheck,
+	2_: assign_: while_arc,
+	3_: assign_: while_elem
+], ,end_while)
+
+label(kill_arcs)
+eraseEl([ 1_: fixed_: while_arc ], ,)
+searchElStr3([
+	1_: fixed_: set_tocheck,
+	2_: assign_: while_arc,
+	3_: fixed_: while_elem
+], kill_arcs,)
+
+searchElStr3([
+	1_: fixed_: set_checked,
+	2_: assign_: e1,
+	3_: fixed_: while_elem
+], continue,)
+
+searchElStr3([
+	1_: fixed_: limiter,
+	2_: assign_: e1,
+	3_: fixed_: while_elem
+], continue,)
+
+sys_get_location([
+	1_: fixed_: while_elem,
+	2_: assign_: e1
+])
+
+printEl([1_: while_elem])
+
+//arc
+
+//tuple
+searchElStr3([1_: fixed_: tuple,	2_:	assign_: e1,	3_: fixed_:  while_elem], add_inout, )
+//family
+searchElStr3([1_: fixed_: family,	2_:	assign_: e1,	3_: fixed_:  while_elem], add_inout, )
+//attr
+searchElStr3([1_: fixed_: attr,	2_:	assign_: e1,	3_: fixed_:  while_elem], add_inout, )
+//struct
+searchElStr3([1_: fixed_: struct,	2_:	assign_: e1,	3_: fixed_:  while_elem], add_inout, add_tochecked)
+
+label(add_inout)
+genElStr3([1_: fixed_: result, 2_: assign_: e1, 3_: fixed_: while_elem])
+
+callReturn([
+	1_: fixed_: addInOut,
+	2_: fixed_: {[ 1_: while_elem, 2_: set_tocheck ]}
+], rv)
+printEl([1_: set_tocheck])
+
+label(add_tochecked)
+genElStr3([
+	1_: fixed_: set_checked,
+	2_: assign_: e1,
+	3_: fixed_: while_elem
+])
+
+nop(begin_while)
+label(continue)
+printNl([1_: msgcontinue])
+printEl([1_: while_elem])
+nop(begin_while)
+label(end_while)
+//
+//cycle ends
+/////////////
+
+searchSetStr3([
+	1_: fixed_: result,
+	2_:	assign_: e1,
+	3_:	assign_: e2,
+	set3_: assign_: result2
+], , )
+
+searchSetStr3([
+	1_: fixed_: result,
+	2_:	assign_: e1,
+	3_:	assign_: e2,
+	set3_: assign_: result_nodes
+], , )
+
+
+//ok, we added nodes. now add arcs (with attributes) connecting them
+/////////////
+//cycle begins
+//
+label(beg1)
+searchElStr3([1_: fixed_: result2, 2_: assign_: e1, 3_: assign_: e2], ,end1)
+eraseEl([ 1_: fixed_: e1 ],,)
+searchSetStr3([
+	1_: fixed_: result_nodes,
+	2_:	assign_: e3,
+	3_:	assign_: e4,
+	set3_: assign_: result3
+], , )
+/////////////
+//cycle begins
+//
+label(beg2)
+searchElStr3([1_: fixed_: result3, 2_: assign_: e3, 3_: assign_: e4], ,end2)
+eraseEl([ 1_: fixed_: e3 ],,)
+printEl([1_: e2])
+printEl([1_: e4])
+
+//add arc to result
+
+//search arc
+searchElStr3([1_: fixed_: e2, 2_: assign_: e3, 3_: fixed_: e4], ,cont2)
+genElStr3([1_: fixed_: result, 2_: assign_: e5, 3_: fixed_: e3])
+//search attr for this arc
+
+searchSetStr3([
+	1_: assign_: attr1,
+	2_:	assign_: attr2,
+	3_:	fixed_: e3,
+	set1_: assign_: attrs
+], , )
+//e3 - main arc
+/////////////
+//cycle begins
+label(attrs_beg)
+searchElStr3([1_: fixed_: attrs, 2_: assign_: e5, 3_: assign_: e6], ,attrs_end)
+eraseEl([ 1_: fixed_: e5 ],,)
+printNl([1_: nextattr])
+printEl([1_: e6])
+
+searchElStr3([1_: fixed_: attr, 2_: assign_: e5, 3_: fixed_: e6], ,attrs_cont)
+//node e6 - correct attribute for arc e3
+printNl([1_: yesattrs])
+genElStr3([1_: fixed_: result, 2_: assign_: e5, 3_: fixed_: e6])
+searchElStr3([1_: fixed_: e6, 2_: assign_: e5, 3_: fixed_: e3], ,)
+genElStr3([1_: fixed_: result, 2_: assign_: e7, 3_: fixed_: e5])
+label(attrs_cont)
+nop(attrs_beg)
+label(attrs_end)
+//cycle ends
+/////////////
+
+printNl([1_: yesarcs])
+label(cont2)
+nop(beg2)
+label(end2)
+//
+//cycle ends
+/////////////
+nop(beg1)
+label(end1)
+//
+//cycle ends
+/////////////
+
+
+label(end_program3)
+return()
+end
+
+
+procedure(addInOut,
+[[
+	seb_segment = "/seb/META/planimetry";
+	msgyes = /"...same segment...\n"/;
+	msgno = /"...diff segment...\n"/;
+	
+]],
+[{
+	e1, e2,
+	set_tocheck2, elmnt,
+	while_arc, while_elem,
+	temp
+}],
+{[
+	1_: in_: elmnt,
+	2_: in_: out_: set_tocheck2
+]}
+)
+
+
+//arc
+ifType([1_: arc_: elmnt], ,other)
+searchSetStr3([
+	1_: assign_: const_: e1,
+	2_:	fixed_: elmnt,
+	3_:	assign_: const_: e2,
+	set1_: fixed_: set_tocheck2,
+	set3_: fixed_: set_tocheck2
+], , )
+
+label(other)
+//add incoming
+searchSetStr3([
+	1_: assign_: const_: e1,
+	2_:	assign_: const_: e2,
+	3_:	fixed_: elmnt,
+	set1_: fixed_: set_tocheck2,
+	set2_: fixed_: set_tocheck2
+], , )
+//add outgoing
+searchSetStr3([
+	1_: fixed_: elmnt,
+	2_:	assign_: const_: e1,
+	3_:	assign_: const_: e2,
+	set2_: fixed_: set_tocheck2,
+	set3_: fixed_: set_tocheck2
+], , )
+
+label(end_program4)
+return()
+end
+
+/////////////////////////////////////
+//
+// для заданного узла находит все входящие/выходящие пары и дуги, включая атрибуты
+//
+procedure(addInOutExt,
+[[
+	seb_segment = "/seb/META/planimetry";
+	msgbeg = /"...addInOutExt segment...\n"/;
+	msgend = /"...addInOutExt segment...\n"/;
+	skipped = /"...skipped bad segment...\n"/;
+	mnozh_unique = "/operation/lib/mnozh_unique";
+	seb_segment = "/seb/META/planimetry";
+	seb_segment_im = "/META/im";
+	attr, rel;
+	"1_";
+	"2_";
+]],
+[{
+	elmnt,res,e1,e2,e3,e4,segment,attr_node,attr_arc, temp_nodes, temp_arcs
+}],
+{[
+	1_: in_: elmnt,
+	2_: in_: out_: res
+]}
+)
+sys_set_default_segment([1_:seb_segment])
+
+//если это дуга, то ищем ее атрибуты и все
+ifType([1_: arc_: elmnt], ,other2)
+searchSetStr3([
+	1_: assign_: const_: e1,
+	2_:	assign_: const_: e2,
+	3_:	fixed_: elmnt,
+	set1_: fixed_: temp,
+	set2_: fixed_: temp
+], , )
+nop(filter_res)
+
+label(other2)
+genEl([1_: node_: const_: temp_nodes ])
+genEl([1_: node_: const_: temp_arcs ])
+
+//search outgoing 
+searchSetStr3([
+	1_: fixed_: elmnt,
+	2_:	assign_: const_: e1,
+	3_:	assign_: const_: e2,
+	set2_: fixed_: temp_arcs,
+	set3_: fixed_: temp_nodes
+], , )
+
+//search incoming 
+searchSetStr3([
+	1_:	assign_: const_: e1,
+	2_:	assign_: const_: e2,
+	3_: fixed_: elmnt,
+	set1_: fixed_: temp_nodes,
+	set2_: fixed_: temp_arcs
+], , )
+printEl([1_: temp_arcs])
+printEl([1_: temp_nodes])
+
+
+//искать атрибуты для дуг из temp_arcs
+label(begLookAttrs)
+searchElStr3([1_: fixed_: temp_arcs,	2_:	assign_: e1,	3_: assign_: e2], , endLookAttrs)
+eraseEl([1_:e1])
+
+sys_get_location([1_: fixed_: e2, 2_: assign_: e1])
+ifCoin([
+        1_: seb_segment,
+        2_: e1
+       ],segmentOK1, )
+ifCoin([
+        1_: seb_segment_im,
+        2_: e1
+       ],, begLookAttrs)
+
+label(segmentOK1)
+genElStr3([1_: fixed_: temp_nodes, 2_: assign_: e3, 3_: fixed_: e2])
+//seacrh for attr
+searchElStr3([1_: assign_: attr_node,	2_:	assign_: attr_arc,	3_: fixed_: e2], , begLookAttrs)
+searchElStr3([1_: fixed_: attr,	2_:	assign_: e3,	3_: fixed_: attr_node], , begLookAttrs)
+//add attr to result
+genElStr3([1_: fixed_: res, 2_: assign_: e3, 3_: fixed_: attr_node])
+genElStr3([1_: fixed_: res, 2_: assign_: e3, 3_: fixed_: attr_arc])
+nop(begLookAttrs)
+label(endLookAttrs)
+
+
+label(begC2)
+searchElStr3([1_: fixed_: temp_nodes,	2_:	assign_: e1,	3_: assign_: e2], , endC2)
+eraseEl([1_:e1])
+sys_get_location([1_: fixed_: e2, 2_: assign_: e1])
+
+ifCoin([
+        1_: seb_segment,
+        2_: e1
+       ],segmentOK2, )
+ifCoin([
+        1_: seb_segment_im,
+        2_: e1
+       ],, begC2)
+label(segmentOK2)
+genElStr3([1_: fixed_: res, 2_: assign_: e1, 3_: fixed_: e2])
+nop(begC2)
+label(contC2)
+
+printNl([1_: skipped])
+printEl([1_:e2])
+nop(begC2)
+label(endC2)
+
+label(filter_res)
+
+
+label(end_program5)
+eraseEl([ 1_: fixed_: temp_nodes ], ,)
+eraseEl([ 1_: fixed_: temp_arcs ], ,)
+return()
+end

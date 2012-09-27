@@ -1,0 +1,652 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modfirst_ely
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  first_el not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: multiplication.m4scp
+// Description: Файл содержит операцию умножения
+/////////////////////////////////////////////////////
+// 		Author: Sergei Zalivako
+//        Date: 24.01.2011 
+
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "com_keynodes.scsy"
+#include "lib_search.scsy"
+#include "lib_check.scsy"
+#include "lib_gen.scsy"
+#include "lib_answer.scsy"
+#include "lib_set.scsy"
+
+program(init_op,
+[[
+	// Вызываемая SCP-программа
+	multiplication;
+	// Ключевой узел, обозначающий инициированный вопрос
+	q_initiated;
+	// Событие, на которое реагирует обработчик(проведение выходящей дуги из узла)
+	catch_output_arc;
+]],
+[{
+}],
+{[
+]}
+)
+// Установка обработчика события на проведение дуги  из узла "инициированный вопрос" 
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: multiplication,
+	3_: fixed_: {1_: q_initiated}
+])
+
+return()	
+end
+
+
+procedure(multiplication,
+[[
+	// Ключевой узел, обозначающий запрос
+	q_multiplication;
+
+	// Атрибут присутствия ответа
+	rrel_answer_is_present;
+	
+	// Атрибут того, что операция выполнилась
+	rrel_operation_is_over;
+
+	// Ключевой узел отношения умножения в базе знаний
+	nrel_multiplication;
+	
+	// Процедура проверки единиц измерения
+	check_unit_of_measure;
+	
+	// Процедура поиска значения величины
+	search_quantity_value;
+	
+	// Процедура генерации значения величины
+	gen_quantity_value;
+	
+	// Атрибут для обозначения десятичного числа
+	rrel_decimal_number;
+	
+	// Процедура для генерации ответа
+	answer_make;
+	
+	// Процедура удаление элемента из множества
+	set_rm_el;		
+	
+	// Узел, содержимым которого является число 0
+	zero =n= 0;
+	
+	// Узел, содержимым которого является число 1
+	one =n= 1;
+	
+]],
+[{
+	handler, element,
+	arcFromRequest, arcFromQuestion,
+	location, segments,
+	multiplicationLink,
+	arcForChecking, arcVar, attributeArc, nodeVar, checkingNode,
+	multiplicationResult, multipliersLink, multipliersLinkCopy, 
+	multiplicationValue, currentValue,
+	multiplicationAccumulationNode, currentMultiplier,
+	wrongMultipliersCount,
+	divisionAccumulationNode, divisionValue,
+	answer	
+}],
+{[
+	1_: in_: handler, 
+	2_: in_: element, 
+	3_: in_: arcFromQuestion,
+	4_: in_: multiplicationLink
+]}
+)
+// Получение сегмента, в котором находится узел связки запроса умножения
+sys_get_location([
+	1_: fixed_: multiplicationLink,
+	2_: assign_: location
+])
+
+// Установка найденного сегмента как основного
+sys_set_default_segment([
+	1_: fixed_: location
+])
+
+//Разворачивание установленного сегмента
+sys_spin_segment([
+	1_: fixed_: location,
+	2_: assign_: segments
+])
+
+// Проверяем, что в узел запроса проведена дуга из узла "запрос умножения величин"
+searchElStr3([
+	1_: fixed_: q_multiplication,
+	2_: assign_: const_: pos_: arc_: arcFromRequest,
+	3_: fixed_: multiplicationLink
+], , finishOperation)
+
+// Проверяем, что связка, в которую была проведена дуга из запроса явлется именно связкой отношения умножения
+searchElStr3([
+	1_: fixed_: nrel_multiplication,
+	2_: assign_: const_: pos_: actual_: arc_: arcForChecking,
+	3_: fixed_: multiplicationLink
+])
+
+// Поиск связки отношения "произведение*" с атрибутом "присутствует ответ_"
+// Если такой атрибут есть, то работа программы прекращается
+searchElStr5([
+	1_: fixed_: q_multiplication,
+	2_: fixed_: arcFromRequest,
+	3_: fixed_: multiplicationLink,
+	4_: assign_: arc_: const_: pos_: actual_: arcVar,
+	5_: fixed_: rrel_answer_is_present
+], exit)
+
+// Ищем узел, который является множеством множителей, входящих в произведение
+searchElStr5([
+	1_: fixed_: multiplicationLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: multipliersLink,
+	4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+	5_: fixed_: 1_
+], , exit)
+
+// Ищем узел, который должен содержать значение произведения
+searchElStr5([
+	1_: fixed_: multiplicationLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: multiplicationValue,
+	4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+	5_: fixed_: 2_
+], , exit)
+
+// Находим значение произведения
+callReturn([
+	1_: fixed_: search_quantity_value,
+	2_: fixed_: {[
+		1_: multiplicationValue,
+		2_: multiplicationResult
+	]}
+])
+
+// Проверяем значение произведения
+ifVarAssign([
+	1_: multiplicationResult
+], withoutMultiplicationResultGeneration)
+
+// Генерируем значение произведения
+callReturn([
+	1_: fixed_: gen_quantity_value,
+	2_: fixed_: {[
+		1_: multiplicationValue,
+		2_: rrel_decimal_number,
+		3_: multiplicationResult
+	]}
+])
+
+// Продолжение операции без генерации конструкции для значения произведения
+label(withoutMultiplicationResultGeneration)
+
+// Делаем копию множества множителей
+searchSetStr3([
+	1_: fixed_: multipliersLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: nodeVar,
+	set3_: assign_: const_: node_: multipliersLinkCopy
+])
+
+// Проверяем единицы измерения всех множителей
+callReturn([
+	1_: fixed_: check_unit_of_measure,
+	2_: fixed_: {[
+		1_: multipliersLinkCopy,
+		2_: checkingNode
+	]}
+])
+
+// Проверяем результат выполнения процедуры проверки единиц измерения
+ifVarAssign([
+	1_: checkingNode
+], , exit)
+
+// Делаем копию множества множителей в связи с тем, что предыдущая копия использовалась процедурой проверки единиц измерения
+searchSetStr3([
+	1_: fixed_: multipliersLink,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: assign_: node_: const_: nodeVar,
+	set3_: assign_: const_: node_: multipliersLinkCopy
+])
+
+// Если в узле произведения есть содержимое, то выполняем операцию произведения, в противном случае - частного
+ifFormCont([
+	1_: fixed_: multiplicationResult
+], divisionOperation, multiplicationOperation )
+
+// Выполнение операции произведения
+label(multiplicationOperation)
+
+	// Устанавливаем содержимое узла для накопления произведения единицей
+	add([
+		1_: assign_: node_: const_: multiplicationAccumulationNode,
+		2_: fixed_: zero,
+		3_: fixed_: one
+	])
+
+	// Просматриваем узлы, являющиеся множителями
+	label(multipliersView)
+
+		// Находим очередной множитель из произведения
+		searchElStr3([
+			1_: fixed_: multipliersLinkCopy,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: node_: const_: currentValue
+		], , multiplicationOperationSuccess)
+
+		// Удаляем дугу к очередному множителю
+		eraseEl([
+			1_: fixed_: f_: arcVar
+		])
+		
+		// Находим значение очередного множителя
+		callReturn([
+			1_: fixed_: search_quantity_value,
+			2_: fixed_: {[
+				1_: currentValue,
+				2_: currentMultiplier
+			]}
+		])
+		
+		// Проверяем значение очередного множителя
+		ifVarAssign([
+			1_: currentMultiplier
+		], withoutCurrentMultiplierGeneration)
+		
+		// Генерируем значение очередного множителя
+		callReturn([
+			1_: fixed_: gen_quantity_value,
+			2_: fixed_: {[
+				1_: currentValue,
+				2_: rrel_decimal_number,
+				3_: currentMultiplier
+			]}
+		])
+
+		// Продолжение операции без генерации конструкции для значения очередного множителя
+		label(withoutCurrentMultiplierGeneration)
+
+		// Если узел не имеет содержимого, то заканчиваем обработку множителей
+		ifFormCont([
+			1_: fixed_: currentMultiplier
+		], , cleanCopiesAfterMultiplication)
+
+		// Домножаем накопленное произведение на текущий множитель
+		mult([
+			1_: fixed_: multiplicationAccumulationNode,
+			2_: fixed_: multiplicationAccumulationNode,
+			3_: fixed_: currentMultiplier
+		], multipliersView)
+
+	// Операция умножения завершилась успешно
+	label(multiplicationOperationSuccess)
+
+		// Добавляем содержимое, накопленного произведения в узел, где хранится произведение
+		add([
+			1_: fixed_: multiplicationResult,
+			2_: fixed_: zero,
+			3_: fixed_: multiplicationAccumulationNode
+		])
+		
+		//#printNl([
+		//	1_: fixed_: multiplicationResult
+		//])
+		
+		// Генерируем факт присутствия ответа
+		genElStr5([
+			1_: fixed_: q_multiplication,
+			2_: fixed_: arcFromRequest,
+			3_: fixed_: multiplicationLink,
+			4_: assign_: arc_: const_: pos_: actual_: arcVar,
+			5_: fixed_: rrel_answer_is_present
+		])
+
+	// Удаляем созданные временные узлы
+	label(cleanCopiesAfterMultiplication)
+
+		// Удаляем узел, в котором накапливалось произведение
+		eraseEl([
+			1_: fixed_: f_: multiplicationAccumulationNode
+		])
+
+		// Удаляем копию множества множителей
+		eraseEl([
+			1_: fixed_: f_: multipliersLinkCopy
+		], exit, exit)
+
+// Выполнение операции частного
+label(divisionOperation)
+
+	// Обнуляем количество невычисленных множителей
+	add([
+		1_: assign_: node_: const_: wrongMultipliersCount,
+		2_: fixed_: zero,
+		3_: fixed_: zero
+	])
+
+	// Просмотр множителей для нахождения того, который не вычислен
+	label(wrongMultipliersView)
+
+		// Находим очередной множитель из произведения
+		searchElStr3([
+			1_: fixed_: multipliersLinkCopy,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: node_: const_: currentValue
+		], , makeDivision)
+
+		// Удаляем дугу к очередному множителю
+		eraseEl([
+			1_: fixed_: f_: arcVar
+		])
+
+		// Находим значение очередного множителя
+		callReturn([
+			1_: fixed_: search_quantity_value,
+			2_: fixed_: {[
+				1_: currentValue,
+				2_: currentMultiplier
+			]}
+		])
+						
+		// Проверяем значение очередного множителя
+		ifVarAssign([
+			1_: currentMultiplier
+		], withoutCurrentMultiplierForDifGeneration)
+		
+		// Генерируем значение очередного множителя
+		callReturn([
+			1_: fixed_: gen_quantity_value,
+			2_: fixed_: {[
+				1_: currentValue,
+				2_: rrel_decimal_number,
+				3_: currentMultiplier
+			]}
+		])
+
+		// Продолжение операции без генерации конструкции для значения очередного множителя
+		label(withoutCurrentMultiplierForDifGeneration)
+		
+		// Если узел не имеет содержимого, то увеличиваем число множителей, содержимое которых не вычислено
+		ifFormCont([
+			1_: fixed_: currentMultiplier
+		], wrongMultipliersView)
+
+		// Ищем дугу, соединяющую связку множителей и текущий множитель
+		searchElStr3([
+			1_: fixed_: multipliersLink,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: fixed_: currentValue
+		])
+
+		// Используя дугу, найденную в предыдущем операторе заносим невычисленный множитель в узел накопления частного
+		searchElStr3([
+			1_: fixed_: multipliersLink,
+			2_: fixed_: arcVar,
+			3_: assign_: const_: node_: divisionValue
+		])
+		
+		// Находим значение узла накопления частного
+		callReturn([
+			1_: fixed_: search_quantity_value,
+			2_: fixed_: {[
+				1_: divisionValue,
+				2_: divisionAccumulationNode
+			]}
+		])
+		
+		// Проверяем значение узла накопления частного
+		ifVarAssign([
+			1_: divisionAccumulationNode
+		], withoutDivisionAccumulationNodeGeneration)
+			
+		// Генерируем значение узла накопления частного
+		callReturn([
+			1_: fixed_: gen_quantity_value,
+			2_: fixed_: {[
+				1_: divisionValue,
+				2_: rrel_decimal_number,
+				3_: divisionAccumulationNode
+			]}
+		])
+
+		// Продолжение операции без генерации конструкции для значения узла накопления частного
+		label(withoutDivisionAccumulationNodeGeneration)
+
+		// Увеличиваем число множителей, содержимое которых не вычислено
+		add([
+			1_: fixed_: wrongMultipliersCount,
+			2_: fixed_: wrongMultipliersCount,
+			3_: fixed_: one
+		])
+
+		// Если число множителей, содержимое которых не вычислено больше 1, то прекращаем просмотр множителей, 
+		// В противном случае - продолжаем просмотр множителей
+		ifGr([
+			1_: fixed_: wrongMultipliersCount,
+			2_: fixed_: one
+		], cleanCopiesAfterDivision, wrongMultipliersView)
+
+		label(makeDivision)
+
+			// Проверяем, что есть хоть один неизвестный множитель
+			ifEq([
+				1_: fixed_: wrongMultipliersCount,
+				2_: fixed_: zero
+			], cleanCopiesAfterDivision)
+
+			// Делаем копию множества множителей
+			searchSetStr3([
+				1_: fixed_: multipliersLink,
+				2_: assign_: arc_: const_: pos_: actual_: arcVar,
+				3_: assign_: node_: const_: nodeVar,
+				set3_: assign_: const_: node_: multipliersLinkCopy
+			])
+			
+			// Заносим в узел накопления частного произведение всех множителей
+			add([
+				1_: fixed_: divisionAccumulationNode,
+				2_: fixed_: multiplicationResult,
+				3_: fixed_: zero
+			])
+
+			// Находим дугу, идущую от копии связки множителей к узлу накопления частного
+			searchElStr3([
+				1_: fixed_: multipliersLinkCopy,
+				2_: assign_: arc_: const_: pos_: actual_: arcVar,
+				3_: fixed_: divisionValue
+			])
+
+			// Удаляем найденную дугу
+			eraseEl([
+				1_: fixed_: f_: arcVar
+			])
+
+	// Просматриваем все делители
+	label(divisorsView)
+
+		// Находим дугу, идущую от копии связки множителей к узлу накопления частного
+		searchElStr3([
+			1_: fixed_: multipliersLinkCopy,
+			2_: assign_: arc_: const_: pos_: actual_: arcVar,
+			3_: assign_: node_: const_: currentValue
+		], , divisionOperationSuccess)
+
+		// Удаляем найденную дугу
+		eraseEl([
+			1_: fixed_: f_: arcVar
+		])
+		
+		// Находим значение очередного множителя
+		callReturn([
+			1_: fixed_: search_quantity_value,
+			2_: fixed_: {[
+				1_: currentValue,
+				2_: currentMultiplier
+			]}
+		])
+		
+		// Проверяем значение очередного множителя
+		ifVarAssign([
+			1_: currentMultiplier
+		], withoutCurrentMultiplierForViewGeneration)
+		
+		// Генерируем значение очередного множителя
+		callReturn([
+			1_: fixed_: gen_quantity_value,
+			2_: fixed_: {[
+				1_: currentValue,
+				2_: rrel_decimal_number,
+				3_: currentMultiplier
+			]}
+		])
+
+		// Продолжение операции без генерации конструкции для значения очередного слагаемого
+		label(withoutCurrentMultiplierForViewGeneration)
+		
+		// Делим частное на текущий делитель
+		div([
+			1_: fixed_: divisionAccumulationNode,
+			2_: fixed_: divisionAccumulationNode,
+			3_: fixed_: currentMultiplier
+		], divisorsView)
+
+	label(divisionOperationSuccess)
+		
+		//#printNl([
+		//	1_: fixed_: divisionAccumulationNode
+		//])
+		
+		// Генерируем факт присутствия ответа
+		genElStr5([
+			1_: fixed_: q_multiplication,
+			2_: fixed_: arcFromRequest,
+			3_: fixed_: multiplicationLink,
+			4_: assign_: arc_: const_: pos_: actual_: arcVar,
+			5_: fixed_: rrel_answer_is_present
+		])
+
+	label(cleanCopiesAfterDivision)
+
+		// Удаляем узел, в котором считалось число невычисленных множителей
+		eraseEl([
+			1_: fixed_: f_: wrongMultipliersCount
+		])
+
+		// Удаляем копию множества множителей
+		eraseEl([
+			1_: fixed_: f_: multipliersLinkCopy
+		], exit)
+
+label(exit)
+
+// Формирование ответа на запрос умножения величин
+label(makingAnswer)
+
+	// Генерируем узел для вывода ответа
+	genEl([
+		1_: assign_: const_: node_: answer
+	])
+		
+	// Добавляем в ответ узел запроса умножения
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: q_multiplication
+	])
+	
+	// Добавляем в ответ дугу из узла запроса умножения
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: arcFromRequest
+	])
+	
+	// Добавляем в ответ связку запроса умножения
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: multiplicationLink
+	])
+	
+	// Если дуга из узла "присутствует ответ_" не проводилась
+	ifVarAssign([
+		1_: attributeArc
+	], , withoutAnswerIsPresent)
+	
+	// Добавляем в ответ узел "присутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: rrel_answer_is_present
+	])
+	
+	// Добавляем в ответ дугу из узла "присутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: attributeArc
+	])
+	
+// Создание ответа операции
+label(withoutAnswerIsPresent)
+	
+	// Генерация ответа операции
+	callReturn([
+		1_:	fixed_: answer_make,
+		2_:	fixed_: {[
+			1_: multiplicationLink,
+			2_: answer
+		]}
+	])
+	
+	printNl([
+		1_: fixed_: /"Multiplication answer is"/
+	])
+	
+	//#printEl([
+	//#	1_: answer
+	//#])
+
+	// Генерируем факт выполнения операции
+	genElStr5([
+		1_: fixed_: q_multiplication,
+		2_: fixed_: arcFromRequest,
+		3_: fixed_: multiplicationLink,
+		4_: assign_: arc_: const_: pos_: actual_: arcVar,
+		5_: fixed_: rrel_operation_is_over
+	])
+	
+label(finishOperation)
+
+return()
+	
+end

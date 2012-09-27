@@ -1,0 +1,60 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+#include "scp_keynodes.scsy"
+
+/////////////////////////////////////////////////////
+//        File: seg_open.m4scp
+// Description: File contains procedure to open segment
+//				that contains specified element
+/////////////////////////////////////////////////////
+// 		Author: Denis Koronchik
+//        Date: 28.11.10
+
+/* Procedure for segment opening.
+
+@brief Get sc-element and open segment where it's locate.
+*/
+procedure(seg_open,
+[[	// constants
+]],
+[{	// variables
+
+	// input
+	element,
+	// output
+	segment, t
+}],
+{[	// arguments
+	1_:	in_: element,	//	element to open segment
+	2_: out_: segment,	//  opened segment
+	3_: out_: t			//	opened segment descriptor ?
+]}
+)
+
+// trying to get segment, where element locate
+sys_get_location([1_: fixed_: element, 2_: assign_: segment])
+sys_spin_segment([1_: fixed_: segment, 2_: assign_: t])
+
+
+return()
+end()

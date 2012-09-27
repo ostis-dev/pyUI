@@ -1,0 +1,312 @@
+
+// 
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_search.scsy"
+#include "lib_gen.scsy"
+
+program(init_op,
+[[	
+	//#req="/seb/planimetry/запрос поиска в глубину";
+	catch_output_arc;	
+	q_initiated;
+]],
+[{
+	nodeVar
+}],
+{[
+]}
+)
+
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: postorder_tree_search_op,
+	3_: fixed_: {1_: q_initiated},
+	4_: assign_: nodeVar
+])
+
+return()
+end
+
+procedure(postorder_tree_search_op,
+[[
+	rrel_answer_is_present;
+	rrel_answer_is_absent;
+	q_postorder_tree_search;
+	nrel_value;
+	q_initiated;
+	nrel_inclusion;
+	catch_output_arc;
+	catch_input_arc;
+	q_gen_all_accessory_links;
+	gen_all_accessories;
+	group_looked_throught;
+	gen_production_using_classes;
+	nrel_statements_about_class;
+	search_bin_pair_begin_proc;
+	here=/"\n\nI have entered POSTORDER TREE SEARCH\n\n"/;
+	exited=/"\n\nI have exited POSTORDER TREE SEARCH\n\n"/;
+]],
+[{	
+	inputarc,arc,arc1,value,handler,element,seg,segments,temp,rel,obj,
+	class,classes,res,node,set,waitarc,v_v_arc,input_value,attr
+}],
+{[
+	1_: in_: handler,
+	2_: in_: element,
+	3_: in_: inputarc,
+	4_: in_: input_value
+]}
+)
+sys_get_location([1_: input_value,2_: assign_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+sys_set_default_segment([1_: fixed_: seg])
+
+searchElStr3([
+	1_: fixed_: q_postorder_tree_search,
+	2_: assign_: const_: pos_: v_v_arc,
+	3_: fixed_: input_value
+],,exit)
+searchElStr5([
+	1_: fixed_: q_postorder_tree_search,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: input_value,
+	4_: assign_: const_: pos_: arc1,
+	5_: assign_: node_: const_: attr
+],exit)
+printNl([1_: here])
+searchElStr3([
+	1_: fixed_: input_value,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: const_: node_: value
+])
+//#ifVarAssign([1_: value],,gen_bad_result)
+//#printEl([1_: value])
+
+genElStr3([
+	1_: fixed_: group_looked_throught,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: value
+])
+
+/////////////////////////////////////////////////////
+//Starting gen_all_accessories procedure
+callReturn([
+	1_: fixed_: gen_all_accessories,
+	2_: fixed_:
+		{[
+			1_: fixed_: value
+		]}
+])
+
+/////////////////////////////////////////////////////
+//Looking throught all classes in which object is a membership
+callReturn([
+	1_: fixed_: gen_production_using_classes,
+	2_: fixed_:
+		{[
+			1_: fixed_: value,
+			2_: assign_: res
+		]}
+])
+ifVarAssign([1_: res],gen_good_result)
+//#printNl([1_: /"OUTPUT CYCLE"/])
+//#---------------------------------output cycle-------------------------------------
+searchSetStr5([
+	1_: assign_: node_: const_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: value,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 1_,
+	set1_: assign_: set
+],,input_cycle)
+ifVarAssign([1_: set],,input_cycle)
+label(next_node1)
+ifVarAssign([1_: node],,no_erase_node1)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: fixed_: node
+])
+label(no_erase_node1)
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: const_: node
+],,input_cycle)
+searchElStr3([
+	1_: assign_: const_: node_: rel,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: node
+],,next_node1)
+searchElStr5([
+	1_: fixed_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: const_: res,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 2_
+],,next_node1)
+//#printNl([1_: /"RES_OUT"/])
+//#//#printEl([1_: res])
+searchElStr3([
+	1_: fixed_: group_looked_throught,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: res
+],next_node1)
+//#Generating new request
+//#sys_set_default_segment([1_: fixed_: seg])
+genEl([1_: assign_: const_: node_: temp])
+genElStr3([
+	1_: fixed_: q_postorder_tree_search,
+	2_: assign_: const_: pos_: waitarc,
+	3_: fixed_: temp
+])
+//#printNl([1_: /"RES:"/])
+//#//#printEl([1_: res])
+//#//#printEl([1_: input_value])
+genElStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: res
+])
+genElStr3([
+	1_: fixed_: question,
+	2_: assign_: const_: pos_:arc,
+	3_: fixed_: temp
+])
+genElStr3([
+	1_: fixed_: q_initiated,
+	2_: assign_: const_: pos_:arc,
+	3_: fixed_: temp
+])
+//#printNl([1_: /"TEMP"/])
+//#//#printEl([1_: temp])
+label(wait1)
+sys_wait([
+	1_: fixed_: catch_input_arc,
+	2_: fixed_: {1_: waitarc}
+])
+searchElStr5([
+	1_: fixed_: q_postorder_tree_search,
+	2_: fixed_: waitarc,
+	3_: fixed_: temp,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_absent
+],next_node1)
+searchElStr5([
+	1_: fixed_: q_postorder_tree_search,
+	2_: fixed_: waitarc,
+	3_: fixed_: temp,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_present
+],gen_good_result,wait1)
+
+label(input_cycle)
+//#printNl([1_: /"INPUT CYCLE"/])
+//#---------------------------------input cycle-------------------------------------
+searchSetStr5([
+	1_: assign_: node_: const_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: value,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 2_,
+	set1_: assign_: set
+],,gen_bad_result)
+ifVarAssign([1_: set],,gen_bad_result)
+label(next_node2)
+ifVarAssign([1_: node],,no_erase_node2)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: fixed_: node
+])
+label(no_erase_node2)
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: const_: node
+],,gen_bad_result)
+searchElStr3([
+	1_: assign_: const_: node_: rel,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: node
+],,next_node2)
+searchElStr5([
+	1_: fixed_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: const_: res,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 1_
+],,next_node2)
+//#printNl([1_: /"RES_IN"/])
+//#//#printEl([1_: res])
+searchElStr3([
+	1_: fixed_: group_looked_throught,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: res
+],next_node2)
+//#printNl([1_: /"RES2"/])
+//#//#printEl([1_: res])
+//#Generating new request
+genElStr3([
+	1_: fixed_: q_postorder_tree_search,
+	2_: assign_: const_: pos_: waitarc,
+	3_: assign_: node_: const_: temp
+])
+genElStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: res
+])
+genElStr3([
+	1_: fixed_: question,
+	2_: assign_: const_: pos_:arc,
+	3_: fixed_: temp
+])
+genElStr3([
+	1_: fixed_: q_initiated,
+	2_: assign_: const_: pos_:arc,
+	3_: fixed_: temp
+])
+
+label(wait2)
+sys_wait([
+	1_: fixed_: catch_input_arc,
+	2_: fixed_: {1_: waitarc}
+])
+searchElStr5([
+	1_: fixed_: q_postorder_tree_search,
+	2_: fixed_: waitarc,
+	3_: fixed_: temp,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_absent
+],next_node2)
+searchElStr5([
+	1_: fixed_: q_postorder_tree_search,
+	2_: fixed_: waitarc,
+	3_: fixed_: temp,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_present
+],gen_good_result,wait2)
+
+label(gen_good_result)
+genElStr3([
+	1_: fixed_: rrel_answer_is_present,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: v_v_arc
+],l_init,l_init)
+label(gen_bad_result)
+genElStr3([
+	1_: fixed_: rrel_answer_is_absent,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: v_v_arc
+],l_init,l_init)
+
+label(l_init)
+//#eraseEl([1_: fixed_: inputarc])
+
+label(exit)
+printNl([1_: exited])
+return()
+end

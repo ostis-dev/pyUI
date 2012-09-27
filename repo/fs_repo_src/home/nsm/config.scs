@@ -1,0 +1,175 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+#include "ordinal.scsy"
+#include "nsm_keynodes.scsy"
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//        File: config.scs
+//
+// Description: содержит описания навигационных команд.
+//
+//         $Id: config.scs,v 1.6 2006-05-10 16:07:22 rozhansky Exp $
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+//      Author: Alexey Rukin
+//
+///////////////////////////////////////////////////////////////////////////////
+
+
+/*============================== ВАЖНО !!!! ===================================*/
+// a,b,c - командные элементы.
+// _a, _b, _c,.. - переменные узлы шаблона
+// _undef1, _undef2,.. - переменные неопределенного типа элементы.
+//!!!!!!НИЗЗЯ ИЗ НИХ ВЕСТИ ДУГИ!!!!!!!!!!!!!!!
+/*=============================================================================*/
+
+//Описание команд навигационно- поисковой машины
+/*
+1) окрестность элемента по выходящим дугам,
+2) окрестность элемента по входящим дугам,
+3) элементы, у которого выходящие дуги имеют атрибуты,
+4) элементы, у которого входящие дуги имеют атрибуты,
+5) заголовок программы
+
+Команды необходимо описывать следующим образом
+для необязательного текста используются скобки /+  +/
+[] - скобки контура
+/ * * / // - комментарии
+начало описания
+nsm_command -> имя_команды ->  nsm_command_: /+имя_множества_для_отладки = +/ {
+                                                       nsm_command_comment_: /"Коментарии ик команде"/,   // не обязательно 
+                                                       nsm_show_content_: {
+                                                                                           // не обязательно 
+                                                                                          //      Множество элементов в шаблоне,
+                                                                                          // для найденных соответствий которым необходимо отобразить содержимое в ТМ
+                                                       },
+                            nsm_command_pattern_:  [  
+                                                        // шаблон, который ищется;
+                                                        // Правила соответствия:
+                                                        // ШАБЛОН                                               РЕЗУЛЬТАТ
+                                                        // Узел                                                 Узел
+                                                        // Дуга                                                 Дуга
+                                                        // Неопределенный эл. (Дуга|Узел|Элемент)
+                                                        // Константа                            соответствует себе
+                                                        // Переменная                           константа
+                                                        // Метапеременная   переменная
+                        ],
+                        nsm_command_elem_:  {
+                                // Элемент запроса под соответствующим атрибутом подменяется соответствующим элементом шаблона команды.
+                                // Если он один, то помечать атрибутом 1_ необязательно.
+                        };
+                        
+конец описания
+
+Следующие команды можно рассматривать в качестве примера
+*/
+//явное указание неопределенности типа соответствующих элементов
+@undf -> _undef1, _undef2, _undef3, __undef1;
+@node -> _attr, _a;
+//-------------------------------------------------
+///1) найти окрестность элемента по выходящим дугам
+nsm_command -> search_all_output_arcs -> nsm_command_: search_all_output_arcs_impl = {
+                        nsm_command_shortname_: /"Выходящие дуги"/,
+                        nsm_command_comment_: /"Найденные выходящие позитивные константные sc-дуги входящие в константы (и не в sc-дуги)"/,
+                        nsm_command_pattern_: nsm_command_pattern_pattern=[  // шаблон
+/* a- множество элементов, из которых выходят дуги в некоторые элементы _e */                   
+                                a ->> _undef1;
+                        ],
+                        nsm_command_elem_: { 
+//имена элементов шаблона, относительно(начиная с) которых поисходит поиск
+//необходимо перечислять с атрибутами 1_, 2_, 3_ и т.д. 
+                                1_: a 
+                        }                       
+};
+
+
+
+///2) найти окрестность элемента по входящим дугам
+nsm_command -> search_all_input_arcs -> nsm_command_: {
+                        nsm_command_shortname_: /"Входящие дуги"/,
+                        nsm_command_comment_: /"Найденные входящие позитивные константные sc-дуги"/,    
+                        nsm_command_pattern_: [
+                                _a ->> a;
+                        ],
+                        nsm_command_elem_: { 1_: a }
+};
+
+///3) найти элементы, у которого выходящие дуги имеют атрибуты
+nsm_command -> search_all_output_attr -> nsm_command_: {
+                        nsm_command_shortname_: /"Вых-щие дуги с атрибутами"/,
+                        nsm_command_comment_: /"Найденные выходящие sc-дуги с возможным атрибутом, входящие в константы, которые не являются sc-дугами"/,    
+                    	nsm_command_pattern_: [
+//шаблон конструкции из 5 элементов (str5)
+                                a ->> _a:: _undef1;
+                        ],
+                        nsm_command_elem_: { 1_: a }
+};
+
+///4) найти элементы, у которого входящие дуги имеют атрибуты
+nsm_command -> search_all_input_attr -> nsm_command_: {
+                        nsm_command_shortname_: /"Вх-щие дуги с атрибутами"/,
+                        nsm_command_comment_: /"Найденные входящие sc-дуги с возможным атрибутом"/,    
+                        nsm_command_pattern_: [
+                                _a ->> _b:: a;
+                        ],
+                        nsm_command_elem_: { 1_: a }
+};
+
+
+//5) Конструкция, описывающая тип содержимого элемента
+nsm_command -> sclist_content_type -> nsm_command_: {
+	nsm_command_shortname_: /"Тип содержимого элемента"/,
+	nsm_command_comment_: /""/,    
+     	nsm_command_pattern_: [  // шаблон
+		_a ->> "/proc/keynode/mime_" :: a;
+		
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//6) Найти множество задач для данной главы
+//исправить учебная задача ввместо атомарной формулировки
+nsm_command -> search_all_part_study_tasks -> nsm_command_: {
+    nsm_command_shortname_: /"Задачи главы"/,
+    nsm_command_comment_: /"Задачи главы"/,
+	nsm_command_pattern_: [
+		a ->> _undef1 <<- "/seb/planimetry/формулировка атомарной задачи";
+	],
+    nsm_command_elem_:  { 1_: a }
+};
+
+
+// Поиск задач к главе
+nsm_command -> search_russian_study_task -> nsm_command_: {
+    nsm_command_shortname_: /"Русскоязычная формулировка"/,
+    nsm_command_comment_: /"Русскоязычная формулировка"/,
+	nsm_command_pattern_: [
+		"/seb/planimetry/семантически эквивалентные конструкции" ->> {. a, _undef1 .};
+		_undef1 <<- "/seb/planimetry/текст русского языка";
+	],
+    nsm_command_elem_:  { 1_: a }
+};

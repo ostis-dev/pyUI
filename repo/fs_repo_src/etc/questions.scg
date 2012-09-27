@@ -1,0 +1,8 @@
+#include "ordinal.scsy"
+#include "meta_info.scsy"
+#include "ui_keynodes.scsy"
+questions_src\questions_keynodes.gwf
+questions_src\ея.примеры.вопросов.gwf
+questions_src\спец.поиск иллюстрации объекта.gwf
+questions_src\спец.поиск полной семантической окрестности.gwf
+

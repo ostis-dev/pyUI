@@ -1,0 +1,10 @@
+﻿MyGUI_Theme_Texture	scifi_skin.png
+MyGUI_Theme_Button_ColourNormal	#313131
+MyGUI_Theme_Button_ColourHighlighted	#cf271f
+MyGUI_Theme_Button_ColourPushed	#e31111
+MyGUI_Theme_Button_ColourDisabled	#5f5f5f
+MyGUI_Theme_Idtf_Colour #0000aa
+MyGUI_Theme_ToolTipText_Colour #000000
+MyGUI_Theme_ArgumentsLabel_Colour #ffffff
+MyGUI_Theme_StaticText_Colour #313131
+MyGUI_Theme_KeyFont_Color #ffffff

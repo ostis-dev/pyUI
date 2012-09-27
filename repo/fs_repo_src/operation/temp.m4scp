@@ -1,0 +1,54 @@
+//#
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_set.scsy"
+#include "lib_search.scsy"
+
+
+program(temp,
+[[	
+	oper=full_merge;
+	rrel_answer_is_present;
+	rrel_answer_is_absent;
+	rrel_formula_is_absent;
+	req="/seb/planimetry/запрос истинности высказывания";
+	req1=q_var_value;
+	req2="/seb/planimetry/запрос вычисления формулы";
+	link="/seb/planimetry/LINK";
+	link1="/seb/planimetry/LINK1";
+	tr="/seb/planimetry_scg/VM";
+	a="/seb/planimetry/C1";
+	q_calculation;
+	q_initiated;
+	q_postorder_tree_search;
+	search_quantity_value;
+	here=/"\n\nTEMP ended!\n\n"/;
+	impl=nrel_impl;
+	ekv=nrel_eq;
+	catch_output_arc;
+	node="/seb/planimetry/OKR";
+	vna=/"VAR NOT ASSIGN"/;
+	cna=/"CONT NOT ASSIGN"/;
+	abc="/seb/planimetry/Треугольник (A,,B,,C)";
+]],
+[{
+	arc,temp,segment,calc_link,res,arc1,seg,segments
+}],
+{[
+]}
+)
+sys_get_location([
+	1_: fixed_: tr,
+	2_: assign_: seg
+])
+
+printEl([
+	1_: fixed_: seg
+])
+
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+return()
+
+end

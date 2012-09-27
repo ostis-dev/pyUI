@@ -1,0 +1,86 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: set_sub.m4scp
+// Description: File contains procedure to find
+//				substraction of set2 from set1
+/////////////////////////////////////////////////////
+// 		Author: Denis Koronchik
+//        Date: 28.11.10
+
+#include "scp_keynodes.scsy"
+
+procedure(set_sub,
+[[	// constants
+]],
+[{	// variables
+
+	// input
+	set1, set2,
+	// other
+	set, el, arc
+	
+}],
+{[	// arguments
+	1_:	in_: set1,		//	first set for substracting (result)
+	2_: in_: set2		//  second set that will be substracted
+]}
+)
+
+// copy elements from set2 for processing
+searchSetStr3([
+	1_: fixed_: set2,
+	2_: assign_: arc_: pos_: const_: arc,
+	3_: assign_: el,
+	set3_: assign_: set
+	], , , goto_error)
+
+label(process_set)
+// iterate elements of set2 and remove them from set1
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: assign_: el], , goto_finish, goto_error)
+	
+eraseEl([1_: fixed_: arc])
+
+// trying to find element in set1
+searchElStr3([
+	1_:	fixed_: set1,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: fixed_: el], , process_set, goto_error)
+	
+// remove element from set1
+eraseEl([1_: fixed_: arc])
+
+// goto process_set
+nop(process_set)
+	
+label(goto_error)
+//!	FIXME:	add error processing (grabage cleaning)
+
+label(goto_finish)
+
+return()
+end()

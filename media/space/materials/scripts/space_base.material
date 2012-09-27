@@ -1,0 +1,41 @@
+material space_Normal
+{
+	technique 
+	{
+		pass 
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 1.000 1.000 1.000
+			cull_hardware none
+			depth_write on
+		}
+	}
+}
+
+material space_Selected
+{
+	technique 
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.000 0.000 0.000
+			cull_hardware none
+			depth_write on
+		}
+	}
+}
+
+material space_Highlighted
+{
+	technique
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.000 0.000 0.000
+			cull_hardware none
+			depth_write on
+		}
+	}
+}

@@ -1,0 +1,83 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: search_node_theory.m4scp
+// Description: Файл содержит процедуру поиска
+//				теории, котрой принадлежит заданное высказывание
+/////////////////////////////////////////////////////
+// 		Author: Shunkevich Daniil
+//        Date: 22.01.2011 
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+procedure(search_stat_theory,
+[[	
+	group_theory;
+]],
+[{	
+	arc,arc1,stat,handler,element,seg,segments,temp,set,set2,theory,section,attr
+}],
+{[
+	//узел, к которому проведена дуга
+	1_: in_: stat,
+	//результирующее мн-во, которое представляет собой узел теории
+	2_: out_: theory
+]}
+)
+sys_get_location([1_: stat,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+searchSetStr3([
+	1_: assign_: node_: const_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: stat,
+	set1_: assign_: set
+])
+label(next_node)
+ifVarAssign([1_: theory],,no_erase)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: fixed_: theory
+])
+label(no_erase)
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: const_: node_: theory
+],,exit)
+searchElStr3([
+	1_: fixed_: group_theory,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: theory
+],exit,next_node)
+
+label(exit)
+
+return()
+end

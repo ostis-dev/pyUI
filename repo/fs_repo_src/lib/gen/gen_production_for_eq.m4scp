@@ -1,0 +1,251 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: gen_production_for_eq.m4scp
+// Description:
+// Файл содержит процедуру запуска операции
+// продукции для высказывания об эквивалентности
+// двух атомарных высказываний
+// 1-й аргумент - исходное высказывание
+// 2-й аргумент - объект, который необходимо подставить в выказывание
+// 3-й аргумент - узел, отражающий наличие ответа (имеет значение, если продцукция успешна)
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 11.01.11
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_search.scsy"
+#include "lib_gen.scsy"
+
+procedure(gen_production_for_eq,
+[[	
+	nrel_eq;
+	q_production;
+	q_calculation;
+	nrel_answer;
+	catch_input_arc;
+	gen_impl_link;	
+	calc_req_pattern=[nrel_answer->>{. 1_:: _node, 2_:: _res.};_q_arc=(q_calculation->>_q_req);_node->>q_calculation;_node->>_q_arc;_node->>_q_req;];
+]],
+[{	
+	stat,arc,arc1,seg,segments,temp,arc1,value,res,left,right,res_set1,res_set2,node1,node2,set,waitarc,q_req,q_arc,out_res,theory
+}],
+{[
+	1_: in_: stat,
+	2_: in_: value,
+	3_: out_: out_res
+]}
+)
+sys_get_location([1_: stat,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+printNl([1_: /"PRODUCTION EQ entered"/])
+
+searchElStr3([
+	1_: fixed_: nrel_eq,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: stat
+],,exit)
+printEl([1_: stat])
+searchSetStr3([
+	1_: fixed_: stat,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: node1,
+	set3_: assign_: set
+],,exit)
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: left
+],,exit)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: f_: assign_: const_: pos_: arc,
+	3_: fixed_: left
+])
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: right
+],,exit)
+eraseEl([1_: fixed_: set])
+
+
+sys_search([
+	1_: fixed_: right,
+	4_: assign_: res_set1
+],right_good,right_wrong)
+
+
+label(right_good)
+sys_search([
+	1_: fixed_: left,
+	4_: assign_: res_set2
+],exit)
+searchElStr3([
+	1_: fixed_: res_set1,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: value
+],,exit)
+callReturn([
+	1_: fixed_: search_stat_theory,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: stat,
+			2_: assign_: theory
+		]}
+])
+ifVarAssign([1_: theory],,gen_bad_result)
+callReturn([
+	1_: fixed_: gen_impl_link,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: right,
+			2_: fixed_: left,
+			3_: fixed_: theory,
+			4_: assign_: stat
+		]}
+],gen_request,gen_request)
+
+label(right_wrong)
+sys_search([
+	1_: fixed_: left,
+	4_: assign_: res_set2
+],,exit)
+searchElStr3([
+	1_: fixed_: res_set2,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: value
+],,exit)
+callReturn([
+	1_: fixed_: search_stat_theory,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: stat,
+			2_: assign_: theory
+		]}
+])
+ifVarAssign([1_: theory],,gen_bad_result)
+callReturn([
+	1_: fixed_: gen_impl_link,
+	2_: fixed_: 
+		{[	
+			1_: fixed_: right,
+			2_: fixed_: left,
+			3_: fixed_: theory,
+			4_: assign_: stat
+		]}
+],gen_request,gen_request)
+label(gen_request)
+/////////////////////////////////////////////////////
+// production generation start
+genElStr3([
+	1_: assign_: node_: const_: res,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: const_: node2
+],,exit)
+genElStr3([
+	1_: fixed_: res,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: stat
+],,exit)
+genElStr3([
+	1_: fixed_: node2,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: value
+],,exit)
+genElStr3([
+	1_: fixed_: q_production,
+	2_: assign_: const_: pos_: waitarc,
+	3_: fixed_: res
+],,exit)
+genElStr3([
+	1_: fixed_: question,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: res
+],,exit)
+genElStr3([
+	1_: fixed_: q_initiated,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: res
+],,exit)
+
+label(wait)
+sys_wait([
+	1_: fixed_: catch_input_arc,
+	2_: fixed_: {1_: waitarc}
+])
+searchElStr5([
+	1_: fixed_: q_production,
+	2_: fixed_: waitarc,
+	3_: fixed_: res,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_absent
+],gen_bad_result)
+searchElStr5([
+	1_: fixed_: q_production,
+	2_: fixed_: waitarc,
+	3_: fixed_: res,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_present
+],,wait)
+
+sys_search([
+	1_: fixed_: calc_req_pattern,
+	2_: fixed_: {
+		{1_: _q_arc, 2_: assign_: q_arc}, {1_: _q_req, 2_: assign_: q_req}
+	},
+	3_: fixed_: {
+		{1_: _res, 2_: res}
+	}
+])
+
+label(wait2)
+sys_wait([
+	1_: fixed_: catch_input_arc,
+	2_: fixed_: {1_: q_arc}
+])
+searchElStr5([
+	1_: fixed_: q_calculation,
+	2_: fixed_: q_arc,
+	3_: fixed_: q_req,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_absent
+],gen_bad_result)
+searchElStr5([
+	1_: fixed_: q_calculation,
+	2_: fixed_: q_arc,
+	3_: fixed_: q_req,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_present
+],gen_good_result,wait2)
+label(gen_good_result)
+genEl([1_: assign_: const_: node_: out_res],exit,exit)
+label(gen_bad_result)
+//#eraseEl([1_: fixed_: res],exit,exit)
+label(exit)
+return()
+end

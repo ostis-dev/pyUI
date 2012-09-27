@@ -1,0 +1,132 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: search_illustration.m4scp
+// Description: File contains operation for 
+//				illustrayion search.
+//				Input arguments includes into result set
+/////////////////////////////////////////////////////
+// 		Author: Sergei Zalivako
+//        Date: 27.12.2010
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_search.scsy"
+#include "lib_set.scsy"
+#include "lib_answer.scsy"
+
+// program that initialize operation
+program(init_op,
+[[
+	q_initiated;
+	elmn_pattern = {1_: q_initiated };
+	run_op;
+	catch_output_arc;
+	answer_make;		//	procedure to make answer
+]],
+[{
+}])
+
+// subscribe to handle output pairs from "initiated question" node
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: run_op,
+	3_: fixed_: elmn_pattern
+	])
+	
+return()
+end()
+
+// procedure, that process question and make answer
+procedure(run_op,
+[[
+	q_search_illustration;
+	set_sub;
+	set_rm_el;
+	set_merge;
+	search_illustration;
+	search_base_cycle;
+]],
+[{
+	// input params
+	descr, element, arc, question_node,
+	// other
+	descr2, result, tmp_res, el_for_process, el_set, a, segment
+}],
+{[
+	1_: in_: descr,
+	2_: in_: element,
+	3_: in_: arc,
+	4_: in_: question_node
+]}
+)
+
+/* need to set segment that contains question node as default to generate answer in it */
+sys_get_location([1_: fixed_: question_node, 2_: assign_: segment])	
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+searchElStr3([
+	1_: fixed_: q_search_illustration,
+	2_: assign_: const_: pos_: arc_: a,
+	3_: fixed_: question_node], ,finish_op)
+
+/* call cycle to identifiers pairs for all elements in a question */
+callReturn([
+	1_: fixed_: search_base_cycle,
+	2_: fixed_: {[
+		1_: question_node,
+		2_: search_illustration,
+		3_: result
+		]}
+	], , , goto_error)
+
+label(goto_answer)
+
+/* remove question node from result */
+callReturn([
+	1_: fixed_: set_rm_el,
+	2_: fixed_: {[
+		1_: result,
+		2_: question_node]}
+	], , , goto_error)
+	
+//#printEl([
+	//#1_: fixed_: result
+//#])
+
+/* make answer */
+callReturn([
+	1_:	fixed_: answer_make,
+	2_:	fixed_: {[
+		1_: question_node,
+		2_: result]}
+	], finish_op, , goto_error)
+	
+label(goto_error)
+	
+label(finish_op)
+
+return()
+end()

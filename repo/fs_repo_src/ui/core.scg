@@ -1,0 +1,15 @@
+#include "ordinal.scsy"
+#include "meta_info.scsy"
+#include "ui_keynodes.scsy"
+core_src\geomx.gwf
+core_src\scgx.gwf
+core_src\spacex.gwf
+core_src\string.gwf
+core_src\ui_all_translations.gwf
+core_src\ui_atom_command.gwf
+core_src\ui_keynodes.gwf
+core_src\ui_no_atom_command.gwf
+core_src\ui_output_window_set.gwf
+core_src\ui_question_command.gwf
+core_src\voice.gwf
+

@@ -1,0 +1,61 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+// common keynodes
+nrel_decomposition 		=	"/etc/com_keynodes/декомпозиция*";
+nrel_identification		=	"/etc/com_keynodes/идентификация*";
+nrel_authors			=	"/etc/com_keynodes/авторы*";
+nrel_illustration		=	"/etc/com_keynodes/иллюстрация*";
+nrel_addition 			=	"/etc/com_keynodes/сложение величин*";
+nrel_multiplication 	=	"/etc/com_keynodes/произведение величин*";
+nrel_value 				=	"/etc/com_keynodes/значение*";
+nrel_exponention		=	"/etc/com_keynodes/возведение величин в степень*";
+
+rrel_exp_base			=	"/etc/com_keynodes/основание_";
+rrel_exp_degree			=	"/etc/com_keynodes/степень_";
+rrel_exp_exponent		=	"/etc/com_keynodes/показатель_";
+
+rrel_russian_text		=	"/etc/com_keynodes/русский текст_";
+rrel_english_text		=	"/etc/com_keynodes/английский текст_";
+rrel_decimal_number		=	"/etc/com_keynodes/десятичное число_";
+
+nrel_copy				=   "/etc/com_keynodes/копия*";
+nrel_inclusion			=	"/etc/com_keynodes/включение*";
+nrel_impl				=	"/etc/com_keynodes/impl*";
+nrel_conj				=	"/etc/com_keynodes/conj*";
+nrel_eq					=	"/etc/com_keynodes/eq*";
+nrel_statements_about_class			=	"/etc/com_keynodes/утверждения о классе*";
+
+rrel_answer_is_present	=   "/etc/com_keynodes/присутствует ответ_";
+rrel_answer_is_absent	=   "/etc/com_keynodes/отсутствует ответ_";
+rrel_answer_is_absent_at_evident_view	=   "/etc/com_keynodes/ответ отсутствует в явном виде_";
+rrel_formula_is_absent	=   "/etc/com_keynodes/отсутствует формула_";
+rrel_operation_is_over	=   "/etc/com_keynodes/операция выполнилась_";
+rrel_expression_is_substituted	=   "/etc/com_keynodes/выражение подставлено_";
+rrel_expression_isnt_substituted	=   "/etc/com_keynodes/выражение не подставлено_";
+
+group_transitive_relation = "/etc/com_keynodes/транзитивное отношение";
+group_all_equivalent_constructions = "/etc/com_keynodes/все семантически эквивалентные конструкции";
+group_theory = "/etc/com_keynodes/теория";
+group_generated_statement = "/etc/com_keynodes/сгенерированное высказывание";
+group_looked_throught = "/etc/com_keynodes/просмотренный узел";

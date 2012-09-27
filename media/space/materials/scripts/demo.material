@@ -1,0 +1,558 @@
+import * from "space_base.material"
+
+material space/SkyBox
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			depth_write off
+			texture_unit
+			{
+				cubic_texture skybox_FR.jpg skybox_BK.jpg skybox_LF.jpg skybox_RT.jpg skybox_UP.jpg skybox_DN.jpg separateUV
+				tex_address_mode clamp
+			}
+		}
+	}
+}
+
+material space/None
+{
+	technique
+	{
+		pass
+		{
+			lighting on
+			ambient 0.0 0.0 0.0 0.0
+			diffuse 1.0 0.0 0.0 0.0
+			depth_write on
+			
+		}
+	}
+}
+
+material space/Sun_Normal: space_Normal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture sunmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Mercury_Normal: space_Normal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture mercurymap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+
+material space/Venus_Normal: space_Normal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture venusmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+
+material space/Earth_Normal: space_Normal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000
+			depth_write on
+	
+			texture_unit
+			{
+				texture earthmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Moon_Normal: space_Normal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000
+			depth_write on
+			
+			texture_unit
+			{
+				texture moonmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Mars_Normal: space_Normal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture marsmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Jupiter_Normal: space_Normal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture jupitermap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Saturn_Normal: space_Normal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture saturnmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Uranus_Normal: space_Normal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture uranusmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Neptune_Normal: space_Normal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture neptunemap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+
+material space/Sun_Selected: space_Selected
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture sunmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Mercury_Selected: space_Selected
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 1.000 1.000
+			depth_write on
+			texture_unit
+			{
+				texture mercurymap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+
+material space/Venus_Selected: space_Selected
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 1.000 1.000
+			depth_write on
+			texture_unit
+			{
+				texture venusmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+
+material space/Earth_Selected: space_Selected
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 1.000 1.000
+			depth_write on
+	
+			texture_unit
+			{
+				texture earthmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Moon_Selected: space_Selected
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 1.000 1.000
+			depth_write on
+			
+			texture_unit
+			{
+				texture moonmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Mars_Selected: space_Selected
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 1.000 1.000
+			depth_write on
+			texture_unit
+			{
+				texture marsmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Jupiter_Selected: space_Selected
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 1.000 1.000
+			depth_write on
+			texture_unit
+			{
+				texture jupitermap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Saturn_Selected: space_Selected
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 1.000 1.000
+			depth_write on
+			texture_unit
+			{
+				texture saturnmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Uranus_Selected: space_Selected
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 1.000 1.000
+			depth_write on
+			texture_unit
+			{
+				texture uranusmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Neptune_Selected: space_Selected
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 1.000 1.000
+			depth_write on
+			texture_unit
+			{
+				texture neptunemap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+	
+
+material space/Sun_Highlighted: space_Highlighted
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture sunmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Mercury_Highlighted: space_Highlighted
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture mercurymap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+
+material space/Venus_Highlighted: space_Highlighted
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture venusmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+
+material space/Earth_Highlighted: space_Highlighted
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 0.000 0.000
+			depth_write on
+	
+			texture_unit
+			{
+				texture earthmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Moon_Highlighted: space_Highlighted
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 0.000 0.000
+			depth_write on
+			
+			texture_unit
+			{
+				texture moonmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Mars_Highlighted: space_Highlighted
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture marsmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Jupiter_Highlighted: space_Highlighted
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture jupitermap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Saturn_Highlighted: space_Highlighted
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture saturnmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Uranus_Highlighted: space_Highlighted
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture uranusmap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+
+material space/Neptune_Highlighted: space_Highlighted
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.000 0.000 0.000
+			depth_write on
+			texture_unit
+			{
+				texture neptunemap.jpg
+				filtering bilinear
+			}
+		}
+	}
+}
+	

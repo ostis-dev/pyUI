@@ -1,0 +1,230 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+///////////////////////////////////////////////////////
+//        File: scp_keynodes.scsy
+// Description: synonyms for scp-machine keynodes
+///////////////////////////////////////////////////////
+//      Author: IVP
+//        Date: 8.08.2002
+//
+
+#include "ordinal.scsy"
+
+"init"                 = "/proc/keynode/init";
+"initWithData"         = "/proc/keynode/initWithData";
+
+"programSCP"           = "/proc/keynode/programSCP";
+"operatorSCP"          = "/proc/keynode/scp_operator";
+"operatorSCP_type"     = "/proc/keynode/scp_operator_type";
+
+"processSCP"           = "/proc/keynode/scp_process";
+
+"process_state_then"   = "/proc/keynode/process_state_then";
+"process_state_else"   = "/proc/keynode/process_state_else";
+"process_state_repeat" = "/proc/keynode/process_state_repeat";
+"process_state_sleep"  = "/proc/keynode/process_state_sleep";
+"process_state_run"    = "/proc/keynode/process_state_run";
+"process_state_dead"   = "/proc/keynode/process_state_dead";
+"process_state_error"  = "/proc/keynode/process_state_error";
+
+"typeAttrs"            = "/proc/keynode/typeattrs";
+"const_"               = "/proc/keynode/const_";
+"var_"                 = "/proc/keynode/var_";
+"metavar_" = meta_     = "/proc/keynode/metavar_";
+"pos_"                 = "/proc/keynode/pos_";
+"neg_"                 = "/proc/keynode/neg_";
+"fuz_"                 = "/proc/keynode/fuz_";
+"arc_"                 = "/proc/keynode/arc_";
+"node_"                = "/proc/keynode/node_";
+"undf_"                = "/proc/keynode/undf_";
+"permanent_"           = "/proc/keynode/permanent_";
+"temporary_"           = "/proc/keynode/temporary_";
+"actual_"              = "/proc/keynode/actual_";
+
+"assign_"              = "/proc/keynode/assign_";
+"fixed_"               = "/proc/keynode/fixed_";
+"f_"                   = "/proc/keynode/f_";
+"active_"              = "/proc/keynode/active_";
+"autosegment_"         = "/proc/keynode/autosegment_";
+//"defaultSegment_"      = "/proc/keynode/default_segment_";
+"program_"             = "/proc/keynode/program_";
+"error_"               = "/proc/keynode/error_";
+"then_"                = "/proc/keynode/then_";
+"else_"                = "/proc/keynode/else_";
+"goto_"                = "/proc/keynode/goto_";
+"init_"                = "/proc/keynode/init_";
+"varValue_"            = "/proc/keynode/var_value_";
+"father_"              = "/proc/keynode/father_";
+
+"in_"                  = "/proc/keynode/in_";
+"out_"                 = "/proc/keynode/out_";
+"prm_"                 = "/proc/keynode/prm_";
+
+"call"                 = "/proc/keynode/call";
+"callReturn"           = "/proc/keynode/callReturn";
+"contAssign"           = "/proc/keynode/contAssign";
+"contErase"            = "/proc/keynode/contErase";
+"eraseEl"              = "/proc/keynode/eraseEl";
+"eraseElStr3"          = "/proc/keynode/eraseElStr3";
+"eraseElStr5"          = "/proc/keynode/eraseElStr5";
+"eraseSetStr3"         = "/proc/keynode/eraseSetStr3";
+"genEl"                = "/proc/keynode/genEl";
+"genElStr3"            = "/proc/keynode/genElStr3";
+"genElStr5"            = "/proc/keynode/genElStr5";
+"idtfAssign"           = "/proc/keynode/idtfAssign";
+"idtfErase"            = "/proc/keynode/idtfErase";
+"idtfMove"             = "/proc/keynode/idtfMove";
+"ifCoin"               = "/proc/keynode/ifCoin";
+"ifEq"                 = "/proc/keynode/ifEq";
+"ifFormCont"           = "/proc/keynode/ifFormCont";
+"ifFormIdtf"           = "/proc/keynode/ifFormIdtf";
+"ifGr"                 = "/proc/keynode/ifGr";
+"ifGrEq"               = "/proc/keynode/ifGrEq";
+"ifType"               = "/proc/keynode/ifType";
+"ifVarAssign"          = "/proc/keynode/ifVarAssign";
+"ifNumber"             = "/proc/keynode/ifNumber";
+"ifString"             = "/proc/keynode/ifString";
+"return"               = "/proc/keynode/return";
+"searchElStr3"         = "/proc/keynode/searchElStr3";
+"searchElStr5"         = "/proc/keynode/searchElStr5";
+"searchSetStr3"        = "/proc/keynode/searchSetStr3";
+"searchSetStr5"        = "/proc/keynode/searchSetStr5";
+"selectNStr3"          = "/proc/keynode/selectNStr3";
+"selectNStr5"          = "/proc/keynode/selectNStr5";
+"selectYStr3"          = "/proc/keynode/selectYStr3";
+"selectYStr5"          = "/proc/keynode/selectYStr5";
+"toStr"                = "/proc/keynode/to_str";
+"varAssign"            = "/proc/keynode/varAssign";
+"varErase"             = "/proc/keynode/varErase";
+"waitReturn"           = "/proc/keynode/waitReturn";
+
+"add"                  = "/proc/keynode/add";
+"sub"                  = "/proc/keynode/sub";
+"mult"                 = "/proc/keynode/mult";
+"div"                  = "/proc/keynode/div";
+"sin"                  = "/proc/keynode/sin";
+"asin"                 = "/proc/keynode/asin";
+"cos"                  = "/proc/keynode/cos";
+"acos"                 = "/proc/keynode/acos";
+"pow"                  = "/proc/keynode/pow";
+"gsub"                 = "/proc/keynode/gsub";
+
+"print"                = "/proc/keynode/print";
+"printNl"              = "/proc/keynode/printNl";
+"printEl"              = "/proc/keynode/printEl";
+"halt"                 = "/proc/keynode/halt";
+"nop"                  = "/proc/keynode/nop";
+
+sys_close_segment       = "/proc/keynode/sys_close_segment";
+sys_create_segment      = sys_create_segment_uri = "/proc/keynode/sys_create_segment";
+sys_create_tmp_segment  = "/proc/keynode/sys_create_tmp_segment";
+sys_create_unique_segment  = "/proc/keynode/sys_create_unique_segment";
+sys_get_autosegment     = "/proc/keynode/sys_get_autosegment";
+sys_get_default_segment = "/proc/keynode/sys_get_default_segment";
+sys_get_location        = "/proc/keynode/sys_get_location";
+sys_open_dir            = "/proc/keynode/sys_open_dir";
+sys_open_dir_uri        = "/proc/keynode/sys_open_dir_uri";
+sys_open_segment        = "/proc/keynode/sys_open_segment";
+sys_open_segment_uri    = "/proc/keynode/sys_open_segment_uri";
+sys_set_default_segment = "/proc/keynode/sys_set_default_segment";
+sys_spin_segment        = "/proc/keynode/sys_spin_segment";
+sys_merge_element       = "/proc/keynode/sys_merge_element";
+sys_unlink  		= "/proc/keynode/sys_unlink";
+
+sys_search      	= "/proc/keynode/sys_search";
+sys_gen        		= "/proc/keynode/sys_gen";
+
+sys_breakpoint		= "/proc/keynode/sys_breakpoint";
+
+sys_wait                = "/proc/keynode/sys_wait";
+
+sys_set_event_handler   = "/proc/keynode/sys_set_event_handler";
+
+// types of message box
+ui_confirm	= "/proc/keynode/ui_confirm";
+ui_error	= "/proc/keynode/ui_error";
+ui_information	= "/proc/keynode/ui_information";
+
+// reply from message box
+ui_ok  = "/proc/keynode/ui_ok";
+ui_yes = "/proc/keynode/ui_yes";
+ui_no  = "/proc/keynode/ui_no";
+
+"set1_"                = "/proc/keynode/set1_";
+"set2_"                = "/proc/keynode/set2_";
+"set3_"                = "/proc/keynode/set3_";
+"set4_"                = "/proc/keynode/set4_";
+"set5_"                = "/proc/keynode/set5_";
+"set6_"                = "/proc/keynode/set6_";
+"set7_"                = "/proc/keynode/set7_";
+"set8_"                = "/proc/keynode/set8_";
+"set9_"                = "/proc/keynode/set9_";
+"set10_"               = "/proc/keynode/set10_";
+
+"segc_1_"              = "/proc/keynode/segc_1_";
+"segc_2_"              = "/proc/keynode/segc_2_";
+"segc_3_"              = "/proc/keynode/segc_3_";
+"segc_4_"              = "/proc/keynode/segc_4_";
+"segc_5_"              = "/proc/keynode/segc_5_";
+"segc_6_"              = "/proc/keynode/segc_6_";
+"segc_7_"              = "/proc/keynode/segc_7_";
+"segc_8_"              = "/proc/keynode/segc_8_";
+"segc_9_"              = "/proc/keynode/segc_9_";
+"segc_10_"             = "/proc/keynode/segc_10_";
+
+"set_" 			= "/proc/keynode/set_";
+"idtf_"			= "/proc/keynode/idtf_";
+"content_" 		= "/proc/keynode/content_";
+
+
+
+true = "/proc/keynode/true";
+false = "/proc/keynode/false";
+
+wait_erase_element     = "/proc/keynode/wait_erase_element";
+wait_gen_input_arc     = "/proc/keynode/wait_gen_input_arc";
+wait_gen_output_arc    = "/proc/keynode/wait_gen_output_arc";
+wait_input_arc         = "/proc/keynode/wait_input_arc";
+wait_output_arc        = "/proc/keynode/wait_output_arc";
+wait_recieve_message   = "/proc/keynode/wait_recieve_message";
+
+catch_erase_element    = "/proc/keynode/wait_erase_element_pre";
+catch_gen_input_arc    = "/proc/keynode/wait_gen_input_arc_pre";
+catch_gen_output_arc   = "/proc/keynode/wait_gen_output_arc_pre";
+catch_input_arc        = "/proc/keynode/wait_gen_input_arc";
+catch_output_arc       = "/proc/keynode/wait_gen_output_arc";
+loose_element          = "/proc/keynode/wait_erase_element";
+
+allow                  = "/proc/keynode/ev_allow";
+deny                   = "/proc/keynode/ev_deny";
+
+All_childs = "/proc/keynode/All_childs";
+true = "/proc/keynode/true";
+
+operator_file_ = "/proc/keynode/operator_file_";
+operator_line_ = "/proc/keynode/operator_line_";
+
+
+mime_type = "/proc/keynode/mime_type";

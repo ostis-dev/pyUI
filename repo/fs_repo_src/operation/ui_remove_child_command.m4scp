@@ -1,0 +1,110 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: menu_modify_handler.m4scp
+// Description: File contains program to set handlers
+//				for menu modifying
+//                                      operations
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich, Sergei Startsev, Sergei Zalivako, Olga Savelieva
+//        Date: 05.12.11
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_ui.scsy"
+
+program(init_op,
+[[	
+	q_initiated;
+	catch_output_arc;
+	run_op;
+]],
+[{
+}],
+{[
+]}
+)
+/////////////////////////////////////////////////////
+// Setting handler for command remove operation
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: run_op,
+	3_: fixed_: {1_: q_initiated}
+])
+
+return()
+end()
+
+// procedure, that process question and make answer
+procedure(run_op,
+[[
+	q_remove_child_command;
+	ui_remove_child_command_proc;
+]],
+[{
+	// input params
+	descr, element, arc, question_node,
+	// other
+	segment, t_seg, node, arc
+}],
+{[
+	1_: in_: descr,
+	2_: in_: element,
+	3_: in_: arc,
+	4_: in_: question_node
+]}
+)
+
+sys_get_location([1_: fixed_: question_node, 2_: assign_: segment])	
+sys_spin_segment([1_: fixed_: segment, 2_: assign_: t_seg])
+sys_set_default_segment([1_: fixed_: segment])
+
+/////////////////////////////////////////////////////
+// Checking operation start full condition
+searchElStr3([
+	1_: fixed_: q_remove_child_command,
+	2_: assign_: pos_: const_: arc_: arc,
+	3_: fixed_: question_node
+],,finish_op)
+
+/////////////////////////////////////////////////////
+// Get imet for remove
+searchElStr3([
+	1_: fixed_: question_node,
+	2_: assign_: pos_: const_: arc_: arc,
+	3_: assign_: node_: const_: node
+],,finish_op)
+
+//# call procedure to remove command from parent
+callReturn([
+	1_:	fixed_: ui_remove_child_command_proc,
+	2_: fixed_: {[
+			1_: fixed_: node
+		]}
+	])
+	
+label(finish_op)
+
+return()
+end()

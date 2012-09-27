@@ -1,0 +1,308 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/*
+Операция поиска классификации
+Условие инициализации:
+Х < - - О < - - "поиск разбиения"
+Автор: Житко Владимир Александрович
+Дата: 22 мая 2010
+*/
+
+
+#include "scp_keynodes.scsy"
+#include "ui_keynodes.scsy"
+
+procedure(search_classification_ckeck,
+[[
+	k_question = "/seb/lingvistic/поиск разбиения";
+	ge = "/seb/planimetry/Геометрия Евклида";
+	concept1 = "/seb/planimetry/понятие";
+	concept2 = "/seb/planimetry/множество";
+]],
+[{
+	question, result,
+	arc1, node1
+}],
+{[
+	1_: in_: question,
+	2_: out_: result
+]}
+)
+printNl([ 1_: /"Check operation CLASSIFICATION"/])
+
+searchElStr3([
+	1_: fixed_: k_question,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: question
+	],,is_not_my)
+	
+//#printNl([ 1_: /"question is ok"/])
+//#printEl([1_: fixed_: question])
+
+searchElStr3([
+	1_: fixed_: question,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node_: const_: node1
+	],,is_not_my)
+
+//#printNl([ 1_: /"get elem"/])
+	
+searchElStr3([
+	1_: fixed_: concept1,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: node1
+	],is_my)
+	
+//#printNl([ 1_: /"c1 is ok"/])
+	
+searchElStr3([
+	1_: fixed_: concept2,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: node1
+	],is_my)
+	
+//#printNl([ 1_: /"c2 is ok"/])
+	
+nop(is_not_my)
+	
+label(is_my)
+	
+varAssign([1_: assign_: result, 2_: node1])
+printNl([ 1_: /"OK"/])
+
+label(is_not_my)
+
+return()
+end
+
+procedure(search_classification_oper,
+[[
+	f_search = "/operation/search_classification/search_classification";
+]],
+[{
+	input, result_set
+}],
+{[
+	1_: in_: input,
+	2_: out_: result_set
+]}
+)
+
+printNl([ 1_: /"Run operation"/])
+
+genEl([1_: assign_: node_: const_: result_set])
+
+callReturn([
+	1_: fixed_: f_search,
+	2_: fixed_: {[
+		1_: input,
+		2_: result_set
+	]}
+], e)
+
+printNl([ 1_: /"End operation"/])
+
+return()
+end
+
+procedure(search_classification_ui,
+[[
+	f_search = "/operation/search_classification/search_classification";
+	ui_Output;		// процедура вывода конструкций пользователю
+]],
+[{
+	selected_el, sheet, 
+	arc, target, result_set, e, answer_reciever
+}],
+{[
+	1_: in_: selected_el,
+	2_: in_: sheet,
+	3_: in_: answer_reciever
+]}
+)
+printEl([1_: fixed_: selected_el])
+//# Получение целевого объекта
+searchElStr3([
+	1_: fixed_: selected_el,
+	2_: assign_: arc_: pos_: const_: arc,
+	3_: assign_: node_: target
+	])
+	
+genEl([
+	1_: assign_: node_: const_: result_set
+	])
+
+callReturn([
+	1_: fixed_: f_search,
+	2_: fixed_: {[
+		1_: target,
+		2_: result_set,
+		3_: answer_reciever
+		]}
+	], e)
+	
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: result_set
+	]}
+	])
+
+return()
+end
+
+
+procedure(search_classification,
+[[	
+	f_search_r = "/operation/search_classification/search_classification";
+	"разбиение*" = "/seb/planimetry/разбиение*";
+]],
+[{
+	target, result_set,
+	e, answer_reciever,
+	node1, node2, node3, node4,
+	arc1, arc2, arc3, arc4, arc5, arc6, arc7,
+	set1, set2	
+}],
+{[
+	1_: in_: target,
+	2_: in_: out_: result_set
+]}
+)
+searchSetStr5([
+	1_: assign_: node_: const_: node1,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: target,
+	4_: assign_: arc_: pos_: const_: arc2,
+	5_: fixed_: 2_,
+	set1_: assign_: set1
+	],,end_class)
+	
+label(beg_search_dec)
+
+	searchElStr3([
+		1_: fixed_: set1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node_: const_: node1
+		],,end_class)
+		
+	eraseEl([1_: fixed_: arc1])
+	
+	searchElStr3([
+		1_: fixed_: "разбиение*",
+		2_: assign_: arc_: pos_: const_: arc3,
+		3_: fixed_: node1
+		],,beg_search_dec)
+	
+	searchElStr5([
+		1_: fixed_: node1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: target,
+		4_: assign_: arc_: pos_: const_: arc2,
+		5_: fixed_: 2_
+		],,beg_search_dec)
+		
+	searchElStr5([
+		1_: fixed_: node1,
+		2_: assign_: arc_: pos_: const_: arc4,
+		3_: assign_: node_: const_: node2,
+		4_: assign_: arc_: pos_: const_: arc5,
+		5_: fixed_: 1_
+		],,beg_search_dec)
+		
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc7, 3_: fixed_: "разбиение*"])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc7, 3_: fixed_: arc3])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc7, 3_: fixed_: node1])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc7, 3_: fixed_: arc1])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc7, 3_: fixed_: target])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc7, 3_: fixed_: arc2])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc7, 3_: fixed_: 2_])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc7, 3_: fixed_: arc4])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc7, 3_: fixed_: node2])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc7, 3_: fixed_: arc5])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc7, 3_: fixed_: 1_])
+	
+	searchSetStr3([
+		1_: fixed_: node2,
+		2_: assign_: arc_: pos_: const_: arc6,
+		3_: assign_: node_: const_: node3,
+		set3_: fixed_: result_set
+		])
+		
+	searchSetStr3([
+		1_: fixed_: node2,
+		2_: assign_: arc_: pos_: const_: arc6,
+		3_: assign_: node_: const_: node3,
+		set2_: fixed_: result_set
+		])
+		
+	genEl([1_: assign_: const_: node_: set2])
+	
+	searchSetStr3([
+		1_: fixed_: node2,
+		2_: assign_: arc_: pos_: const_: arc6,
+		3_: assign_: node_: const_: node3,
+		set3_: fixed_: set2
+		],,beg_search_dec)
+		
+	label(beg_call)
+	
+		searchElStr3([
+			1_: fixed_: set2,
+			2_: assign_: arc_: pos_: const_: arc1,
+			3_: assign_: node_: const_: node1
+			],,end_call)
+			
+		eraseEl([1_: fixed_: arc1])
+		
+		callReturn([
+			1_: fixed_: f_search_r,
+			2_: fixed_: {[
+				1_: node1,
+				2_: result_set
+				]}
+			], e, beg_call)
+	
+	label(end_call)
+	
+	nop(beg_search_dec)
+
+label(end_class)
+
+return()
+end
+
+
+
+
+
+
+
+
+
+
+
+
+

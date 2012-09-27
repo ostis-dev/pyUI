@@ -1,0 +1,65 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+///////////////////////////////////////////////
+// Ключевые узлы для описания мета информации
+///////////////////////////////////////////////
+
+
+/// константность sc-элементов
+sc_unknown 	= 	"/info/sc_unknown";	//// sc-элемент неизвестной константности
+sc_const 	= 	"/info/sc_const";	//// sc-константа
+sc_var		= 	"/info/sc_var";		//// sc-первопеременная
+sc_meta		= 	"/info/sc_meta";	//// sc-метапеременная
+
+/// структурный тип sc-элементов
+stype_element	=	"/info/stype_element";		//// sc-элемент
+stype_sheaf		=	"/info/stype_sheaf";		//// * обозначение связки
+		//// ** обозначение пары
+stype_pair_noorient		=	"/info/stype_pair_noorient";	//// ** обозначение неориентированной пары
+stype_pair_orient		=	"/info/stype_pair_orient";		//// ** обозначение ориентированной пары
+		//// *** обозначение пары принадлежности
+stype_pair_time		=	"/info/stype_pair_time";	//// **** обозначение временной пары принадлежности
+		/// *** обозначение ориентированной пары,не являющейся парой принадлежности
+		
+		
+stype_nopair_sheaf		=	"/info/stype_nopair_sheaf";				//// обозначение непарной связки
+stype_struct			=	"/info/stype_struct";					//// обозначение структуры
+stype_concept			=	"/info/stype_concept";					//// обозначение понятия
+stype_relation			=	"/info/stype_relation";					//// * обозначение отношения
+stype_bin_noorient_rel	=	"/info/stype_bin_noorient_rel";			//// ** обозначение бинарного неориентированного отношения
+stype_bin_orient_rel	= 	"/info/stype_bin_orient_rel";			//// ** обозначение бинарного ориентированного отношения
+stype_bin_orient_role_rel			=	"/info/stype_bin_orient_role_rel";					//// *** обозначение бинарного ориентированного ролевого отношения
+stype_bin_orient_norole_rel	=	"/info/stype_bin_orient_norole_rel"; //// *** обозначение бинарного ориентированного неролевого отношения
+stype_nobin_noorient_rel	=	"/info/stype_nobin_noorient_rel";	//// ** обозначение небинарного неориентированного отношения
+stype_nobin_orient_rel		=	"/info/stype_nobin_orient_rel";		//// ** обозначение небинарного ориентированного отношения
+stype_concept_norel		=	"/info/stype_concept_norel";			//// * обозначение понятия, не являющегося отношением
+stype_struct_class			=	"/info/stype_struct_class";			//// ** обозначение класса структур
+stype_ext_obj_class			=	"/info/stype_ext_obj_class";		//// ** обозначение класса внешних объектов
+stype_ext_info_type1_class	=	"/info/stype_ext_info_type1_class";	//// *** обозначение класса внешних информационных конструкций, имеющих однотипную структуру
+stype_ext_obj				=	"/info/stype_ext_obj";				//// обозначение внешнего объекта 
+stype_ext_obj_abstract		=	"/info/stype_ext_obj_abstract";		//// * обозначение абстрактного внешнего объекта
+stype_ext_obj_real			=	"/info/stype_ext_obj_real";			//// * обозначение реального внешнего объекта
+stype_ext_info_constr		=	"/info/stype_ext_info_constr";		//// ** обозначение внешней информационной конструкции 
+stype_ext_noinfo_obj_real	=	"/info/stype_ext_noinfo_obj_real";	//// ** обозначение реального внешнего неинформационного объекта

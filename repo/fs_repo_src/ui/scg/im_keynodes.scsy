@@ -1,0 +1,92 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+/////////////////////////////////////////////////
+//   File: im_keynodes.scsy
+//   Date: 26.10.2004
+// Author: IVP (modified by gluk, RDV)
+/////////////////////////////////////////////////
+// синонимы ключевых узлов интерфейсной модели
+
+#include "ordinal.scsy"
+
+prm_ 		= "/proc/keynode/prm_";
+const_		= "/proc/keynode/const_";
+
+interface	= "/proc/im_keynode/IM";
+popup =mf_popup	= "/proc/agents/shell/keynode/mf_popup";
+string		= "/proc/agents/shell/keynode/mf_string";
+descr_ = id_	= "/proc/agents/shell/keynode/id_";
+item_		= "/proc/agents/shell/keynode/item_";
+
+dlg_properties	= "/proc/agents/shell/keynode/dlg_properties";
+dlg_button	= "/proc/agents/shell/keynode/dlg_button";
+dlg_static	= "/proc/agents/shell/keynode/dlg_static";
+dlg_name	= "/proc/agents/shell/keynode/dlg_name";
+
+list_next_	= "/proc/keynode/list_next_";
+list_value_	= "/proc/keynode/list_value_";
+
+//added by gluk
+window_		= "/proc/im_keynode/window_";
+menu_		= "/proc/im_keynode/menu_";
+toolbar_	= "/proc/im_keynode/toolbar_";
+image_		= "/proc/im_keynode/image_";
+dialog_		= "/proc/im_keynode/dialog_";
+push_button_	= "/proc/im_keynode/push_button_";
+check_button_	= "/proc/im_keynode/check_button_";
+radio_button_	= "/proc/im_keynode/radio_button_";
+group_		= "/proc/im_keynode/group_";
+static_		= "/proc/im_keynode/static_";
+editbox_	= "/proc/im_keynode/editbox_";
+caption_	= "/proc/agents/shell/keynode/caption_";
+size_		= "/proc/agents/shell/keynode/size_";
+menu =menu_root	= "/etc/im_keynode/main_menu";
+
+//Перенесено из etc/events by RDV
+name_		= "/proc/im_keynode/name_";
+
+selected_element_list_on_sheet = "/proc/im_keynode/selected_element_list_on_sheet";
+selected_elements_on_sheet = "/proc/im_keynode/selected_elements_on_sheet";
+single_selected_element = "/proc/im_keynode/single_selected_element";
+im_sheet	= "/proc/im_keynode/sheet";
+im_sheettype	= "/proc/im_keynode/sheettype";
+sheet_content	= "/proc/im_keynode/sheet_content";
+
+eventListener_	= "/proc/im_keynode/eventListener_";
+descr_user_cmd	= ui_eventClass	= "/proc/im_keynode/ui_eventClass";
+class_		= "/etc/events/class_";
+start_scp_program = "/etc/events/start_scp_program";
+start_nsm_command = "/etc/events/start_nsm_command"; 
+
+vk_shift_	= "/proc/keynode/vk_shift_";
+vk_control_	= "/proc/keynode/vk_control_";
+
+closed		= "/etc/im_keynode/closed";
+protected	= "/etc/im_keynode/im_protected";
+reducible	= "/etc/im_keynode/reducible";
+
+dialog_number	= "/etc/im_keynode/dialog_number";
+
+

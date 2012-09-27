@@ -1,0 +1,919 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MyGUI type="Skin" version="1.1">
+
+  <Skin name = "DefaultClient" size = "32 32" texture = "#{MyGUI_Theme_Texture}" >
+    <BasisSkin type="MainSkin" offset = "0 0 32 32" align = "Stretch">
+      <State name="normal" offset = "288 3 32 32"/>
+    </BasisSkin>
+  </Skin>
+
+<!-- Panel -->
+  <Skin name = "Panel" size = "40 42" texture = "#{MyGUI_Theme_Texture}">
+
+    <BasisSkin type="SubSkin" offset = "0 0 5 5" align = "Left Top">
+      <State name="normal" offset = "179 0 5 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 0 30 5" align = "HStretch Top">
+      <State name="normal" offset = "184 0 30 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "35 0 5 5" align = "Right Top">
+      <State name="normal" offset = "214 0 5 5"/>
+    </BasisSkin>
+
+    <BasisSkin type="SubSkin" offset = "0 5 5 32" align = "Left VStretch">
+      <State name="normal" offset = "179 5 5 32"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 5 30 32" align = "Stretch">
+      <State name="normal" offset = "184 5 30 32"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "35 5 5 32" align = "Right VStretch">
+      <State name="normal" offset = "214 5 5 32"/>
+    </BasisSkin>
+
+    <BasisSkin type="SubSkin" offset = "0 37 5 5" align = "Left Bottom">
+      <State name="normal" offset = "179 37 5 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 37 30 5" align = "HStretch Bottom">
+      <State name="normal" offset = "184 37 30 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "35 37 5 5" align = "Right Bottom">
+      <State name="normal" offset = "214 37 5 5"/>
+    </BasisSkin>
+  </Skin>
+  
+<!-- Progress -->
+  <Skin name = "Progress" size = "40 42" texture = "#{MyGUI_Theme_Texture}" >
+    <Property key="TrackSkin" value = "ProgressTrack" />
+    <Property key="TrackWidth" value = "10" />
+    <Property key="TrackFill" value = "false" />
+
+    <Child type="Widget" skin="Default" offset = "3 1 34 39" align = "Stretch" name = "Client"/>
+
+    <BasisSkin type="SubSkin" offset = "0 0 5 5" align = "Left Top">
+      <State name="normal" offset = "179 0 5 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 0 30 5" align = "HStretch Top">
+      <State name="normal" offset = "184 0 30 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "35 0 5 5" align = "Right Top">
+      <State name="normal" offset = "214 0 5 5"/>
+    </BasisSkin>
+
+    <BasisSkin type="SubSkin" offset = "0 5 5 32" align = "Left VStretch">
+      <State name="normal" offset = "179 5 5 32"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 5 30 32" align = "Stretch">
+      <State name="normal" offset = "184 5 30 32"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "35 5 5 32" align = "Right VStretch">
+      <State name="normal" offset = "214 5 5 32"/>
+    </BasisSkin>
+
+    <BasisSkin type="SubSkin" offset = "0 37 5 5" align = "Left Bottom">
+      <State name="normal" offset = "179 37 5 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 37 30 5" align = "HStretch Bottom">
+      <State name="normal" offset = "184 37 30 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "35 37 5 5" align = "Right Bottom">
+      <State name="normal" offset = "214 37 5 5"/>
+    </BasisSkin>
+  </Skin>
+
+  <Skin name = "ProgressTrack" size = "10 42" texture = "#{MyGUI_Theme_Texture}">
+    <BasisSkin type="SubSkin" offset = "0 0 5 42" align = "Stretch">
+      <State name="normal" offset = "179 89 5 42"/>
+	</BasisSkin>
+	<BasisSkin type="SubSkin" offset = "5 0 5 42" align = "Stretch">
+      <State name="normal" offset = "214 89 5 42"/>
+	</BasisSkin>
+  </Skin>
+  
+  <!-- Static text -->
+  <Skin name = "StaticText" size = "16 16">
+    <Property key="FontName" value = "Default" />
+    <Property key="TextAlign" value = "Default" />
+    <Property key="TextColour" value = "#{MyGUI_Theme_Button_ColourNormal}" />
+
+    <BasisSkin type="SimpleText" offset = "0 0 16 16"  align = "Stretch"/>
+  </Skin>
+  
+  <Skin name = "StaticTextBack" size = "16 16" texture = "#{MyGUI_Theme_Texture}">
+    <Property key="FontName" value = "Default" />
+    <Property key="TextAlign" value = "Default" />
+    <Property key="TextColour" value = "#{MyGUI_Theme_Button_ColourNormal}" />
+	
+	<BasisSkin type="SubSkin" offset = "0 0 16 16" align = "Stretch">
+      <State name="normal" offset = "294 80 16 16"/>
+    </BasisSkin>
+	
+	<BasisSkin type="SimpleText" offset = "0 0 16 16"  align = "Stretch"/>
+  </Skin>
+  
+  <!-- Static Image -->
+  <Skin name = "StaticImage" size = "16 16">
+    <BasisSkin type="MainSkin" offset = "0 0 16 16"/>
+  </Skin>
+  
+  <!-- Button -->
+  <Skin name = "Button" size = "40 42" texture = "#{MyGUI_Theme_Texture}">
+    <Property key="FontName" value = "Default" />
+    <Property key="TextAlign" value = "HCenter VCenter" />
+
+    <BasisSkin type="SubSkin" offset = "0 0 5 5" align = "Left Top">
+      <State name="normal" offset = "179 0 5 5"/>
+	  <State name="highlighted" offset = "179 45 5 5"/>
+	  <State name="pushed" offset = "179 91 5 5"/>
+	  <State name="disabled" offset = "179 136 5 5"/>
+	  <State name="normal_checked" offset = "94 0 5 5"/>
+	  <State name="highlighted_checked" offset = "94 45 5 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 0 30 5" align = "HStretch Top">
+      <State name="normal" offset = "184 0 30 5"/>
+	  <State name="highlighted" offset = "184 45 30 5"/>
+	  <State name="pushed" offset = "184 91 30 5"/>
+	  <State name="disabled" offset = "184 136 30 5"/>
+	  <State name="normal_checked" offset = "99 0 30 5"/>
+	  <State name="highlighted_checked" offset = "99 45 30 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "35 0 5 5" align = "Right Top">
+      <State name="normal" offset = "214 0 5 5"/>
+	  <State name="highlighted" offset = "214 45 5 5"/>
+	  <State name="pushed" offset = "214 91 5 5"/>
+	  <State name="disabled" offset = "214 136 5 5"/>
+	  <State name="normal_checked" offset = "129 0 5 5"/>
+	  <State name="highlighted_checked" offset = "129 45 5 5"/>
+    </BasisSkin>
+
+    <BasisSkin type="SubSkin" offset = "0 5 5 32" align = "Left VStretch">
+      <State name="normal" offset = "179 5 5 32"/>
+	  <State name="highlighted" offset = "179 50 5 32"/>
+	  <State name="pushed" offset = "179 96 5 32"/>
+	  <State name="disabled" offset = "179 141 5 32"/>
+	  <State name="normal_checked" offset = "94 5 5 32"/>
+	  <State name="highlighted_checked" offset = "94 50 5 32"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 5 30 32" align = "Stretch">
+      <State name="normal" offset = "184 5 30 32"/>
+	  <State name="highlighted" offset = "184 50 30 32"/>
+	  <State name="pushed" offset = "184 96 30 32"/>
+	  <State name="disabled" offset = "184 141 30 32"/>
+	  <State name="normal_checked" offset = "99 5 30 32"/>
+	  <State name="highlighted_checked" offset = "99 50 30 32"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "35 5 5 32" align = "Right VStretch">
+      <State name="normal" offset = "214 5 5 32"/>
+	  <State name="highlighted" offset = "214 50 5 32"/>
+	  <State name="pushed" offset = "214 96 5 32"/>
+	  <State name="disabled" offset = "214 141 5 32"/>
+	  <State name="normal_checked" offset = "129 5 5 32"/>
+	  <State name="highlighted_checked" offset = "129 50 5 32"/>
+    </BasisSkin>
+
+    <BasisSkin type="SubSkin" offset = "0 37 5 5" align = "Left Bottom">
+      <State name="normal" offset = "179 37 5 5"/>
+	  <State name="highlighted" offset = "179 82 5 5"/>
+	  <State name="pushed" offset = "179 128 5 5"/>
+	  <State name="disabled" offset = "179 173 5 5"/>
+	  <State name="normal_checked" offset = "94 37 5 5"/>
+	  <State name="highlighted_checked" offset = "94 82 5 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 37 30 5" align = "HStretch Bottom">
+      <State name="normal" offset = "184 37 30 5"/>
+	  <State name="highlighted" offset = "184 82 30 5"/>
+	  <State name="pushed" offset = "184 128 30 5"/>
+	  <State name="disabled" offset = "184 173 30 5"/>
+	  <State name="normal_checked" offset = "99 37 30 5"/>
+	  <State name="highlighted_checked" offset = "99 82 30 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "35 37 5 5" align = "Right Bottom">
+      <State name="normal" offset = "214 37 5 5"/>
+	  <State name="highlighted" offset = "214 82 5 5"/>
+	  <State name="pushed" offset = "214 128 5 5"/>
+	  <State name="disabled" offset = "214 173 5 5"/>
+	  <State name="normal_checked" offset = "129 37 5 5"/>
+	  <State name="highlighted_checked" offset = "129 82 5 5"/>
+    </BasisSkin>
+
+    <BasisSkin type="SimpleText" offset = "3 3 34 34" align = "Stretch">
+      <State name="disabled" colour="#{MyGUI_Theme_Button_ColourDisabled}" shift = "false"/>
+      <State name="normal" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+      <State name="highlighted" colour="#{MyGUI_Theme_Button_ColourHighlighted}" shift = "false"/>
+      <State name="normal_checked" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+      <State name="pushed" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+    </BasisSkin>
+  </Skin>
+  
+  <!-- Check box -->
+  <Skin name = "CheckBox" size = "100 22" texture = "#{MyGUI_Theme_Texture}">
+    <Property key="FontName" value = "Default" />
+    <Property key="TextAlign" value = "Left VCenter" />
+    <Property key="TextColour" value = "#{MyGUI_Theme_Button_ColourNormal}"/>
+
+    <BasisSkin type="SubSkin" offset = "0 0 20 22" align = "Left VCenter">
+      <State name="disabled" offset = "64 252 20 22"/>
+      <State name="normal" offset = "4 252 20 22"/>
+      <State name="highlighted" offset = "24 252 20 22"/>
+      <State name="pushed" offset = "44 252 20 22"/>
+      <State name="disabled_checked" offset = "64 230 20 22"/>
+      <State name="normal_checked" offset = "4 230 20 22"/>
+      <State name="highlighted_checked" offset = "24 230 20 22"/>
+      <State name="pushed_checked" offset = "44 230 20 22"/>
+    </BasisSkin>
+
+    <BasisSkin type="SimpleText" offset = "24 1 76 20" align = "Stretch">
+    </BasisSkin>
+  </Skin>
+  
+  <!-- Edit -->
+  <Skin name = "EditClient" size = "10 10">
+	  <Property key="FontName" value = "Default" />
+      <Property key="TextAlign" value = "Left VCenter" />
+      <Property key="TextColour" value = "#{MyGUI_Theme_Button_ColourNormal}" />
+      <Property key="Pointer" value = "beam" />
+      <BasisSkin type="EditText" offset = "0 0 10 10" align = "Stretch"/>
+  </Skin>
+  
+  <Skin name = "Edit" size = "30 30" texture = "#{MyGUI_Theme_Texture}" >
+    <Child type="Widget" skin="EditClient" offset = "4 4 22 22" align = "Stretch" name = "Client"/>
+	
+	<BasisSkin type="SubSkin" offset = "0 0 5 5" align = "Left Top">
+	  <State name="pushed" offset = "223 0 5 5"/>
+	  <State name="normal" offset = "223 32 5 5"/>
+      <State name="disabled" offset = "223 64 5 5"/>
+      <State name="highlighted" offset = "223 96 5 5"/>
+      <State name="normal_checked" offset = "223 128 5 5"/>
+    </BasisSkin>
+	
+	<BasisSkin type="SubSkin" offset = "5 0 20 5" align = "HStretch Top">
+      <State name="pushed" offset = "228 0 20 5"/>
+	  <State name="normal" offset = "228 32 20 5"/>
+      <State name="disabled" offset = "228 64 20 5"/>
+      <State name="highlighted" offset = "228 96 20 5"/>
+      <State name="normal_checked" offset = "228 128 20 5"/>
+    </BasisSkin>
+	
+	<BasisSkin type="SubSkin" offset = "25 0 5 5" align = "Right Top">
+      <State name="pushed" offset = "248 0 5 5"/>
+	  <State name="normal" offset = "248 32 5 5"/>
+	  <State name="disabled" offset = "248 64 5 5"/>
+      <State name="highlighted" offset = "248 96 5 5"/>
+      <State name="normal_checked" offset = "248 128 5 5"/>
+    </BasisSkin>
+	
+
+	<BasisSkin type="SubSkin" offset = "0 5 5 20" align = "Left VStretch">
+	  <State name="pushed" offset = "223 5 5 20"/>
+	  <State name="normal" offset = "223 37 5 20"/>
+      <State name="disabled" offset = "223 69 5 20"/>
+      <State name="highlighted" offset = "223 101 5 20"/>
+      <State name="normal_checked" offset = "223 133 5 20"/>
+    </BasisSkin>
+	
+	<BasisSkin type="SubSkin" offset = "5 5 20 20" align = "HStretch VStretch">
+      <State name="pushed" offset = "228 5 20 20"/>
+	  <State name="normal" offset = "228 37 20 20"/>
+      <State name="disabled" offset = "228 69 20 20"/>
+      <State name="highlighted" offset = "228 101 20 20"/>
+      <State name="normal_checked" offset = "228 133 20 20"/>
+    </BasisSkin>
+	
+	<BasisSkin type="SubSkin" offset = "25 5 5 20" align = "Right VStretch">
+      <State name="pushed" offset = "248 5 5 20"/>
+	  <State name="normal" offset = "248 37 5 20"/>
+	  <State name="disabled" offset = "248 69 5 20"/>
+      <State name="highlighted" offset = "248 101 5 20"/>
+      <State name="normal_checked" offset = "248 133 5 20"/>
+    </BasisSkin>
+	
+	
+	<BasisSkin type="SubSkin" offset = "0 25 5 5" align = "Left Bottom">
+	  <State name="pushed" offset = "223 25 5 5"/>
+	  <State name="normal" offset = "223 57 5 5"/>
+      <State name="disabled" offset = "223 89 5 5"/>
+      <State name="highlighted" offset = "223 121 5 5"/>
+      <State name="normal_checked" offset = "223 153 5 5"/>
+    </BasisSkin>
+	
+	<BasisSkin type="SubSkin" offset = "5 25 20 5" align = "HStretch Bottom">
+      <State name="pushed" offset = "228 25 20 5"/>
+	  <State name="normal" offset = "228 57 20 5"/>
+      <State name="disabled" offset = "228 89 20 5"/>
+      <State name="highlighted" offset = "228 121 20 5"/>
+      <State name="normal_checked" offset = "228 153 20 5"/>
+    </BasisSkin>
+	
+	<BasisSkin type="SubSkin" offset = "25 25 5 5" align = "Right Bottom">
+      <State name="pushed" offset = "248 25 5 5"/>
+	  <State name="normal" offset = "248 57 5 5"/>
+	  <State name="disabled" offset = "248 89 5 5"/>
+      <State name="highlighted" offset = "248 121 5 5"/>
+      <State name="normal_checked" offset = "248 153 5 5"/>
+    </BasisSkin>
+    
+  </Skin>
+  
+  <Skin name = "EditEmpty" size = "30 30" texture = "#{MyGUI_Theme_Texture}" >
+    <Child type="Widget" skin="EditClient" offset = "4 4 22 22" align = "Stretch" name = "Client"/>
+  </Skin>
+  
+  <!-- ScrollView -->
+  <Skin name = "ScrollView" size = "54 64" texture = "#{MyGUI_Theme_Texture}">
+    <Property key="NeedKey" value = "true" />
+
+    <Child type="VScroll" skin="VScroll" offset = "34 2 20 41" align = "Right VStretch" name = "VScroll"/>
+    <Child type="HScroll" skin="HScroll" offset = "2 44 52 20" align = "HStretch Bottom" name = "HScroll"/>
+    <Child type="Widget" skin="DefaultClient" offset = "2 2 30 40" align = "Stretch" name = "Client"/>
+
+  </Skin>
+  
+  <!-- List -->
+  <Skin name = "ListLine" size = "5 5" texture = "#{MyGUI_Theme_Texture}" >
+    <Property key="FontName" value = "Default" />
+    <Property key="TextAlign" value = "Left VCenter" />
+
+    <!-- <Child type="StaticImage" skin="PopupMenuLineIcon" offset = "-10 0 12 15" align = "Right VCenter" name = "Image"/> -->
+
+    <BasisSkin type="MainSkin" offset = "0 0 5 5">
+      <State name="normal" offset = "343 115 1 1"/>
+      <State name="highlighted" offset = "306 115 1 1"/>
+      <State name="normal_checked" offset = "318 115 1 1"/>
+      <State name="pushed" offset = "330 115 1 1"/>
+    </BasisSkin>
+
+    <BasisSkin type="SimpleText" offset = "2 0 1 5"  align = "Stretch">
+      <State name="disabled" colour="#{MyGUI_Theme_Button_ColourNormal}"/>
+      <State name="normal" colour="#{MyGUI_Theme_Button_ColourNormal}"/>
+      <State name="highlighted" colour="#{MyGUI_Theme_Button_ColourNormal}"/>
+      <State name="normal_checked" colour="#{MyGUI_Theme_Button_ColourPushed}"/>
+      <State name="pushed" colour="#{MyGUI_Theme_Button_ColourPushed}"/>
+    </BasisSkin>
+  </Skin>
+  
+  <Skin name = "List" size = "51 63" texture = "#{MyGUI_Theme_Texture}">
+    <Property key="NeedKey" value = "true" />
+    <Property key="SkinLine" value = "Button" />
+    <Property key="HeightLine" value = "20" />
+
+    <Child type="VScroll" skin="VScroll" offset = "30 3 20 57" align = "Right VStretch" name = "VScroll"/>
+    <Child type="Widget" skin="DefaultClient" offset = "2 2 17 57" align = "Stretch" name = "Client"/>
+
+	<BasisSkin type="SubSkin" offset = "0 0 5 5" align = "Left Top">
+      <State name="normal" offset = "287 2 5 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 0 41 5" align = "HStretch Top">
+      <State name="normal" offset = "292 2 39 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "46 0 5 5" align = "Right Top">
+      <State name="normal" offset = "333 2 5 5"/>
+    </BasisSkin>
+
+    <BasisSkin type="SubSkin" offset = "0 5 5 53" align = "Left VStretch">
+      <State name="normal" offset = "287 7 5 53"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 5 41 53" align = "Stretch">
+      <State name="normal" offset = "292 7 41 53"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "46 5 5 53" align = "Right VStretch">
+      <State name="normal" offset = "333 7 5 53"/>
+    </BasisSkin>
+
+    <BasisSkin type="SubSkin" offset = "0 58 5 5" align = "Left Bottom">
+      <State name="normal" offset = "287 58 5 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "5 58 41 5" align = "HStretch Bottom">
+      <State name="normal" offset = "292 58 41 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "46 58 5 5" align = "Right Bottom">
+      <State name="normal" offset = "333 58 5 5"/>
+    </BasisSkin>
+  </Skin>
+   
+  <!-- Identifiers -->
+  <Skin name = "Idtf" size = "16 16">
+    <Property key="FontName" value = "Identifier" />
+    <Property key="TextAlign" value = "Default" />
+    <Property key="TextColour" value = "#{MyGUI_Theme_Idtf_Colour}" />
+
+    <BasisSkin type="SimpleText" offset = "0 0 16 16"  align = "Stretch"/>
+  </Skin>
+  
+  <Skin name = "IdtfPanel" size = "48 48" texture = "#{MyGUI_Theme_Texture}">
+	<Property key="NeedKey" value = "false" />
+	<Property key="NeedMouse" value = "false" />
+	
+	<BasisSkin type="SubSkin" offset = "0 0 14 14" align = "Left Top">
+      <State name="normal" offset = "282 70 14 14"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "14 0 20 14" align = "HStretch Top">
+      <State name="normal" offset = "296 70 20 14"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "34 0 14 14" align = "Right Top">
+      <State name="normal" offset = "316 70 14 14"/>
+    </BasisSkin>
+
+    <BasisSkin type="SubSkin" offset = "0 14 14 20" align = "Left VStretch">
+      <State name="normal" offset = "282 84 14 20"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "14 14 20 20" align = "Stretch">
+      <State name="normal" offset = "296 84 20 20"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "34 14 14 20" align = "Right VStretch">
+      <State name="normal" offset = "316 84 14 20"/>
+    </BasisSkin>
+
+    <BasisSkin type="SubSkin" offset = "0 34 14 14" align = "Left Bottom">
+      <State name="normal" offset = "282 104 14 14"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "14 34 20 20" align = "HStretch Bottom">
+      <State name="normal" offset = "296 104 20 20"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "34 34 14 14" align = "Right Bottom">
+      <State name="normal" offset = "316 104 14 14"/>
+    </BasisSkin>
+
+  </Skin>
+  
+    
+  <!-- Exit button -->
+  <Skin name = "GlobalExitButton" size = "32 43" texture = "#{MyGUI_Theme_Texture}">
+	<BasisSkin type="SubSkin" offset = "0 0 32 43" align = "Left Top">
+      <State name="normal" offset = "4 293 32 43"/>
+	  <State name="highlighted" offset = "38 293 32 43"/>
+	  <State name="pushed" offset = "72 293 32 43"/>
+	  <State name="disabled" offset = "106 293 32 43"/>
+    </BasisSkin>
+  </Skin>
+  
+  <!-- Scroll buttons -->
+  <Skin name = "ScrollButton_Left" size = "42 42" texture = "#{MyGUI_Theme_Texture}">
+	
+	<BasisSkin type="SubSkin" offset = "0 0 42 42" align = "Stretch">
+      <State name="normal" offset = "3 186 42 42"/>
+	  <State name="highlighted" offset = "46 186 42 42"/>
+	  <State name="pushed" offset = "89 186 42 42"/>
+	  <State name="disabled" offset = "132 186 42 42"/>
+    </BasisSkin>
+	
+	<!-- arrow -->
+	<BasisSkin type="SubSkin" offset = "10 10 22 22" align = "Stretch">
+      <State name="normal" offset = "58 134 22 22"/>
+	  <State name="highlighted" offset = "58 134 22 22"/>
+	  <State name="pushed" offset = "58 156 22 22"/>
+	  <State name="disabled" offset = "58 134 22 22"/>
+    </BasisSkin>
+	
+  </Skin>
+  
+  <Skin name = "ScrollButton_Right" size = "42 42" texture = "#{MyGUI_Theme_Texture}">
+	
+	<BasisSkin type="SubSkin" offset = "0 0 42 42" align = "Stretch">
+      <State name="normal" offset = "3 186 42 42"/>
+	  <State name="highlighted" offset = "46 186 42 42"/>
+	  <State name="pushed" offset = "89 186 42 42"/>
+	  <State name="disabled" offset = "132 186 42 42"/>
+    </BasisSkin>
+	
+	<!-- arrow -->
+	<BasisSkin type="SubSkin" offset = "10 10 22 22" align = "Stretch">
+      <State name="normal" offset = "84 134 22 22"/>
+	  <State name="highlighted" offset = "84 134 22 22"/>
+	  <State name="pushed" offset = "84 156 22 22"/>
+	  <State name="disabled" offset = "84 134 22 22"/>
+    </BasisSkin>
+  </Skin>
+  
+  <Skin name = "ScrollButton_Up" size = "42 42" texture = "#{MyGUI_Theme_Texture}">
+	
+	<BasisSkin type="SubSkin" offset = "0 0 42 42" align = "Stretch">
+      <State name="normal" offset = "3 186 42 42"/>
+	  <State name="highlighted" offset = "46 186 42 42"/>
+	  <State name="pushed" offset = "89 186 42 42"/>
+	  <State name="disabled" offset = "132 186 42 42"/>
+    </BasisSkin>
+	
+	<!-- arrow -->
+	<BasisSkin type="SubSkin" offset = "10 10 22 22" align = "Stretch">
+      <State name="normal" offset = "9 129 22 22"/>
+	  <State name="highlighted" offset = "9 129 22 22"/>
+	  <State name="pushed" offset = "33 129 22 22"/>
+	  <State name="disabled" offset = "9 129 22 22"/>
+    </BasisSkin>
+	
+  </Skin>
+  
+  <Skin name = "ScrollButton_Down" size = "42 42" texture = "#{MyGUI_Theme_Texture}">
+	
+	<BasisSkin type="SubSkin" offset = "0 0 42 42" align = "Stretch">
+      <State name="normal" offset = "3 186 42 42"/>
+	  <State name="highlighted" offset = "46 186 42 42"/>
+	  <State name="pushed" offset = "89 186 42 42"/>
+	  <State name="disabled" offset = "132 186 42 42"/>
+    </BasisSkin>
+	
+	<!-- arrow -->
+	<BasisSkin type="SubSkin" offset = "10 10 22 22" align = "Stretch">
+      <State name="normal" offset = "9 155 22 22"/>
+	  <State name="highlighted" offset = "9 155 22 22"/>
+	  <State name="pushed" offset = "33 155 22 22"/>
+	  <State name="disabled" offset = "9 155 22 22"/>
+    </BasisSkin>
+	
+  </Skin>
+  
+  <!-- Scrolls -->
+  <Skin name = "VScrollTrackSlider" size = "13 13" texture = "#{MyGUI_Theme_Texture}">
+    <BasisSkin type="MainSkin" offset = "0 0 39 42" align = "Stretch">
+      <State name="disabled" offset = "255 62 13 13"/>
+      <State name="normal" offset = "255 14 13 13"/>
+      <State name="highlighted" offset = "255 30 13 13"/>
+      <State name="normal_checked" offset = "255 78 13 13"/>
+      <State name="pushed" offset = "255 46 13 13"/>
+    </BasisSkin>
+  </Skin>
+
+  <Skin name = "VScrollTrack" size = "13 13" texture = "#{MyGUI_Theme_Texture}">
+    <BasisSkin type="SubSkin" offset = "0 0 13 4" align = "HStretch Top">
+      <State name="disabled" offset = "255 62 13 4"/>
+      <State name="normal" offset = "255 14 13 4"/>
+      <State name="highlighted" offset = "255 30 13 4"/>
+      <State name="normal_checked" offset = "255 78 13 4"/>
+      <State name="pushed" offset = "255 46 13 4"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "0 4 13 5" align = "HStretch VStretch">
+      <State name="disabled" offset = "255 66 13 5"/>
+      <State name="normal" offset = "255 18 13 5"/>
+      <State name="highlighted" offset = "255 34 13 5"/>
+      <State name="normal_checked" offset = "255 82 13 5"/>
+      <State name="pushed" offset = "255 50 13 5"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "0 9 13 4" align = "HStretch Bottom">
+      <State name="disabled" offset = "255 71 13 4"/>
+      <State name="normal" offset = "255 23 13 4"/>
+      <State name="highlighted" offset = "255 39 13 4"/>
+      <State name="normal_checked" offset = "255 87 13 4"/>
+      <State name="pushed" offset = "255 55 13 4"/>
+    </BasisSkin>
+  </Skin>
+
+  <Skin name = "VScrollTopPart" size = "15 6" texture = "#{MyGUI_Theme_Texture}" >
+    <BasisSkin type="SubSkin" offset = "0 0 15 6" align = "Stretch">
+      <State name="normal" offset = "0 0 0 0"/>
+    </BasisSkin>
+  </Skin>
+
+  <Skin name = "VScrollBottomPart" size = "15 6" texture = "#{MyGUI_Theme_Texture}" >
+    <BasisSkin type="SubSkin" offset = "0 0 15 6" align = "Stretch">
+      <State name="normal" offset = "0 0 0 0"/>
+    </BasisSkin>
+  </Skin>
+
+  <Skin name = "VScroll" size = "20 49" texture = "#{MyGUI_Theme_Texture}" >
+    <Property key="TrackRangeMargins" value = "18 18" />
+    <Property key="MinTrackSize" value = "13" />
+
+    <!--<Child type="Button" skin="VScrollTopPart" offset = "0 15 15 6" align = "Stretch" name = "FirstPart"/>
+    <Child type="Button" skin="VScrollBottomPart" offset = "0 21 15 6" align = "HStretch Bottom" name = "SecondPart"/>-->
+
+    <Child type="Button" skin="ScrollButton_Up" offset = "2 1 18 18" align = "HStretch Top" name = "Start"/>
+    <Child type="Button" skin="ScrollButton_Down" offset = "2 30 18 18" align = "HStretch Bottom" name = "End"/>
+    <Child type="Button" skin="VScrollTrack" offset = "2 22 18 9" align = "HStretch Top" name = "Track"/>
+
+    <BasisSkin type="SubSkin" offset = "6 6 9 3" align = "HStretch Top">
+      <State name="normal" offset = "255 2 9 3"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "6 9 9 31" align = "Stretch">
+      <State name="normal" offset = "255 5 9 3"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "6 40 9 3" align = "HStretch Bottom">
+      <State name="normal" offset = "255 8 9 3"/>
+    </BasisSkin>
+
+  </Skin>
+  
+  
+  <Skin name = "HScrollTrackSlider" size = "7 14" texture = "#{MyGUI_Theme_Texture}">
+    <BasisSkin type="MainSkin" offset = "0 0 39 42" align = "Stretch">
+      <State name="disabled" offset = "255 62 13 13"/>
+      <State name="normal" offset = "255 14 13 13"/>
+      <State name="highlighted" offset = "255 30 13 13"/>
+      <State name="normal_checked" offset = "255 78 13 13"/>
+      <State name="pushed" offset = "255 46 13 13"/>
+    </BasisSkin>
+  </Skin>
+
+  <Skin name = "HScrollTrack" size = "13 13" texture = "#{MyGUI_Theme_Texture}">
+    <BasisSkin type="SubSkin" offset = "0 0 4 13" align = "Left VStretch">
+      <State name="disabled" offset = "255 62 4 13"/>
+      <State name="normal" offset = "255 14 4 13"/>
+      <State name="highlighted" offset = "255 30 4 13"/>
+      <State name="normal_checked" offset = "255 78 4 13"/>
+      <State name="pushed" offset = "255 46 4 13"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "4 0 5 13" align = "HStretch VStretch">
+      <State name="disabled" offset = "259 62 5 13"/>
+      <State name="normal" offset = "259 14 5 13"/>
+      <State name="highlighted" offset = "259 30 5 13"/>
+      <State name="normal_checked" offset = "259 78 5 13"/>
+      <State name="pushed" offset = "259 46 5 13"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "9 0 4 13" align = "Right VStretch">
+      <State name="disabled" offset = "265 62 4 13"/>
+      <State name="normal" offset = "265 14 4 13"/>
+      <State name="highlighted" offset = "265 30 4 13"/>
+      <State name="normal_checked" offset = "265 78 4 13"/>
+      <State name="pushed" offset = "265 46 4 13"/>
+    </BasisSkin>
+	
+  </Skin>
+
+  <Skin name = "HScrollLeftPart" size = "6 15" texture = "#{MyGUI_Theme_Texture}" >
+    <BasisSkin type="SubSkin" offset = "0 0 6 15" align = "Stretch">
+      <State name="normal" offset = "0 0 0 0"/>
+    </BasisSkin>
+  </Skin>
+
+  <Skin name = "HScrollRightPart" size = "6 15" texture = "#{MyGUI_Theme_Texture}" >
+    <BasisSkin type="SubSkin" offset = "0 0 6 15" align = "Stretch">
+      <State name="normal" offset = "0 0 0 0"/>
+    </BasisSkin>
+  </Skin>
+
+  <Skin name = "HScroll" size = "49 20" texture = "#{MyGUI_Theme_Texture}" >
+    <Property key="TrackRangeMargins" value = "18 18" />
+    <Property key="MinTrackSize" value = "13" />
+
+    <!--<Child type="Button" skin="HScrollLeftPart" offset = "15 0 6 15" align = "Stretch" name = "FirstPart"/>
+    <Child type="Button" skin="HScrollRightPart" offset = "21 0 6 15" align = "Right VStretch" name = "SecondPart"/>-->
+
+    <Child type="Button" skin="ScrollButton_Left" offset = "1 2 18 18" align = "Left VStretch" name = "Start"/>
+    <Child type="Button" skin="ScrollButton_Right" offset = "30 2 18 18" align = "Right VStretch" name = "End"/>
+    <Child type="Button" skin="HScrollTrack" offset = "22 2 9 18" align = "Left VStretch" name = "Track"/>
+	
+    <BasisSkin type="SubSkin" offset = "6 6 3 9" align = "Left VStretch">
+      <State name="normal" offset = "255 2 3 9"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "9 6 31 9" align = "HStretch VStretch">
+      <State name="normal" offset = "258 2 3 9"/>
+    </BasisSkin>
+    <BasisSkin type="SubSkin" offset = "40 6 3 9" align = "Right VStretch">
+      <State name="normal" offset = "261 2 3 9"/>
+    </BasisSkin>
+	
+  </Skin>
+  
+  <!-- Top menu -->
+  <Skin name = "MenuTop_ButtonAtom" size = "57 26" texture = "#{MyGUI_Theme_Texture}">
+		
+		<Property key="FontName" value = "Default" />
+		<Property key="TextAlign" value = "Left VCenter" />
+
+		<BasisSkin type="SubSkin" offset = "0 0 27 26" align = "Left VStretch">
+		  <State name="normal" offset = "12 0 27 26"/>
+		  <State name="highlighted" offset = "12 28 27 26"/>
+		  <State name="pushed" offset = "12 56 27 26"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "27 0 23 26" align = "HStretch VStretch">
+		  <State name="normal" offset = "39 0 23 26"/>
+		  <State name="highlighted" offset = "39 28 23 26"/>
+		  <State name="pushed" offset = "39 56 23 26"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "50 0 7 26" align = "Right VStretch">
+		  <State name="normal" offset = "62 0 7 26"/>
+		  <State name="highlighted" offset = "62 28 7 26"/>
+		  <State name="pushed" offset = "62 56 7 26"/>
+		</BasisSkin>
+		<!-- Icon -->
+		<BasisSkin type="SubSkin" offset = "5 3 15 17" align="Left VCenter">
+		  <State name="normal" offset = "48 110 15 17"/>
+		  <State name="highlighted" offset = "32 110 15 17"/>
+		  <State name="pushed" offset = "32 110 15 17"/>
+		</BasisSkin>
+		<!-- Text -->
+		<BasisSkin type="SimpleText" offset = "28 1 28 24" align = "Stretch">
+		  <State name="disabled" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="normal" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="highlighted" colour="#{MyGUI_Theme_Button_ColourHighlighted}" shift = "false"/>
+		  <State name="normal_checked" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		  <State name="pushed" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		</BasisSkin>
+  </Skin>
+  
+  <Skin name = "MenuTop_ButtonObject" size = "57 26" texture = "#{MyGUI_Theme_Texture}">
+		
+		<Property key="FontName" value = "Default" />
+		<Property key="TextAlign" value = "Left VCenter" />
+
+		<BasisSkin type="SubSkin" offset = "0 0 27 26" align = "Left VStretch">
+		  <State name="normal" offset = "12 0 27 26"/>
+		  <State name="highlighted" offset = "12 28 27 26"/>
+		  <State name="pushed" offset = "12 56 27 26"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "27 0 23 26" align = "HStretch VStretch">
+		  <State name="normal" offset = "39 0 23 26"/>
+		  <State name="highlighted" offset = "39 28 23 26"/>
+		  <State name="pushed" offset = "39 56 23 26"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "50 0 7 26" align = "Right VStretch">
+		  <State name="normal" offset = "62 0 7 26"/>
+		  <State name="highlighted" offset = "62 28 7 26"/>
+		  <State name="pushed" offset = "62 56 7 26"/>
+		</BasisSkin>
+		<!-- Icon --
+		<BasisSkin type="SubSkin" offset = "5 3 15 17" align="Left VCenter">
+		  <State name="normal" offset = "48 110 15 17"/>
+		  <State name="highlighted" offset = "32 110 15 17"/>
+		  <State name="pushed" offset = "32 110 15 17"/>
+		</BasisSkin>-->
+		<!-- Text -->
+		<BasisSkin type="SimpleText" offset = "28 1 28 24" align = "Stretch">
+		  <State name="disabled" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="normal" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="highlighted" colour="#{MyGUI_Theme_Button_ColourHighlighted}" shift = "false"/>
+		  <State name="normal_checked" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		  <State name="pushed" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		</BasisSkin>
+  </Skin>
+  
+  <Skin name = "MenuTop_ButtonNoAtom" size = "57 26" texture = "#{MyGUI_Theme_Texture}">
+		
+		<Property key="FontName" value = "Default" />
+		<Property key="TextAlign" value = "Left VCenter" />
+
+		<BasisSkin type="SubSkin" offset = "0 0 27 26" align = "Left VStretch">
+		  <State name="normal" offset = "12 0 27 26"/>
+		  <State name="highlighted" offset = "12 28 27 26"/>
+		  <State name="pushed" offset = "12 56 27 26"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "27 0 23 26" align = "HStretch VStretch">
+		  <State name="normal" offset = "39 0 23 26"/>
+		  <State name="highlighted" offset = "39 28 23 26"/>
+		  <State name="pushed" offset = "39 56 23 26"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "50 0 7 26" align = "Right VStretch">
+		  <State name="normal" offset = "62 0 7 26"/>
+		  <State name="highlighted" offset = "62 28 7 26"/>
+		  <State name="pushed" offset = "62 56 7 26"/>
+		</BasisSkin>
+		<!-- Icon -->
+		<BasisSkin type="SubSkin" offset = "5 3 14 17" align="Left VCenter">
+		  <State name="normal" offset = "79 110 14 17"/>
+		  <State name="highlighted" offset = "65 110 14 17"/>
+		  <State name="pushed" offset = "65 110 14 17"/>
+		</BasisSkin>
+		<!-- Text -->
+		<BasisSkin type="SimpleText" offset = "28 1 28 24" align = "Stretch">
+		  <State name="disabled" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="normal" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="highlighted" colour="#{MyGUI_Theme_Button_ColourHighlighted}" shift = "false"/>
+		  <State name="normal_checked" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		  <State name="pushed" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		</BasisSkin>
+  </Skin>
+  
+    <Skin name = "MenuTop_ButtonQuestion" size = "57 26" texture = "#{MyGUI_Theme_Texture}">
+		
+		<Property key="FontName" value = "Default" />
+		<Property key="TextAlign" value = "Left VCenter" />
+
+		<BasisSkin type="SubSkin" offset = "0 0 27 26" align = "Left VStretch">
+		  <State name="normal" offset = "12 0 27 26"/>
+		  <State name="highlighted" offset = "12 28 27 26"/>
+		  <State name="pushed" offset = "12 56 27 26"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "27 0 23 26" align = "HStretch VStretch">
+		  <State name="normal" offset = "39 0 23 26"/>
+		  <State name="highlighted" offset = "39 28 23 26"/>
+		  <State name="pushed" offset = "39 56 23 26"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "50 0 7 26" align = "Right VStretch">
+		  <State name="normal" offset = "62 0 7 26"/>
+		  <State name="highlighted" offset = "62 28 7 26"/>
+		  <State name="pushed" offset = "62 56 7 26"/>
+		</BasisSkin>
+		<!-- Icon -->
+		<BasisSkin type="SubSkin" offset = "7 3 10 17" align="Left VCenter">
+		  <State name="normal" offset = "20 110 10 17"/>
+		  <State name="highlighted" offset = "11 110 10 17"/>
+		  <State name="pushed" offset = "11 110 10 17"/>
+		</BasisSkin>
+		<!-- Text -->
+		<BasisSkin type="SimpleText" offset = "28 1 28 24" align = "Stretch">
+		  <State name="disabled" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="normal" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="highlighted" colour="#{MyGUI_Theme_Button_ColourHighlighted}" shift = "false"/>
+		  <State name="normal_checked" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		  <State name="pushed" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		</BasisSkin>
+  </Skin>
+  
+  <Skin name = "MenuTop_ToolTipText" size = "16 16">
+    <Property key="FontName" value = "Default" />
+    <Property key="TextAlign" value = "Left" />
+    <Property key="TextColour" value = "#{MyGUI_Theme_ToolTipText_Colour}" />
+
+    <BasisSkin type="SimpleText" offset = "0 0 16 16"  align = "Stretch"/>
+  </Skin>
+  
+  <!--
+  <Skin name = "MenuTop_ToolTip" size = "34 22" texture = "#{MyGUI_Theme_Texture}">
+    
+		<BasisSkin type="SubSkin" offset = "0 0 5 5" align = "Left Top">
+			<State name="normal" offset = "163 125 5 5"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "5 0 24 5" align = "HStretch Top">
+			<State name="normal" offset = "168 125 24 5"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "29 0 5 5" align = "Right Top">
+			<State name="normal" offset = "192 125 5 5"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "0 5 5 12" align = "Left VStretch">
+			<State name="normal" offset = "163 130 5 12"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "5 5 24 12" align = "Stretch">
+			<State name="normal" offset = "168 130 24 12"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "29 5 5 12" align = "Right VStretch">
+			<State name="normal" offset = "192 130 5 12"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "0 17 5 5" align = "Left Bottom">
+			<State name="normal" offset = "163 142 5 5"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "5 17 24 5" align = "HStretch Bottom">
+			<State name="normal" offset = "168 142 24 5"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "29 17 5 5" align = "Right Bottom">
+			<State name="normal" offset = "192 142 5 5"/>
+		</BasisSkin>
+		
+	</Skin>-->
+
+  <!-- Window panel -->
+  <Skin name = "WindowPanel_Back" size = "3 38" texture = "#{MyGUI_Theme_Texture}">
+  
+	<Property key="NeedKey" value = "false" />
+	<Property key="NeedMouse" value = "false" />
+  
+	<BasisSkin type="SubSkin" offset = "0 0 3 38" align = "Stretch">
+      <State name="normal" offset = "0 0 3 38"/>
+    </BasisSkin>
+  </Skin>
+  
+   <!-- Window panel (container) -->
+  <Skin name = "WindowPanel_Container" size = "2 2" texture = "#{MyGUI_Theme_Texture}">
+  
+	<Property key="NeedKey" value = "false" />
+	<Property key="NeedMouse" value = "true" />
+  
+	<BasisSkin type="MainSkin" offset = "0 0 2 2" align = "Stretch">
+		<State name="normal" offset="0 50 2 2"/>
+	</BasisSkin>
+  </Skin>
+  
+  <!-- Window Panel (Button) -->
+  <Skin name = "WindowPanel_Button" size = "74 81" texture = "#{MyGUI_Theme_Texture}">
+	<BasisSkin type="SubSkin" offset = "0 0 74 81" align = "Stretch">
+      <State name="normal" offset = "3 338 74 81"/>
+	  <State name="highlighted" offset = "77 338 74 81"/>
+	  <State name="pushed" offset = "155 338 74 81"/>
+	  <State name="disabled" offset = "231 338 74 81"/>
+    </BasisSkin>
+  </Skin>
+  
+  <!-- Static text header -->
+  <Skin name = "StaticTextHead" size = "16 16">
+    <Property key="FontName" value = "Head" />
+    <Property key="TextAlign" value = "Center" />
+    <Property key="TextColour" value = "#{MyGUI_Theme_Button_ColourNormal}" />
+
+    <BasisSkin type="SimpleText" offset = "0 0 16 16"  align = "Stretch"/>
+  </Skin>
+	
+<!-- arguments -->
+  <Skin name = "ArgumentsLabel" size = "40 30" texture = "#{MyGUI_Theme_Texture}">
+		
+	<Property key="FontName" value = "Default" />
+	<Property key="TextAlign" value = "Center"/>
+
+	<BasisSkin type="SubSkin" offset = "0 0 40 30" align = "Stretch">
+	  <State name="normal" offset = "112 140 40 30"/>
+	</BasisSkin>
+
+	<BasisSkin type="SimpleText" offset = "13 14 17 10" align = "Left Top">
+	  <State name="normal" colour="#{MyGUI_Theme_ArgumentsLabel_Colour}" shift = "false"/>
+	</BasisSkin>
+  </Skin>
+  
+<!-- task panel -->
+
+	
+</MyGUI>

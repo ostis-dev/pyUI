@@ -1,0 +1,238 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: search_inverse_mapping.m4scp
+// Description: ‘айл содержит процедуру поиска соответстви€
+//				заданных переменных из шаблона и конкретных узлов из Ѕ«
+/////////////////////////////////////////////////////
+// 		Author: Startsev Sergei
+//        Date: 19.01.2011
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+/*!
+	ѕоиск соответстви€ заданных переменных из шаблона и конкретных узлов из Ѕ«
+	
+	@result	результирующее мн-во, которое представл€ет собой мн-во св€зок, где под 1_ находитс€ переменна€ из шаблона, а под 2_ - соответствующей ей узел из Ѕ«
+	
+		  1_	mapping_set	  2_
+		  |			 |		  |
+		  |			 |		  |
+		  v			 v		  v
+	var<------------ O ---------->object
+*/
+
+procedure(search_inverse_mapping,
+[[
+	
+	first=1_;
+	second=2_;		
+	
+	//#отладочна€ информаци€, закомментировать или убрать	
+	here=/"\n\nI have entered search_inverse_mapping!!!\n\n"/;
+	exited=/"\n\nI have exited search_inverse_mapping!!!\n\n"/;
+	
+]],
+[{	
+	vars_template_set,condition_set,mapping_set,search_res,temp_set,
+	temp_vars_template_set,temp_vars_set,current_var,objects,template,arc,arc1,node,
+	element,el,seg,segments,temp,set,object
+}],
+{[		
+	//#шаблон
+	1_: in_: template,
+	//#множество переменных из шаблона, дл€ которых необходимо найти соответствие из Ѕ«
+	2_: in_: vars_template_set,
+	//#необ€зательное дополнительное условие, которое представл€ет собой мн-во св€зок, где под 1_ находитс€ переменна€ из шаблона, а под 2_ - соответствующей ей узел из Ѕ«
+	//#данное условие позвол€ет уточнить поиск
+	3_: in_: condition_set,
+	//#результирующее мн-во, которое представл€ет собой мн-во св€зок, где под 1_ находитс€ переменна€ из шаблона, а под 2_ - соответствующей ей узел из Ѕ«
+	4_: out_: mapping_set
+]}
+)
+sys_get_location([1_: template,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+printNl([1_: here])
+
+genEl([1_: node_: const_: assign_: mapping_set])
+
+///////////////////////////////
+//#сразу делаем копию vars_template_set в temp_vars_template_set, чтобы не повредить вход€щие данные, далее работаем только с temp_vars_template_set
+
+searchSetStr3([
+	1_: fixed_: vars_template_set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: set,
+	set3_: assign_: temp_vars_template_set
+],,exit)
+
+///////////////////////////////
+//#sys_search
+label(search_mapping)
+
+ifVarAssign([1_: condition_set],,without_condition_set)
+
+sys_search([
+	1_: fixed_: template,
+	2_: assign_: search_res,
+	3_: fixed_: condition_set
+],,exit)
+
+label(without_condition_set)
+
+sys_search([
+	1_: fixed_: template,
+	2_: assign_: search_res	
+],,exit)
+///////////////////////////////
+
+///////////////////////////////
+//#собственно поиск соответстви€
+searchElStr3([
+	1_: fixed_: search_res,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node
+])
+
+//#printEl([1_:node])
+
+searchSetStr3([
+	1_: fixed_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: set,
+	set3_: assign_: temp_set
+],,exit)
+
+//перебираем элементы
+label(next2)
+
+ifVarAssign([1_: element],,noerase2)
+eraseElStr3([
+	1_: fixed_: temp_set,
+	2_: assign_: f_: arc,
+	3_: fixed_: element
+])
+label(noerase2)
+
+searchElStr3([
+	1_: fixed_: temp_set,
+	2_: assign_: arc,
+	3_: assign_: element
+],,exit)
+
+searchElStr5([
+	1_: fixed_: element,
+	2_: assign_: arc,
+	3_: assign_: var_: temp,
+	4_: assign_: arc1,
+	5_: fixed_: first
+],,exit)
+
+//#printEl([1_: temp])
+
+//#temp - это кака€-то переменна€ из шаблона, проверим, находитс€ ли она в vars_template_set, т.е. нужно ли дл€ нее искать соответствие
+
+searchSetStr3([
+	1_: fixed_: temp_vars_template_set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: set,
+	set3_: assign_: temp_vars_set
+],,exit)
+
+//перебираем элементы
+label(next3)
+
+ifVarAssign([1_: current_var],,noerase3)
+eraseElStr3([
+	1_: fixed_: temp_vars_set,
+	2_: assign_: f_: arc,
+	3_: fixed_: current_var
+])
+label(noerase3)
+
+searchElStr3([
+	1_: fixed_: temp_vars_set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: current_var
+],,next2)
+
+//#сравниваем
+
+ifCoin([
+	1_: fixed_: current_var,
+	2_: fixed_: temp
+],gen,next3)
+
+///////////////////////////////
+//#добавление св€зки соответстви€ в mapping_set
+label(gen)
+
+//#определение соответствущего узла из Ѕ«
+searchElStr5([
+	1_: fixed_: element,
+	2_: assign_: arc,
+	3_: assign_: object,
+	4_: assign_: arc1,
+	5_: fixed_: second
+],,exit)
+
+//#printEl([1_: object])
+
+//#генераци€ новой св€зки
+genElStr3([
+	1_: fixed_: mapping_set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: el
+])
+
+genElStr5([
+	1_: fixed_: el,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: current_var,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: first
+])
+
+genElStr5([
+	1_: fixed_: el,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: object,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: second
+],next2,next2)
+
+///////////////////////////////////////
+
+///////////////////////////////////////
+label(exit)
+
+
+printNl([1_: exited])
+return()
+end

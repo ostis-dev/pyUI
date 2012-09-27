@@ -1,0 +1,292 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+#include "scp_keynodes.scsy"
+#include "ui_keynodes.scsy"
+
+/* Интерфейсная процедура */
+procedure(search_attributes_common_ui,
+[[
+	f_search_state2_ = "/operation/search_attributes_common/search_attributes_common_state2";
+	geometry = "/seb/planimetry/Геометрия Евклида";
+	ui_Output;		// процедура вывода конструкций пользователю
+]],
+[{
+	wnd, selected_el, sheet, shift, result_set, target, arc, node, e2, e1, e3, output,answer_reciever
+}],
+{[
+	1_: in_: selected_el,
+	2_: in_: sheet,
+	3_: in_: answer_reciever
+]}
+)
+genEl([ 1_: assign_: node_: const_: result_set ])
+
+//# вызов процедуры поиска
+callReturn([
+	1_: fixed_: f_search_state2_,
+	2_: fixed_: {[
+		1_: fixed_: geometry,
+		2_: fixed_: selected_el,
+		3_: fixed_: result_set
+		]}
+	],e2)
+	
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: result_set
+	]}
+	])
+	
+label(ui_no_answer)
+
+return()
+end
+
+/* Процедура поиска ответа этап №2 */
+procedure(search_attributes_common_state2,
+[[
+	f_search_rec = "/operation/search_attributes_common/search_attributes_common_rec";
+]],
+[{
+	output, theory, target, tmp_target,
+	arc1, node1, node2, set1, e
+}],
+{[
+	1_: in_: theory,
+	2_: in_: target,
+	3_: in_: out_: output
+]}
+)	
+/* получение всех высказываний заданной теории */
+searchSetStr3([
+	1_: fixed_: theory,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node_: const_: node1,
+	set3_: assign_: set1
+	])
+	
+/* восзможно стоит почистить множества от элементов
+заведомо не являющихся высказываниями,  но как 
+определить кто из них? */
+	
+/* организуем просмотр высказываний в цикле */
+label(begin_cycle_theory)
+
+	/* нахождение одного из элементов теории */
+	searchElStr3([
+		1_: fixed_: set1,
+		2_: assign_: arc_: const_: pos_: arc1,
+		3_: assign_: node_: const_: node1
+		],,end_cycle_theory)
+		
+	/* удалние найденого элемента из множества set1 */
+	eraseEl([
+		1_: arc1
+		])
+		
+	searchSetStr3([
+		1_: fixed_: target,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node_: const_: node2,
+		set3_: assign_: tmp_target
+		])
+		
+	/* вызов процедуры рекурсивного обхода высказывания */
+	callReturn([
+		1_: fixed_: f_search_rec,
+		2_: fixed_: {[
+			1_: fixed_: node1,
+			2_: fixed_: node1,
+			3_: fixed_: tmp_target,
+			4_: fixed_: output
+			]}
+		], e, begin_cycle_theory, begin_cycle_theory, begin_cycle_theory)
+		
+	/* признак конца цикла */
+label(end_cycle_theory)
+
+return()
+end
+
+/* Процедура рекурсивного обхода выражения
+	1-й агрумент - узел высказывания
+	2-й агрумент - текущий расматриваемый узел
+	3-й агрумент - искомый узел
+	4-й агрумент - множество результата */
+procedure(search_attributes_common_rec,
+[[
+	f_search_rec = "/operation/search_attributes_common/search_attributes_common_rec";
+	"family" = "/info/stype_concept_norel";
+	"rel" = "/info/stype_bin_orient_norole_rel";
+]],
+[{
+	statment, node, target, output, tmp_target,
+	arc1, node1, node2, set1, set2, e
+}],
+{[
+	1_: in_: statment,
+	2_: in_: node,
+	3_: in_: out_: target,
+	4_: in_: out_: output
+]}
+)
+	
+/* проверяем наличие выражения в результирующем множестве,
+если есть, то в дальнейшем поиске нет необходимости*/
+searchElStr3([
+	1_: fixed_: output,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: statment
+	],end_rec,,end_rec)
+	
+/* ишем искомый узелы в текущем множестве, если будет
+найден, то добавляем в результирующее множество*/
+searchSetStr3([
+	1_: fixed_: target,
+	2_: assign_: pos_: const_: arc_: arc1,
+	3_: assign_: node_: const_: node1,
+	set3_: assign_: tmp_target
+	])
+
+label(beg_search_target)
+
+	searchElStr3([
+		1_: fixed_: tmp_target,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node_: const_: node1
+		],,end_search_target)
+		
+	eraseEl([
+		1_: fixed_: arc1
+		])
+
+	searchElStr3([
+		1_: fixed_: node,
+		2_: assign_: arc_: const_: pos_: arc1,
+		3_: fixed_: node1
+		],,beg_search_target)
+		
+	searchElStr3([
+		1_: fixed_: target,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		])
+		
+	eraseEl([
+		1_: fixed_: arc1
+		],beg_search_target,beg_search_target,beg_search_target)
+	
+label(end_search_target)
+
+searchElStr3([
+	1_: fixed_: target,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node_: const_: node1
+	],to_search,set_ans,set_ans)
+	
+label(set_ans)
+
+genElStr3([
+	1_: fixed_: output,
+	2_: assign_: arc_: const_: pos_: arc1,
+	3_: fixed_: statment
+	],end_rec,end_rec)
+	
+/* если искомого элемента нет в текущем множестве */
+label(to_search)
+
+/* создание копии множества */
+searchSetStr3([
+	1_: fixed_: node,
+	2_: assign_: arc_: const_: pos_: arc1,
+	3_: assign_: node_: const_: node1,
+	set3_: assign_: set2
+	],,end_rec,end_rec)
+	
+genEl([
+	1_: assign_: node_: const_: set1
+	])
+
+/* удаляем из множества узлы классов и отношений */
+label(beg_del_other)
+
+	searchElStr3([
+		1_: fixed_: set2,
+		2_: assign_: arc_: const_: pos_: arc1,
+		3_: assign_: node_: const_: node1
+		],,end_del_other)
+		
+	eraseEl([1_: fixed_: arc1])
+	
+	searchElStr3([
+		1_: fixed_: "family",
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],beg_del_other)
+		
+	searchElStr3([
+		1_: fixed_: "rel",
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],beg_del_other)
+		
+	genElStr3([
+		1_: fixed_: set1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: node1
+		],beg_del_other,beg_del_other,beg_del_other)
+
+label(end_del_other)
+
+/* цикл по множеству */
+label(begin_rec_cycle)
+
+	/* получение элемента из множества */
+	searchElStr3([
+		1_: fixed_: set1,
+		2_: assign_: arc_: const_: pos_: arc1,
+		3_: assign_: node_: const_: node1
+		],,end_rec,end_rec)
+		
+	/* удаление элемента из множества */
+	eraseEl([ 1_: fixed_: arc1 ])
+		
+	/* рекурсивный вызов */
+	callReturn([
+		1_: fixed_: f_search_rec,
+		2_: fixed_: {[
+			1_: fixed_: statment,
+			2_: fixed_: node1,
+			3_: fixed_: target,
+			4_: fixed_: output
+			]}
+		], e, begin_rec_cycle, begin_rec_cycle, begin_rec_cycle)
+
+label(end_rec)
+
+return()
+end

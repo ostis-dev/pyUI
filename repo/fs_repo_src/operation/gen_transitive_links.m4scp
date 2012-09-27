@@ -1,0 +1,347 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: gen_transitive_links.m4scp
+// Description: File contains operation to
+//			generate all links for transitive
+//			relation
+/////////////////////////////////////////////////////
+// 		Author: Olga Savelieva
+//        Date: 11.01.11
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+
+program(init_op,
+[[	
+	//#req = "/seb/planimetry/запрос истинности высказыания";
+	q_gen_all_trans_relation_links;
+//#	oper="/operation/gen_transitive_links/reflexive/reflexive";
+	catch_output_arc;
+	here1=/"Refl handler setted"/;
+]],
+[{
+	nodeVar
+}],
+{[
+]}
+)
+
+//#printNl([1_: here1])
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: gen_transitive_links,
+	3_: fixed_: {1_: q_gen_all_trans_relation_links},
+	4_: assign_: nodeVar
+])
+//#printNl([1_: here1])
+
+return()
+end
+
+procedure(gen_transitive_links,
+[[	
+	//узел для определения отношения
+	group_transitive_relation;
+	q_gen_all_trans_relation_links;
+	rrel_answer_is_present;
+	one = 1_;
+	two = 2_;
+	here=/"\n\nI've entered gen transitive links\n\n"/;
+]],
+[{
+	els,sheet,u,arc,arc1,arc2,n,n1,n2,n3,n4,n5,elsels,el,ponjatie,otnoshenie,star,st,en,news,second_n,st1,en1,vse_ontoshenia,nachalo,
+	handler,element,sheaf,seg,segments
+}],
+{[
+	1_: in_: handler,
+	2_: in_: element,
+	3_: in_: arc,
+	4_: in_: els
+]}
+)
+printNl([1_: here])
+sys_get_location([1_: element,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+printNl([1_: here])
+
+//генерация узла для множества выходных элементов
+genEl([1_:assign_:node_:u])
+
+//копирование множества входных узлов
+searchSetStr3([
+	1_:fixed_:els,
+	2_:assign_:arc_:pos_:arc,
+	3_:assign_:node_:n1,
+	set3_:assign_:node_:elsels
+])
+
+//поиск узла во множестве входных узлов elsels
+searchElStr3([
+	1_:fixed_:elsels,
+	2_:assign_:arc_:pos_:arc,
+	3_:assign_:node_:otnoshenie
+])
+
+//поиск узла отношения
+searchElStr3([
+	1_:fixed_:group_transitive_relation,
+	2_:assign_:arc_:pos_:arc1,
+	3_:fixed_:otnoshenie
+],,el)
+
+//удаление дуги в найденной трехэлементной конструкции
+eraseElStr3([
+	1_:fixed_:elsels,
+	2_:assign_:arc_:f_:arc,
+	3_:fixed_:otnoshenie
+])
+
+//поиск узла во множестве входных узлов els
+searchElStr3([
+	1_:fixed_:elsels,
+	2_:assign_:arc_:pos_:arc,
+	3_:assign_:node_:ponjatie
+],star)
+
+label(el)
+
+//поиск узла во множестве входных узлов elsels
+searchElStr3([
+	1_:fixed_:elsels,
+	2_:fixed_:arc,
+	3_:assign_:node_:ponjatie
+])
+
+//удаление дуги в найденной трехэлементной конструкции
+eraseElStr3([
+	1_:fixed_:elsels,
+	2_:assign_:arc_:f_:arc,
+	3_:fixed_:ponjatie
+])
+
+//поиск узла во множестве входных узлов els
+searchElStr3([
+	1_:fixed_:elsels,
+	2_:assign_:arc_:pos_:arc,
+	3_:assign_:node_:otnoshenie
+])
+
+label(star)
+
+//копирование множества третьих узлов в трехэлементной 
+//конструкции, первый элемент которой отношение otnoshenie
+searchSetStr3([
+	1_:fixed_:otnoshenie,
+	2_:assign_:arc_:pos_:arc,
+	3_:assign_:node_:n1,
+	set3_:assign_:node_:vse_ontoshenia
+])
+
+label(nachalo)
+
+//копирование множества третьих узлов в трехэлементной 
+//конструкции, первый элемент которой отношение otnoshenie
+searchSetStr3([
+	1_:fixed_:vse_ontoshenia,
+	2_:assign_:arc_:pos_:arc,
+	3_:assign_:node_:n1,
+	set3_:assign_:node_:n
+],,en)
+
+label(st)
+
+//поиск трехэлементной конструкции в скопированном множестве
+//при отсутствии конструкции, перейти по ссылке en
+searchElStr3([
+	1_:fixed_:n,
+	2_:assign_:arc_:pos_:arc,
+	3_:assign_:node_:n1
+],,en)
+
+//удаление дуги в найденной трехэлементной конструкции
+eraseElStr3([
+	1_:fixed_:n,
+	2_:assign_:arc_:f_:arc,
+	3_:fixed_:n1
+])
+
+//поиск пятиэлементной конструкции, в которой первый
+//элемент - найденный узел, пятый - узел элементы архитектуры_
+searchElStr5([
+	1_:fixed_:node_:n1,
+	2_:assign_:arc_:pos_:arc1,
+	3_:fixed_:node_:ponjatie,
+	4_:assign_:arc_:pos_:arc2,
+	5_:fixed_:node_:two
+],,st)
+
+//поиск пятиэлементной конструкции, в которой первый
+//элемент - найденный узел, пятый - узел элементы архитектуры_
+searchElStr5([
+	1_:fixed_:n1,
+	2_:assign_:arc_:pos_:arc1,
+	3_:assign_:node_:n2,
+	4_:assign_:arc_:pos_:arc2,
+	5_:fixed_:one
+])
+
+//копирование множества третьих узлов в трехэлементной 
+//конструкции, первый элемент которой отношение otnoshenie
+searchSetStr3([
+	1_:fixed_:vse_ontoshenia,
+	2_:assign_:arc_:pos_:arc,
+	3_:assign_:node_:n5,
+	set3_:assign_:node_:second_n
+])
+
+label(st1)
+
+//поиск трехэлементной конструкции в скопированном множестве
+//при отсутствии конструкции, перейти по ссылке en
+searchElStr3([
+	1_:fixed_:node_:second_n,
+	2_:assign_:arc_:pos_:arc,
+	3_:assign_:node_:n4
+],,en1)
+
+//удаление дуги в найденной трехэлементной конструкции
+eraseElStr3([
+	1_:fixed_:second_n,
+	2_:assign_:arc_:f_:arc,
+	3_:fixed_:n4
+])
+
+//поиск пятиэлементной конструкции, в которой первый
+//элемент - найденный узел, пятый - узел элементы архитектуры_
+searchElStr5([
+	1_:fixed_:node_:n4,
+	2_:assign_:arc_:pos_:arc1,
+	3_:fixed_:node_:n2,
+	4_:assign_:arc_:pos_:arc2,
+	5_:fixed_:node_:two
+],,st1)
+
+//поиск пятиэлементной конструкции, в которой первый
+//элемент - найденный узел, пятый - узел элементы архитектуры_
+searchElStr5([
+	1_:fixed_:n4,
+	2_:assign_:arc_:pos_:arc1,
+	3_:assign_:node_:n3,
+	4_:assign_:arc_:pos_:arc2,
+	5_:fixed_:one
+])
+
+//удаление дуги в найденной трехэлементной конструкции
+eraseElStr3([
+	1_:fixed_:vse_ontoshenia,
+	2_:assign_:arc_:f_:arc,
+	3_:fixed_:n4
+])
+
+//генерация узла для множества
+genEl([1_:assign_:node_:news])
+
+//добавление узла показатели стиля в объекте в выходное множество элементов
+genElStr3([
+	1_:fixed_:node_:otnoshenie,
+	2_:assign_:arc_:pos_:arc1,
+	3_:fixed_:node_:news
+])
+
+//добавление узла показатели стиля в объекте в выходное множество элементов
+genElStr3([
+	1_:fixed_:node_:news,
+	2_:assign_:arc_:pos_:arc1,
+	3_:fixed_:node_:ponjatie
+])
+
+//добавление узла показатели стиля в объекте в выходное множество элементов
+genElStr3([
+	1_:fixed_:node_:two,
+	2_:assign_:arc_:pos_:arc,
+	3_:fixed_:arc_:arc1
+])
+
+//добавление узла показатели стиля в объекте в выходное множество элементов
+genElStr3([
+	1_:fixed_:node_:news,
+	2_:assign_:arc_:pos_:arc1,
+	3_:fixed_:node_:n3
+])
+
+//---------------
+//добавление узла показатели стиля в объекте в выходное множество элементов
+genElStr3([
+	1_:fixed_:u,
+	2_:assign_:arc_:pos_:arc2,
+	3_:fixed_:node_:n3
+])
+//---------------------
+
+//добавление узла показатели стиля в объекте в выходное множество элементов
+genElStr3([
+	1_:fixed_:node_:one,
+	2_:assign_:arc_:pos_:arc,
+	3_:fixed_:arc_:arc1
+])
+
+//добавление узла показатели стиля в объекте в выходное множество элементов
+genElStr3([
+	1_:fixed_:node_:vse_ontoshenia,
+	2_:assign_:arc_:pos_:arc1,
+	3_:fixed_:node_:news
+],nachalo)
+
+label(en1)
+
+//удаление дуги в найденной трехэлементной конструкции
+eraseElStr3([
+	1_:fixed_:vse_ontoshenia,
+	2_:assign_:arc_:f_:arc,
+	3_:fixed_:n1
+],nachalo)
+
+label(en)
+
+searchElStr3([
+	1_: fixed_: q_gen_all_trans_relation_links,
+	2_: assign_: arc,
+	3_: fixed_: els
+])
+
+genElStr5([
+	1_: fixed_: q_gen_all_trans_relation_links,
+	2_: fixed_: arc,
+	3_: fixed_: els,
+	4_: assign_: arc1,
+	5_: fixed_: rrel_answer_is_present
+])
+
+//вывод выходного множества элементов
+//#ui_output([1_:fixed_: sheet, 2_:fixed_:u])
+
+return()
+end

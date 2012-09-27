@@ -1,0 +1,90 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: gen_meta_node.m4scp
+// Description:
+// Файл содержит процедуру запуска операции генерации
+// всех связок принадлежности классам для некоторого объекта
+// с учетом транзитивности отношения включения
+// 1-й аргумент - исходный объект
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 11.01.11
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+
+procedure(gen_all_accessories,
+[[	
+	rrel_answer_is_present;
+	q_gen_all_accessory_links;
+	nrel_inclusion;
+]],
+[{	
+	a,arc,seg,segments,temp,arc1
+}],
+{[
+	1_: in_: a
+]}
+)
+sys_get_location([1_: a,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+//#printNl([1_: /"A"/])
+///#printEl([1_: a])
+genElStr3([
+	1_: assign_: node_: const_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: nrel_inclusion
+])
+genElStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: a
+])
+genElStr3([
+	1_: fixed_: q_gen_all_accessory_links,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: temp
+])
+label(wait1)
+printNl([1_: /"WAIT START"/])
+sys_wait([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: {1_: rrel_answer_is_present}
+])
+printNl([1_: /"WAIT END"/])
+searchElStr5([
+	1_: fixed_: q_gen_all_accessory_links,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: temp,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_present
+],,wait1)
+eraseEl([1_: fixed_: temp])
+
+label(exit)
+return()
+end

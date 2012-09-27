@@ -1,0 +1,84 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: gen_link.m4scp
+// Description:
+// ‘айл содержит процедуру  генерации св€зки указанного отношени€
+// 1-й аргумент - узел, вход€щий в св€зку отношени€ под атрибутом 1_
+// 2-й аргумент - узел, вход€щий в св€зку отношени€ под атрибутом 2_
+// 3-й аргумент - множество, содержащее все эелементы св€зок отношени€
+// под атрибутом 2_ (если требуетс€)
+// 4-й аргумент - знак самого отношени€
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 11.01.11
+#include "scp_keynodes.scsy"
+#include "ordinal.scsy"
+
+procedure(gen_link,
+[[
+	1_;
+	2_;
+]],
+[{	
+	a,b,set,arc,arc1,node,copy,seg,segments
+}],
+{[
+	1_: in_: a,
+	2_: in_: b,
+	3_: in_: set,
+	4_: in_: copy
+]}
+)
+sys_get_location([1_: copy,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+genElStr3([
+	1_: fixed_: copy,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: const_: node_: node
+])
+genElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: b
+])
+genElStr5([
+	1_: fixed_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: a,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 1_
+])
+genElStr5([
+	1_: fixed_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: b,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 2_
+])
+
+return()
+end

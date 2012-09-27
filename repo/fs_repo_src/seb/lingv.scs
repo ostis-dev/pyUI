@@ -1,0 +1,9 @@
+#include "ordinal.scsy"
+#include "meta_info.scsy"
+#include "ui_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "_keynodes.scsy"
+#include "lingv_src\bel.scsy"
+#include "lingv_src\rus.scsy"
+#include "lingv_src\_keynodes.scsy"
+

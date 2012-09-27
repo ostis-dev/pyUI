@@ -1,0 +1,148 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: gen_meta_node.m4scp
+// Description:
+// Файл содержит процедуру генерации метаузла из константного
+// sc-узла с учетом расширенного алфавита
+// 1-й аргумент - исходный узел
+// 2-й аргумент - копия узла
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 11.01.11
+
+#include "scp_keynodes.scsy"
+#include "meta_info.scsy"
+
+procedure(gen_meta_node,
+[[	
+	stype_concept_norel;	
+	stype_bin_orient_role_rel;	
+	stype_bin_orient_norole_rel;		
+	stype_struct;
+	stype_sheaf;
+	stype_ext_obj_real;	
+	stype_ext_obj_abstract;
+]],
+[{	
+	a,b,arc,seg,segments
+}],
+{[
+	1_: in_: a,	
+	2_: out_: b
+]}
+)
+sys_get_location([1_: a,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+genEl([1_: node_: meta_: assign_: b])
+
+searchElStr3([
+	1_: fixed_: stype_concept_norel,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: a
+],,next1)
+genElStr3([
+	1_: fixed_: stype_concept_norel,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: b
+],exit,exit)
+label(next1)
+//-------------------------------------------------------------------------------------------------
+searchElStr3([
+	1_: fixed_: stype_bin_orient_role_rel,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: a
+],,next2)
+genElStr3([
+	1_: fixed_: stype_bin_orient_role_rel,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: b
+],exit,exit)
+label(next2)
+//-------------------------------------------------------------------------------------------------
+searchElStr3([
+	1_: fixed_: stype_bin_orient_norole_rel,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: a
+],,next3)
+genElStr3([
+	1_: fixed_: stype_bin_orient_norole_rel,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: b
+],exit,exit)
+label(next3)
+//-------------------------------------------------------------------------------------------------
+searchElStr3([
+	1_: fixed_: stype_struct,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: a
+],,next4)
+genElStr3([
+	1_: fixed_: stype_struct,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: b
+],exit,exit)
+label(next4)
+//-------------------------------------------------------------------------------------------------
+searchElStr3([
+	1_: fixed_: stype_sheaf,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: a
+],,next5)
+genElStr3([
+	1_: fixed_: stype_sheaf,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: b
+],exit,exit)
+label(next5)
+//-------------------------------------------------------------------------------------------------
+searchElStr3([
+	1_: fixed_: stype_ext_obj_real,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: a
+],,next6)
+genElStr3([
+	1_: fixed_: stype_ext_obj_real,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: b
+],exit,exit)
+label(next6)
+//-------------------------------------------------------------------------------------------------
+searchElStr3([
+	1_: fixed_: stype_ext_obj_abstract,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: a
+],,next7)
+genElStr3([
+	1_: fixed_: stype_ext_obj_abstract,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: b
+],exit,exit)
+label(next7)
+
+label(exit)
+return()
+end

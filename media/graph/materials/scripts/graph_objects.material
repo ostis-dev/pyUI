@@ -1,0 +1,38 @@
+material graph_object_Normal
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.6 0.6 0.8
+			depth_write on
+		}
+	}
+}
+
+material graph_object_Selected
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.337 0.455 0.882
+			depth_write on
+		}
+	}
+}
+
+material graph_object_Highlighted
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.741 0.643 0.204
+			depth_write on
+		}
+	}
+}

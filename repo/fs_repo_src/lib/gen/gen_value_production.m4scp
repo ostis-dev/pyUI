@@ -1,0 +1,372 @@
+// 
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+procedure(gen_value_production,
+[[
+	//#TODO answerIsPresent = "/seb/planimetry/присутствует ответ_";
+	answerIsPresent=rrel_answer_is_present;	
+	
+	//#TODO answerIsAbsent = "/seb/planimetry/отсутствует ответ_";
+	answerIsAbsent=rrel_answer_is_absent;
+		
+	//TODO req="/seb/planimetry/запрос значения величины";
+	req=q_production;
+	
+	//#TODO th = "/seb/planimetry/теория";
+	th=group_theory;
+	
+	first=1_;
+	second=2_;
+	set_attr=set_;
+	fixed_attr=fixed_;
+	
+	//#отладочная информация, закомментировать или убрать
+	l_find_t=/"\n\nI find t!!!\n\n"/;
+	bla=/"\n\nBLA!\n\n"/;	
+	bla2=/"\n\nBLA-BLA!\n\n"/;	
+	here=/"\n\nI have entered sys_search_and_sys_gen!!!\n\n"/;
+	exited=/"\n\nI have exited sys_search_and_sys_gen!!!\n\n"/;
+]],
+[{	
+	if,else,objects,copy_objects,temp_objects,temp_obj,link_search_param,search_params,linked,current_linked,val,value,values,result,abc,t,template,arc,arc1,node,handler,element,el,seg,segments,temp,set,set1,set2,set3,set4,theory,object,section,attr
+}],
+{[		
+	1_: in_: linked,
+	2_: in_: if,
+	3_: in_: objects,
+	4_: in_: value,	
+	5_: out_: values
+]}
+)
+sys_get_location([1_: value,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+printNl([1_: here])
+
+sys_search([
+	1_: fixed_: if,
+	2_: assign_: template
+])
+
+//#genEl([1_: node_: set1])
+//#printEl([1_: set1])
+searchSetStr3([
+	1_: fixed_: template,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp,
+	set3_: assign_: set1
+])
+
+//перебираем элементы
+label(next)
+
+ifVarAssign([1_: node],,noerase)
+eraseElStr3([
+	1_: fixed_: set1,
+	2_: assign_: f_: arc,
+	3_: fixed_: node
+])
+label(noerase)
+
+searchElStr3([
+	1_: fixed_: set1,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node,
+],,exit)
+
+searchSetStr3([
+	1_: fixed_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: set,
+	set3_: assign_: set2
+],,exit)
+
+///////////////////////////////////////////
+//#new тут делаем копию объектов для того, чтобы потом убедиться, что мы пошли по верной ветке и все объекты найдены/////////////////////////////////////////
+searchSetStr3([
+	1_: fixed_: objects,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp,
+	set3_: assign_: copy_objects
+],,exit)
+
+genEl([1_: node_: const_: assign_: search_params])
+///////////////////////////////////////////
+
+//перебираем элементы
+label(next2)
+
+ifVarAssign([1_: element],,noerase2)
+eraseElStr3([
+	1_: fixed_: set2,
+	2_: assign_: f_: arc,
+	3_: fixed_: element
+])
+label(noerase2)
+
+searchElStr3([
+	1_: fixed_: set2,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: element
+],,next)
+
+searchElStr5([
+	1_: fixed_: element,
+	2_: assign_: arc,
+	3_: assign_: object,
+	4_: assign_: arc1,
+	5_: fixed_: second
+],,exit)
+
+//#printNl([1_: /"OBJECT"/])
+//#printEl([1_:object])
+
+//#когда-то здесь была проверка одного объекта, сейчас здесь имеется проверка текущего объекта с множеством объектов
+
+searchSetStr3([
+	1_: fixed_: objects,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp,
+	set3_: assign_: temp_objects
+])
+/////////////////////////////////////////
+label(search_obj)
+
+ifVarAssign([1_: temp_obj],,search_obj_noerase)
+eraseElStr3([
+	1_: fixed_: temp_objects,
+	2_: assign_: f_: arc,
+	3_: fixed_: temp_obj
+])
+label(search_obj_noerase)
+
+//#printNl([1_: /"TEMP OBJECTS"/])
+//#printEl([1_: temp_objects])
+
+searchElStr3([
+	1_: fixed_: temp_objects,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp_obj
+],,next2)
+
+printNl([1_:bla])
+printEl([1_:object])
+printEl([1_:temp_obj])
+
+ifCoin([
+	1_: fixed_: object,
+	2_: fixed_: temp_obj
+],find,search_obj)
+
+/////////////////////////////////////////
+
+
+label(find)
+
+searchElStr5([
+	1_: fixed_: element,
+	2_: assign_: arc,
+	3_: assign_: t,
+	4_: assign_: arc1,
+	5_: fixed_: first
+],,exit)
+//#printEl([1_: t])
+printNl([1_: l_find_t])
+
+/////////////////////////////////////////
+//#генерируем очередную связку для параметров поиска
+genEl([1_: node_: const_: assign_: link_search_param])
+genElStr5([
+	1_: fixed_: link_search_param,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: t,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: first
+])
+
+genElStr5([
+	1_: fixed_: link_search_param,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: object,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: second
+])
+
+//#добавляем эту связку к параметрам поиска
+genElStr3([
+	1_: fixed_: search_params,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: link_search_param
+])
+
+//#TODO
+
+/////////////////////////////////////////
+
+//#второй sys_search/////////////////////////////////////////
+
+//#sys_search([
+//#	1_: fixed_: if,
+//#	2_: assign_: template,
+//#	3_: fixed_: {
+		//#{1_: t, 2_: object}
+	//#}
+//#],,exit)
+printNl([1_:bla])
+sys_search([
+	1_: fixed_: if,
+	2_: assign_: template,
+	3_: fixed_: search_params
+],,exit)
+
+///////////////////////////////
+//# сразу добавляем найденные соответствия между object и t
+//#TODO
+genEl([1_: node_: const_: assign_: values])
+
+genElStr3([
+	1_: fixed_: values,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: el
+])
+
+genElStr5([
+	1_: fixed_: el,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: t,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: first
+])
+
+genElStr5([
+	1_: fixed_: el,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: object,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: second
+])
+
+///////////////////////////////
+
+searchElStr3([
+	1_: fixed_: template,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node
+])
+
+printEl([1_:node])
+
+searchSetStr3([
+	1_: fixed_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: set,
+	set3_: assign_: set3
+],,exit)
+
+//перебираем элементы
+label(next3)
+
+ifVarAssign([1_: element],,noerase3)
+eraseElStr3([
+	1_: fixed_: set3,
+	2_: assign_: f_: arc,
+	3_: fixed_: element
+])
+label(noerase3)
+
+searchElStr3([
+	1_: fixed_: set3,
+	2_: assign_: arc,
+	3_: assign_: element
+],,exit)
+
+searchElStr5([
+	1_: fixed_: element,
+	2_: assign_: arc,
+	3_: assign_: var_: temp,
+	4_: assign_: arc1,
+	5_: fixed_: first
+],,exit)
+
+printNl([1_: bla2])
+printEl([1_: temp])
+//#printEl([1_: element])
+
+searchSetStr3([
+	1_: fixed_: linked,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: set,
+	set3_: assign_: set4
+],,exit)
+
+//перебираем элементы
+label(next4)
+
+ifVarAssign([1_: current_linked],,noerase4)
+eraseElStr3([
+	1_: fixed_: set4,
+	2_: assign_: f_: arc,
+	3_: fixed_: current_linked
+])
+label(noerase4)
+
+searchElStr3([
+	1_: fixed_: set4,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: current_linked
+],,next3)
+
+//#printNl([1_: /"CURR"/])
+//#printEl([1_: current_linked])
+//#printEl([1_: temp])
+
+ifCoin([
+	1_: fixed_: current_linked,
+	2_: fixed_: temp
+],gen,next4)
+
+label(gen)
+//#printNl([1_: bla])
+
+searchElStr5([
+	1_: fixed_: element,
+	2_: assign_: arc,
+	3_: assign_: value,
+	4_: assign_: arc1,
+	5_: fixed_: second
+],,exit)
+printEl([1_: value])
+genElStr3([
+	1_: fixed_: values,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: el
+])
+
+genElStr5([
+	1_: fixed_: el,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: current_linked,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: first
+])
+
+genElStr5([
+	1_: fixed_: el,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: value,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: second
+],next3,next3)
+
+///////////////////////////////////////
+label(exit)
+
+printEl([1_: linked])
+
+printNl([1_: exited])
+return()
+end

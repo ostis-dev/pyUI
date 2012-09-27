@@ -1,0 +1,109 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: search_node_objects.m4scp
+// Description: Файл содержит процедуру поиска
+//				элемента из мн-ва элемнтов, который является множеством объектов
+/////////////////////////////////////////////////////
+// 		Author: Startsev Sergei
+//        Date: 22.01.2011 
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+/*!
+	Поиск элемента из мн-ва элемнтов, который является множеством объектов
+	
+	@result	результирующее мн-во, которое представляет собой множество объектов
+*/
+
+procedure(search_node_objects,
+[[	
+	
+	first=1_;
+	second=2_;
+	
+	//#отладочная информация, закомментировать или убрать
+	find_obs=/"\n\nI find objects!\n\n"/;
+	not_find_obs=/"\n\nI don't find objects!\n\n"/;
+	here=/"\n\nI have entered search_node_objects!!!\n\n"/;
+	exited=/"\n\nI have exited search_node_objects!!!\n\n"/;		
+]],
+[{	
+	objects,arc,arc1,req_arc,value,handler,element,seg,segments,temp,set,set2,theory,section,attr
+}],
+{[
+	//узел, к которому проведена дуга
+	1_: in_: value,
+	//узел теории
+	2_: in_: theory,
+	//множество объектов
+	3_: out_: objects
+]}
+)
+sys_get_location([1_: value,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+printNl([1_: here])
+
+//пытаемся определить, где объект
+
+searchSetStr3([
+	1_: fixed_: value,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp,
+	set3_: assign_: set
+],,not_find_objects)
+
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: f_: arc,
+	3_: fixed_: theory
+])
+
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: objects,
+],find_object,not_find_objects)
+
+
+label(find_object)
+///////////////////////////////
+printNl([1_: find_obs],exit,exit)
+///////////////////////////////
+
+label(not_find_objects)
+///////////////////////////////
+printNl([1_: not_find_obs])
+///////////////////////////////
+
+label(exit)
+
+printNl([1_: exited])
+return()
+end

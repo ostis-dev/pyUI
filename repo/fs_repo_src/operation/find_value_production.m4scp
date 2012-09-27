@@ -1,0 +1,273 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modfirst_ely
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: find_value_production.m4scp
+// Description: Файл содержит операцию
+//				определения значения продукции
+/////////////////////////////////////////////////////
+// 		Author: Startsev Sergei
+//        Date: 23.01.2011 
+
+/*!
+	Операция определения значения продукции
+*/
+
+#include "scp_keynodes.scsy"
+#include "lib_search.scsy"
+#include "lib_gen.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+/////////////////////////////////////////////////////
+
+program(init_op,
+[[
+	
+	first=1_;
+	second=2_;
+	catch_output_arc;
+	q_initiated;
+]],
+[{
+	nodeVar
+}],
+{[
+]}
+)
+
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: find_value_production,
+	3_: fixed_: {1_: q_initiated},
+	4_: assign_: nodeVar
+])
+
+return()
+end
+/////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////
+
+procedure(find_value_production,
+[[			
+	q_production;
+	
+	//#отладочная информация, закомментировать или убрать
+	here=/"\n\nI have entered FIND VALUE PRODUCTION\n\n"/;
+	exited=/"\n\nI have exited FIND VALUE PRODUCTION\n\n"/;
+	find_th=/""/;//#"\n\nsearch_node_theory_stat is OK!!!\n\n"/;
+	not_find_th=/""/;//#/"\n\nsearch_node_theory_stat is ERROR!!!\n\n"/;
+	find_obs=/""/;//#/"\n\nsearch_node_objects is OK!!!\n\n"/;
+	not_find_obs=/""/;//#/"\n\nsearch_node_objects is ERROR!!!\n\n"/;
+	find_if_then=/""/;//#/"\n\nsearch_first_and_second is OK!!!\n\n"/;
+	not_find_if_then=/""/;//#/"\n\nsearch_first_and_second is ERROR!!!\n\n"/;
+	find_linked=/""/;//#/"\n\nsearch_linked_nodes is OK!!!\n\n"/;
+	not_find_linked=/""/;//#/"\n\nsearch_linked_nodes is ERROR!!!\n\n"/;	
+]],
+[{	
+	condition_set,el,inputarc,arc,arc1,req_arc,value,handler,element,
+	seg,segments,temp,set,set2,t,const_then,theory_stat,objects,if,then,linked,
+	section,attr,result
+}],
+{[
+	1_: in_: handler,
+	2_: in_: element,
+	//проведенная дуга
+	3_: in_: inputarc,
+	//узел, к которому проведена дуга
+	4_: in_: value
+]}
+)
+sys_get_location([1_: value,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+/////////////////////////////////////////////////////
+//#проверка вызова
+searchElStr3([
+	1_: fixed_: q_production,
+	2_: assign_: const_: pos_: req_arc,
+	3_: fixed_: value
+],,exit)
+/////////////////////////////////////////////////////
+printNl([1_: here])
+/////////////////////////////////////////////////////
+callReturn([1_: fixed_: search_node_theory_stat,
+	    2_: fixed_:
+		{[
+			1_: fixed_: value,			
+			2_: assign_:theory_stat
+		]}
+])
+
+ifVarAssign([1_: theory_stat],find_theory,not_find_theory)
+
+label(not_find_theory)
+printNl([1_: not_find_th],bad,bad)
+
+label(find_theory)
+printNl([1_: find_th])
+/////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////
+callReturn([1_: fixed_: search_node_objects,
+	    2_: fixed_:
+		{[
+			1_: fixed_: value,
+			2_: fixed_: theory_stat,
+			3_: assign_:objects		
+		]}
+])
+
+ifVarAssign([1_: objects],find_objects,not_find_objects)
+
+label(not_find_objects)
+printNl([1_: not_find_obs],bad,bad)
+
+label(find_objects)
+printNl([1_: find_obs])
+/////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////
+callReturn([1_: fixed_: search_first_and_second,
+	    2_: fixed_:
+		{[
+			1_: fixed_: theory_stat,			
+			2_: assign_: if,
+			3_: assign_: then
+		]}
+])
+
+
+ifVarAssign([1_: if],l_find_if,l_not_find_if)
+
+label(l_not_find_if)
+printNl([1_: not_find_if_then],bad,bad)
+
+label(l_find_if)
+printNl([1_: find_if_then])
+
+ifVarAssign([1_: then],l_find_then,l_not_find_then)
+
+label(l_not_find_then)
+printNl([1_: not_find_if_then],bad,bad)
+
+label(l_find_then)
+printNl([1_: find_if_then])
+/////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////
+callReturn([1_: fixed_: search_linked_nodes,
+	    2_: fixed_:
+		{[
+			1_: fixed_: if,
+			2_: fixed_: then,			
+			3_: assign_: linked
+		]}
+])
+
+ifVarAssign([1_: linked],l_find_linked,l_not_find_linked)
+
+label(l_not_find_linked)
+printNl([1_: not_find_linked],bad,bad)
+
+label(l_find_linked)
+printNl([1_: find_linked])
+
+//#//#printEl([1_:linked])
+/////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////
+//#вызов search_direct_mapping
+callReturn([1_: fixed_: search_direct_mapping,
+	    2_: fixed_:
+		{[
+			1_: fixed_: if,			
+			2_: fixed_: objects,
+			3_: assign_: condition_set
+	]}
+])
+/////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////
+//#вызов search_inverse_mapping
+callReturn([1_: fixed_: search_inverse_mapping,
+	    2_: fixed_:
+		{[
+			1_: fixed_: if,
+			2_: fixed_: linked,
+			3_: fixed_: condition_set,
+			4_: assign_: result
+	]}
+])
+/////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////
+sys_gen([
+	1_: fixed_: then,
+	2_: fixed_: {		
+	},
+	3_: fixed_: result,
+	4_: assign_:const_then
+])
+/////////////////////////////////////////////////////
+
+//#printEl([1_: const_then])
+
+/////////////////////////////////////////////////////
+callReturn([1_: fixed_: gen_good_result_of_find_value_production,
+	    2_: fixed_:
+		{[
+			1_: fixed_: req_arc,
+			2_: fixed_: const_then,
+			3_: fixed_: objects			
+	]}
+],good,good)
+/////////////////////////////////////////////////////
+
+
+label(bad)
+/////////////////////////////////////////////////////
+callReturn([1_: fixed_: gen_bad_result_of_find_value_production,
+	    2_: fixed_:
+		{[
+			1_: fixed_: req_arc,
+			2_: fixed_: then,
+			3_: fixed_: objects			
+	]}
+])
+/////////////////////////////////////////////////////
+
+
+label(good)
+/////////////////////////////////////////////////////
+
+label(exit)
+
+printNl([1_: exited])
+return()
+end

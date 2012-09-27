@@ -1,0 +1,27 @@
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+mark_as_active = "/lib/questions/mark_question/as_active";
+mark_as_successful = "/lib/questions/mark_question/as_successful";
+mark_as_finished = "/lib/questions/mark_question/as_finished";
+mark_as_finished_with_check = "/lib/questions/mark_question/check_and_mark_as_finished";
+mark_as_not_active_or_finished = "/lib/questions/mark_question/as_not_active";

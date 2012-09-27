@@ -1,0 +1,205 @@
+material scg_empty
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000 0.000
+			diffuse 0.0 0.0 0.0 1.000
+			depth_write on
+		}
+	}
+}
+
+material scg_Normal
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.700 0.000 0.700
+			cull_hardware none
+			depth_write on
+			
+			scene_blend alpha_blend
+		}
+	}
+}
+
+material scg_Selected
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			//diffuse 0.337 0.455 0.882
+			diffuse 1.0 0.5 0.25 1.000 
+			cull_hardware none
+			depth_write on
+			
+			scene_blend alpha_blend
+		}
+	}
+}
+
+material scg_Highlighted
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.741 0.643 0.204
+			cull_hardware none
+			depth_write on
+			
+			scene_blend alpha_blend
+		}
+	}
+}
+
+material scg_WasInMemory
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.000 0.000 0.000
+			cull_hardware none
+			depth_write on
+			
+			scene_blend alpha_blend
+		}
+	}
+}
+
+material scg_NewInMemory
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.000 0.700 0.000
+			cull_hardware none
+			depth_write on
+			
+			scene_blend alpha_blend
+		}
+	}
+}
+
+material scg_Merged
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.000 0.000 0.700
+			cull_hardware none
+			depth_write on
+			
+			scene_blend alpha_blend
+		}
+	}
+}
+
+abstract pass scg_pair_pass2d_normal
+{
+	scene_blend alpha_blend
+	alpha_rejection greater 150
+	depth_write on
+	
+	diffuse 0.700 0.000 0.700
+	
+	texture_unit
+	{
+		texture $tex_name
+		tex_address_mode wrap
+		filtering none
+	}
+}
+
+abstract pass scg_pair_pass2d_selected
+{
+	scene_blend alpha_blend
+	alpha_rejection greater 150
+	depth_write on
+	
+	diffuse 1.0 0.5 0.25 1.000
+	
+	texture_unit
+	{
+		texture $tex_name
+		tex_address_mode wrap
+		filtering none
+	}
+}
+
+abstract pass scg_pair_pass2d_highlighted
+{
+	scene_blend alpha_blend
+	alpha_rejection greater 150
+	depth_write on
+	
+	diffuse 0.741 0.643 0.204
+	
+	texture_unit
+	{
+		texture $tex_name
+		tex_address_mode wrap
+		filtering none
+	}
+}
+
+abstract pass scg_pair_pass2d_wasinmemory
+{
+	scene_blend alpha_blend
+	alpha_rejection greater 150
+	depth_write on
+	
+	diffuse 0.000 0.000 0.000
+	
+	texture_unit
+	{
+		texture $tex_name
+		tex_address_mode wrap
+		filtering none
+	}
+}
+
+abstract pass scg_pair_pass2d_newinmemory
+{
+	scene_blend alpha_blend
+	alpha_rejection greater 150
+	depth_write on
+	
+	diffuse 0.000 0.700 0.000
+	
+	texture_unit
+	{
+		texture $tex_name
+		tex_address_mode wrap
+		filtering none
+	}
+}
+
+abstract pass scg_pair_pass2d_merged
+{
+	scene_blend alpha_blend
+	alpha_rejection greater 150
+	depth_write on
+	
+	diffuse 0.000 0.000 0.700
+	
+	texture_unit
+	{
+		texture $tex_name
+		tex_address_mode wrap
+		filtering none
+	}
+}

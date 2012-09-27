@@ -1,0 +1,144 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: remove_menu_element.m4scp
+// Description: File contains procedure to remove
+//				specified command from noatom command
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich, Sergei Startsev, Sergei Zalivako, Olga Savelieva
+//        Date: 05.12.11
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "com_keynodes.scsy"
+#include "ui_keynodes.scsy"
+#include "lib_search.scsy"
+
+procedure(remove_child_command,
+[[	
+	q_remove_menu_element;
+	search_bin_pair_end_proc;
+	nrel_decomposition;
+	nrel_identification;
+	ui_atom_command;
+	ui_noatom_command;
+	nrel_general_formulation;
+]],
+[{
+	node,decomp,node1,node2,set,identif,contour,parent,
+	arc,arc1, command, 
+	handler,element,inputarc,question_node,segment,t_seg
+}],
+{[
+	1_: in_: command
+]}
+)
+
+sys_get_location([1_: fixed_: command, 2_: assign_: segment])	
+sys_spin_segment([1_: fixed_: segment, 2_: assign_: t_seg])
+sys_set_default_segment([1_: fixed_: segment])
+
+/////////////////////////////////////////////////////
+// Cycle which perfrorms search of all perents command
+// for specified command
+searchSetStr3([
+	1_: assign_: const_: node_: node1,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: command,
+	set1_: assign_: node_: const_: set
+])
+
+ifVarAssign([1_: set],,exit)
+
+label(next_node4)
+
+ifVarAssign([1_: node1],,no_erase_node4)
+
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: fixed_: command
+])
+label(no_erase_node4)
+
+/////////////////////////////////////////////////////
+// Find parent command for a specified command
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: const_: node1
+],,end_cycle4)
+
+callReturn([
+	1_:	fixed_: search_bin_pair_end_proc,
+	2_:	fixed_: {[
+			1_: fixed_: node1,
+			2_: fixed_: nrel_decomposition,
+			3_: assign_: parent
+		]}
+	]
+)
+
+ifVarAssign([1_: parent],, next_node4)
+
+/////////////////////////////////////////////////////
+// Remove specified command from parent
+eraseElStr3([
+	1_: fixed_: node1,
+	2_: assign_: f_: pos_: const_: arc,
+	3_: fixed_: node
+])
+
+/////////////////////////////////////////////////////
+// Removing command accessories for parent command
+// if removed element was a single child
+searchElStr3([
+	1_: fixed_: node1,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: const_:node2
+],next_node4)
+
+eraseElStr3([
+	1_: fixed_: ui_atom_command,
+	2_: f_: assign_: pos_: const_: arc,
+	3_: fixed_: parent
+])
+
+eraseElStr3([
+	1_: fixed_: ui_noatom_command,
+	2_: f_: assign_: pos_: const_: arc,
+	3_: fixed_: parent
+])
+
+genElStr3([
+	1_: fixed_: ui_atom_command,
+	2_: assign_: arc_: const_: pos_: arc,
+	3_: fixed_: parent
+],next_node4, next_node4)
+
+label(end_cycle4)
+
+label(exit)
+return()
+end()

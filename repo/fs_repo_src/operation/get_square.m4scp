@@ -1,0 +1,253 @@
+
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modfirst_ely
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  first_el not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: addiotion.m4scp
+// Description: Файл содержит операцию вычисления площади
+/////////////////////////////////////////////////////
+// 		Author: Sergei Zalivako
+//        Date: 09.02.2011 
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "com_keynodes.scsy"
+#include "lib_search.scsy"
+#include "lib_check.scsy"
+#include "lib_gen.scsy"
+#include "lib_answer.scsy"
+#include "lib_set.scsy"
+
+
+program(init_op,
+[[
+	// Вызываемая SCP-программа
+	get_square;	
+	// Ключевой узел, обозначающий инициированный вопрос
+	q_initiated;
+	// Событие, на которое реагирует обработчик(проведение выходящей дуги из узла)
+	catch_output_arc;
+]],
+[{
+}],
+{[
+]}
+)
+// Установка обработчика события на проведение дуги  из узла "инициированный запрос" 
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: get_square,
+	3_: fixed_: {1_: q_initiated}
+])
+
+return()
+	
+end
+
+procedure(get_square,
+[[
+	// Ключевой узел, обозначающий запрос
+	q_square;
+	
+	// Ключевой узел, обозначающий инициированный вопрос
+	q_initiated;
+	
+	// Ключевой узел, обозначающий вопрос
+	question;
+	
+	// Ключевой узел, обозначающий запрос значения величины
+	q_var_value;
+
+	// Атрибут присутствия ответа
+	rrel_answer_is_present;
+
+	// Ключевой узел отношения площади
+	nrel_square =  "/seb/planimetry/площадь*";
+		
+	// Процедура поиска значения величины
+	search_quantity_value;
+	
+	// Атрибут для обозначения десятичного числа
+	rrel_decimal_number;
+	
+	// Процедура поиска конца бинарной пары
+	search_bin_pair_end_proc;
+	
+	// Процедура для генерации ответа
+	answer_make;
+	
+	// Процедура удаление элемента из множества
+	set_rm_el;
+		
+	// Узел, содержимым которого является число 0
+	zero =n= 0;
+	
+	// Узел, содержимым которого является число 1
+	one =n= 1;
+	
+]],
+[{
+	handler, element,
+	arcFromRequest, arcFromQuestion, 
+	location, segments,
+	questionLink,
+	arcForChecking, arcVar, attributeArc, nodeVar, checkingNode,
+	object, valueNode, questionNode, result, 
+	answer
+}],
+{[
+	1_: in_: handler, 
+	2_: in_: element, 
+	3_: in_: arcFromQuestion, 
+	4_: in_: questionLink
+]}
+)
+// Получение сегмента, в котором находится узел отношения площадь
+sys_get_location([
+	1_: fixed_: nrel_square,
+	2_: assign_: location
+])
+
+// Установка найденного сегмента как основного
+sys_set_default_segment([
+	1_: fixed_: location
+])
+
+//Разворачивание установленного сегмента
+sys_spin_segment([
+	1_: fixed_: location,
+	2_: assign_: segments
+])
+
+//#printEl([
+	//#1_: q_square
+//#])
+
+// Проверяем, что в узел запроса проведена дуга из узла "запрос площади"
+searchElStr3([
+	1_: fixed_: q_square,
+	2_: assign_: const_: pos_: arc_: arcFromRequest,
+	3_: fixed_: questionLink
+], , finishOperation)
+
+// Находим объект, площадь которого надо найти
+searchElStr3([
+	1_: fixed_: questionLink,
+	2_: assign_: const_: pos_: arc_: arcVar,
+	3_: assign_: const_: node_: object
+])
+
+//#printEl([1_: fixed_: nrel_square])
+
+// Находим значение площади для указанного объекта
+callReturn([
+	1_: fixed_: search_bin_pair_end_proc,
+	2_: fixed_: {[
+		1_: object,
+		2_: nrel_square,
+		3_: valueNode
+	]}
+], , , finish_operation)
+
+// Генерируем узел вопроса для запроса значения величины
+genEl([
+	1_: assign_: const_: node_: questionNode
+])
+
+// Добавляем в вопрос найденную величину площади
+genElStr3([
+	1_: fixed_: questionNode,
+	2_: arc_: const_: pos_: actual_: arcVar,
+	3_: fixed_: valueNode
+])
+
+// Инициируем выполнение запроса значения величины
+// Проводим дугу из запроса значения величины
+genElStr3([
+	1_: fixed_: q_var_value,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: fixed_: questionNode
+])
+	
+// Проводим дугу из узла "вопрос"
+genElStr3([
+	1_: fixed_: question,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: fixed_: questionNode
+])
+		
+// Проводим дугу из узла "инициированный вопрос"
+genElStr3([
+	1_: fixed_: q_initiated,
+	2_: assign_: arc_: const_: pos_: actual_: arcVar,
+	3_: fixed_: questionNode
+])
+
+// Ждем пока операция работа решателя завершится
+label(waiting)
+	sys_wait([
+		1_: fixed_: catch_output_arc,
+		2_: fixed_: {1_: rrel_answer_is_present},
+	])
+	
+	// Проверяем, что дуга проведена именно к этому вопросу
+	searchElStr5([
+		1_: fixed_: q_var_value,
+		2_: assign_: arc_: const_: pos_: actual_: arcVar,
+		3_: fixed_: questionNode,
+		4_: assign_: arc_: const_: pos_: actual_: attributeArc,
+		5_: fixed_: rrel_answer_is_present
+	], , waiting)
+	
+// Находим значение площади
+callReturn([
+	1_: fixed_: search_quantity_value,
+	2_: fixed_: {[
+		1_: valueNode,
+		2_: result
+	]}
+])
+
+// Генерируем ответ 
+// Генерируем узел ответа
+genElStr3([
+	1_: assign_: node_: const_: answer,
+	2_: assign_: pos_: const_: arcVar,
+	3_: fixed_: result
+])
+/////////////////////////////////////////////////////
+// Call of the answer making procedure
+callReturn([
+	1_:	fixed_: answer_make,
+	2_:	fixed_: {[
+			1_: questionLink,
+			2_: answer
+		]}
+	]
+)
+
+label(finishOperation)
+	
+return()
+	
+end

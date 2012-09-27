@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MyGUI type="Skin" version="1.1">
+
+  <!-- Window choose menu -->
+	<Skin name = "MenuWindowChoose_back" size = "239 96" texture = "#{MyGUI_Theme_Texture_Menu}" mask="menuwindout_back_mask.png">
+		<BasisSkin type="SubSkin" offset = "0 0 239 96" align = "HStretch VStretch">
+			<State name="normal" offset = "17 160 239 96"/>
+		</BasisSkin>
+	</Skin>
+	
+	<Skin name = "MenuWindowChoose_ButtonOutWnd" size = "34 42" texture = "#{MyGUI_Theme_Texture_Menu}">
+		<BasisSkin type="SubSkin" offset = "0 0 34 42" align = "HStretch VStretch">
+			<State name="normal" offset = "121 0 34 42"/>
+			<State name="highlighted" offset = "153 0 34 42"/>
+			<State name="pushed" offset = "185 0 34 42"/>
+		</BasisSkin>
+	</Skin>
+	
+	<Skin name = "MenuWindowChoose_ListBack" size = "122 150" texture = "#{MyGUI_Theme_Texture_Menu}">
+		<Property key="FontName" value = "Default" />
+		<Property key="TextAlign" value = "Center" />
+		<Property key="TextColour" value = "#{MyGUI_Theme_Button_ColourNormal}"/>
+		
+		<BasisSkin type="SubSkin" offset = "0 0 122 150" align = "HStretch VStretch">
+			<State name="normal" offset = "0 0 122 150"/>
+		</BasisSkin>
+		<BasisSkin type="SimpleText" offset = "5 5 112 20" align = "Stretch">
+		</BasisSkin>
+	</Skin>
+	
+	<Skin name = "MenuWindowChoose_ToolBack" size = "35 63" texture = "#{MyGUI_Theme_Texture_Menu}">
+		<BasisSkin type="SubSkin" offset = "0 0 35 23" align = "HStretch Top">
+			<State name="normal" offset = "221 0 35 23"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "0 34 35 28" align = "HStretch Bottom">
+			<State name="normal" offset = "221 37 35 28"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "0 23 35 11" align = "HStretch VStretch">
+			<State name="normal" offset = "221 24 35 11"/>
+		</BasisSkin>
+	</Skin>
+	
+	<Skin name = "MenuWindowChoose_ToolContainer" size = "34 22" texture = "#{MyGUI_Theme_Texture_Menu}">
+		<BasisSkin type="SubSkin" offset = "0 0 34 4" align = "HStretch Top">
+			<State name="normal" offset = "163 125 34 4"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "0 4 34 14" align = "HStretch VStretch">
+			<State name="normal" offset = "163 129 34 14"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "0 18 34 4" align = "HStretch Bottom">
+			<State name="normal" offset = "163 143 34 4"/>
+		</BasisSkin>
+	</Skin>
+	
+	<Skin name = "MenuTool_ButtonBottom" size = "29 12" texture = "#{MyGUI_Theme_Texture_Menu}">
+    
+		<BasisSkin type="SubSkin" offset = "0 0 29 12" align = "Stretch">
+		  <State name="disabled" offset = "122 111 29 12"/>
+		  <State name="pushed" offset = "152 111 29 12"/>
+		  <State name="highlighted" offset = "182 111 29 12"/>
+		  <State name="normal" offset = "212 111 29 12"/>		  
+		</BasisSkin>
+    
+	</Skin>
+	
+	<Skin name = "MenuTool_ButtonTop" size = "29 12" texture = "#{MyGUI_Theme_Texture_Menu}">
+    
+		<BasisSkin type="SubSkin" offset = "0 0 29 12" align = "Stretch">
+		  <State name="disabled" offset = "122 98 29 12"/>
+		  <State name="pushed" offset = "152 98 29 12"/>
+		  <State name="highlighted" offset = "182 98 29 12"/>
+		  <State name="normal" offset = "212 98 29 12"/>		  
+		</BasisSkin>
+    
+	</Skin>
+	
+				<!-- Tools -->
+	<Skin name = "MenuTool_Icon" size = "22 22" texture = "#{MyGUI_Theme_Texture_Menu}">
+		<Property key="NeedMouse" value = "false" />
+		<Property key="ImageResource" value = "pic_ToolIcons" />
+		<Property key="ImageGroup" value = "Icons" />
+
+		<BasisSkin type="MainSkin" offset = "0 0 22 22" align = "Stretch"/>
+	</Skin>
+  
+  	<Skin name = "MenuTool_Button" size = "25 25" texture = "#{MyGUI_Theme_Texture_Menu}">
+		<!--<Property key="StateCheck" value = "true" />-->
+	
+		<BasisSkin type="SubSkin" offset = "0 0 25 25" align = "HStretch VStretch">
+			<State name="normal" offset = "263 36 25 25"/>
+			<State name="highlighted" offset = "291 36 25 25"/>
+			<State name="pushed" offset = "348 36 25 25"/>
+			<State name="normal_checked" offset = "319 36 25 25"/>
+			<State name="highlighted_checked" offset = "348 36 25 25"/>
+			<State name="pushed_checked" offset = "291 36 25 25"/>
+		</BasisSkin>
+		
+		<Child type="StaticImage" skin="MenuTool_Icon" offset = "2 2 21 21" align = "Default" name = "Image"/>
+	</Skin>
+	
+	
+	<!-- Visual menu -->
+	<Skin name = "MenuVisual_Image" size = "24 24">
+		<Property key="NeedMouse" value = "false" />
+		<Property key="ImageResource" value = "pic_SCgVisualMenu" />
+		<Property key="ImageGroup" value = "Icons" />
+
+		<BasisSkin type="MainSkin" offset = "0 0 24 24" align = "Stretch"/>
+	</Skin>
+	
+	<Skin name = "MenuVisual_Button" size = "34 34" texture = "#{MyGUI_Theme_Texture_Menu}">
+
+		<BasisSkin type="SubSkin" offset = "0 0 34 34" align = "HStretch VStretch">
+			<State name="normal" offset = "264 0 34 34"/>
+			<State name="highlighted" offset = "301 0 34 34"/>
+			<State name="pushed" offset = "337 0 34 34"/>
+		</BasisSkin>
+		
+		<Child type="StaticImage" skin="MenuVisual_Image" offset = "5 5 24 24" align = "Default" name = "Image"/>
+		
+	</Skin>
+	
+	<!-- Top menu -->
+	<Skin name = "MenuTop_ButtonAtom" size = "34 22" texture = "#{MyGUI_Theme_Texture_Menu}">
+		
+		<Property key="FontName" value = "Default" />
+		<Property key="TextAlign" value = "HCenter VCenter" />
+
+		<BasisSkin type="SubSkin" offset = "0 0 4 22" align = "Left VStretch">
+		  <State name="normal" offset = "123 125 4 22"/>
+		  <State name="highlighted" offset = "163 125 4 22"/>
+		  <State name="pushed" offset = "203 125 4 22"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "4 0 26 22" align = "HStretch VStretch">
+		  <State name="normal" offset = "127 125 26 22"/>
+		  <State name="highlighted" offset = "167 125 26 22"/>
+		  <State name="pushed" offset = "207 125 26 22"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "30 0 4 22" align = "Right VStretch">
+		  <State name="normal" offset = "153 125 4 22"/>
+		  <State name="highlighted" offset = "193 125 4 22"/>
+		  <State name="pushed" offset = "233 125 4 22"/>
+		</BasisSkin>
+
+		<BasisSkin type="SimpleText" offset = "1 1 32 20" align = "Stretch">
+		  <State name="disabled" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="normal" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="highlighted" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="normal_checked" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		  <State name="pushed" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		</BasisSkin>
+  </Skin>
+  
+  <Skin name = "MenuTop_ButtonNoAtom" size = "49 22" texture = "#{MyGUI_Theme_Texture_Menu}">
+		
+		<Property key="FontName" value = "Default" />
+		<Property key="TextAlign" value = "Left VCenter" />
+
+		<BasisSkin type="SubSkin" offset = "0 0 4 22" align = "Left VStretch">
+		  <State name="normal" offset = "123 125 4 22"/>
+		  <State name="highlighted" offset = "163 125 4 22"/>
+		  <State name="pushed" offset = "203 125 4 22"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "4 0 41 22" align = "HStretch VStretch">
+		  <State name="normal" offset = "127 125 26 22"/>
+		  <State name="highlighted" offset = "167 125 26 22"/>
+		  <State name="pushed" offset = "207 125 26 22"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "45 0 4 22" align = "Right VStretch">
+		  <State name="normal" offset = "153 125 4 22"/>
+		  <State name="highlighted" offset = "193 125 4 22"/>
+		  <State name="pushed" offset = "233 125 4 22"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "0 2 15 15" align="Left VCenter">
+		  <State name="normal" offset = "264 86 15 15"/>
+		  <State name="highlighted" offset = "279 86 15 15"/>
+		  <State name="pushed" offset = "294 86 15 15"/>
+		</BasisSkin>
+
+		<BasisSkin type="SimpleText" offset = "15 1 32 20" align = "Stretch">
+		  <State name="disabled" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="normal" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="highlighted" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="normal_checked" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		  <State name="pushed" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		</BasisSkin>
+  </Skin>
+  
+    <Skin name = "MenuTop_ButtonQuestion" size = "44 22" texture = "#{MyGUI_Theme_Texture_Menu}">
+		
+		<Property key="FontName" value = "Default" />
+		<Property key="TextAlign" value = "Left VCenter" />
+
+		<BasisSkin type="SubSkin" offset = "0 0 4 22" align = "Left VStretch">
+		  <State name="normal" offset = "123 125 4 22"/>
+		  <State name="highlighted" offset = "163 125 4 22"/>
+		  <State name="pushed" offset = "203 125 4 22"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "4 0 36 22" align = "HStretch VStretch">
+		  <State name="normal" offset = "127 125 26 22"/>
+		  <State name="highlighted" offset = "167 125 26 22"/>
+		  <State name="pushed" offset = "207 125 26 22"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "40 0 4 22" align = "Right VStretch">
+		  <State name="normal" offset = "153 125 4 22"/>
+		  <State name="highlighted" offset = "193 125 4 22"/>
+		  <State name="pushed" offset = "233 125 4 22"/>
+		</BasisSkin>
+		<BasisSkin type="SubSkin" offset = "0 2 10 15" align="Left VCenter">
+		  <State name="normal" offset = "310 87 10 15"/>
+		  <State name="highlighted" offset = "321 87 10 15"/>
+		  <State name="pushed" offset = "332 87 10 15"/>
+		</BasisSkin>
+
+		<BasisSkin type="SimpleText" offset = "15 1 32 20" align = "Stretch">
+		  <State name="disabled" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="normal" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="highlighted" colour="#{MyGUI_Theme_Button_ColourNormal}" shift = "false"/>
+		  <State name="normal_checked" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		  <State name="pushed" colour="#{MyGUI_Theme_Button_ColourPushed}" shift = "true"/>
+		</BasisSkin>
+  </Skin>
+  
+  <Skin name = "MenuTop_ToolTipText" size = "16 16">
+    <Property key="FontName" value = "Default" />
+    <Property key="TextAlign" value = "Left" />
+    <Property key="TextColour" value = "#{MyGUI_Theme_Button_ColourNormal}" />
+
+    <BasisSkin type="SimpleText" offset = "0 0 16 16"  align = "Stretch"/>
+  </Skin>
+  
+  <Skin name = "MenuTop_ToolTip" size = "34 22" texture = "#{MyGUI_Theme_Texture_Menu}">
+    
+		<!-- top -->
+		<BasisSkin type="SubSkin" offset = "0 0 5 5" align = "Left Top">
+			<State name="normal" offset = "163 125 5 5"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "5 0 24 5" align = "HStretch Top">
+			<State name="normal" offset = "168 125 24 5"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "29 0 5 5" align = "Right Top">
+			<State name="normal" offset = "192 125 5 5"/>
+		</BasisSkin>
+		
+		<!-- center -->
+		<BasisSkin type="SubSkin" offset = "0 5 5 12" align = "Left VStretch">
+			<State name="normal" offset = "163 130 5 12"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "5 5 24 12" align = "Stretch">
+			<State name="normal" offset = "168 130 24 12"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "29 5 5 12" align = "Right VStretch">
+			<State name="normal" offset = "192 130 5 12"/>
+		</BasisSkin>
+		
+		<!-- bottom -->
+		<BasisSkin type="SubSkin" offset = "0 17 5 5" align = "Left Bottom">
+			<State name="normal" offset = "163 142 5 5"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "5 17 24 5" align = "HStretch Bottom">
+			<State name="normal" offset = "168 142 24 5"/>
+		</BasisSkin>
+		
+		<BasisSkin type="SubSkin" offset = "29 17 5 5" align = "Right Bottom">
+			<State name="normal" offset = "192 142 5 5"/>
+		</BasisSkin>
+		
+		<!--<Child type="StaticText" skin="MenuTop_ToolTipText" offset = "3 3 24 24" align = "Default" name="Value"/>-->
+		
+	</Skin>
+	
+	
+	<!-- arguments -->
+	<Skin name = "ArgumentsLabel" size = "40 30" texture = "#{MyGUI_Theme_Texture_Menu}">
+		
+		<Property key="FontName" value = "DejaVuSans.14" />
+		<Property key="TextAlign" value = "Center"/>
+
+		<BasisSkin type="SubSkin" offset = "0 0 40 30" align = "Stretch">
+		  <State name="normal" offset = "123 50 40 30"/>
+		</BasisSkin>
+
+		<BasisSkin type="SimpleText" offset = "13 14 17 10" align = "Left Top">
+		  <State name="normal" colour="#{MyGUI_Theme_ArgumentsLabel_Colour}" shift = "false"/>
+		</BasisSkin>
+  </Skin>
+  
+  
+
+</MyGUI>

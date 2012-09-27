@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<GWF version="1.6">
+    <staticSector>
+        <node type="node/const/group" idtf="натуральное число" shapeColor="0" id="13070032" parent="0" left="0" top="0" right="122" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="371" y="287" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/group" idtf="графовая структура" shapeColor="0" id="13742592" parent="0" left="0" top="0" right="132" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="368" y="209" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/relation" idtf="домены*" shapeColor="0" id="13387992" parent="0" left="0" top="0" right="58" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="145" y="158" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/relation" idtf="пороядок графовой структуры*" shapeColor="0" id="13806320" parent="0" left="0" top="0" right="199" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="54" y="306" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/asymmetry" idtf="" shapeColor="0" id="13802168" parent="0" x="216" y="261" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="4100488" parent="0" id_b="13802168" id_e="13070032" b_x="216" b_y="261" e_x="371" e_y="287" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </arc>
+        <pair type="pair/const/orient" idtf="" shapeColor="0" id="13809664" parent="0" id_b="13802168" id_e="13806320" b_x="216" b_y="261" e_x="54" e_y="306" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="13808896" parent="0" id_b="13802168" id_e="13742592" b_x="216" b_y="261" e_x="368" e_y="209" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="12939376" parent="0" id_b="13387992" id_e="13809664" b_x="145" b_y="158" e_x="0" e_y="0" dotBBalance="0" dotEBalance="0.427094">
+            <points/>
+        </arc>
+    </staticSector>
+</GWF>

@@ -1,0 +1,101 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: element_content_subroutine_start.m4scp
+// Description: File contains procedure to start 
+//				element content subroutine procedure
+//                                      procedure
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich, Sergei Startsev, Sergei Zalivako, Olga Savelieva
+//        Date: 05.12.11
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_answer.scsy"
+
+procedure(element_content_subroutine_start,
+[[	
+	oper1="/operation/editing_sc/element_content_subroutine/element_content";
+	quest=q_el_content;
+	answer_make;
+]],
+[{
+	handler,element,inputarc,question_node,descr,arc,t_seg,arc1,segment,start_node,message1,message2
+}],
+{[
+	1_: in_: handler,
+	2_: in_: element,
+	3_: in_: inputarc,
+	4_: in_: question_node
+]}
+)
+
+sys_get_location([1_: fixed_: question_node, 2_: assign_: segment])	
+sys_spin_segment([1_: fixed_: segment, 2_: assign_: t_seg])
+sys_set_default_segment([1_: fixed_: segment])
+
+/////////////////////////////////////////////////////
+// Checking operation start full condition
+searchElStr3([
+	1_: fixed_: quest,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: question_node
+],,exit)
+
+/////////////////////////////////////////////////////
+// Getting question parameters
+searchElStr3([
+	1_: fixed_: question_node,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: const_: start_node
+],,exit)
+
+genEl([1_: assign_: node_: const_: message1])
+genEl([1_: assign_: node_: const_: message2])
+
+/////////////////////////////////////////////////////
+// Call of the requested procedure
+callReturn([1_: fixed_: oper1,
+	    2_: fixed_:
+		{[
+			1_: fixed_: message1,
+			2_: fixed_: message2,
+			3_: fixed_: start_node
+		]}
+])
+
+/////////////////////////////////////////////////////
+// Call of the answer making procedure
+callReturn([
+	1_:	fixed_: answer_make,
+	2_:	fixed_: {[
+			1_: question_node,
+			2_: message2
+		]}
+	])
+
+label(exit)
+
+return()
+end

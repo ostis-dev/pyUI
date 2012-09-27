@@ -1,0 +1,8 @@
+﻿MyGUI_Theme_Texture	black_skin.png
+MyGUI_Theme_Button_ColourNormal	#e9eff5
+MyGUI_Theme_Button_ColourHighlighted	#a2d000
+MyGUI_Theme_Button_ColourPushed	#353535
+MyGUI_Theme_Button_ColourDisabled	#8e8e8e
+MyGUI_Theme_Idtf_Colour #0000aa
+MyGUI_Theme_ToolTipText_Colour #000000
+MyGUI_Theme_ArgumentsLabel_Colour #ffffff

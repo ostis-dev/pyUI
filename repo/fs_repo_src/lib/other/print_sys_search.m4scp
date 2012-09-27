@@ -1,0 +1,59 @@
+// 
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+procedure(print_sys_search,
+[[
+	
+	
+]],
+[{	
+	val,value,values,result,abc,t,template,arc,arc1,seg,segments,node
+}],
+{[		
+	1_: in_: template
+]}
+)
+sys_get_location([1_: template,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+printNl([1_: /"Print template:"/])
+printEl([1_: template])
+
+//#searchElStr3([
+//#	1_: fixed_: template,
+//#	2_: assign_: arc,
+//#	3_: assign_: value
+//#])
+
+//#printEl([1_: value])
+
+searchSetStr3([
+	1_: fixed_: template,
+	2_: assign_: arc,
+	3_: assign_: abc,
+	set3_: assign_: values
+])
+
+
+label(next_value)
+ifVarAssign([1_: node],,noerase)
+eraseElStr3([
+	1_: fixed_: values,
+	2_: assign_: f_: arc,
+	3_: fixed_: node
+])
+label(noerase)
+searchElStr3([
+	1_: fixed_: values,
+	2_: assign_: arc,
+	3_: assign_: node
+],,exit)
+printNl([1_: /"CHILD"/])
+printEl([1_: node],next_value,next_value)
+
+label(exit)
+return()
+end

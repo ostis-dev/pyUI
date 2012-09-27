@@ -1,0 +1,343 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: validity_eq_statement.m4scp
+// Description: Файл содержит операцию, которая
+//				пытается определить достоверность предоставленного высказывания об эквиваленции (s1-s2) с помощью
+//				поиска в БЗ двух высказываний об импликации следующего вида: s1->s2 и s2->s1
+/////////////////////////////////////////////////////
+// 		Author: Startsev Sergei
+//        Date: 29.01.2011
+
+#include "scp_keynodes.scsy"
+#include "lib_search.scsy"
+#include "lib_gen.scsy"
+#include "lib_answer.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+/////////////////////////////////////////////////////
+
+program(init_op,
+[[
+	catch_output_arc;	
+]],
+[{
+	nodeVar
+}],
+{[
+]}
+)
+
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: validity_eq_statement,
+	3_: fixed_: {1_: q_initiated},
+	4_: assign_: nodeVar
+])
+
+return()
+end
+/////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////
+
+procedure(validity_eq_statement,
+[[
+	rrel_answer_is_absent;
+	rrel_answer_is_absent_at_evident_view;
+	rrel_answer_is_present;	
+	gen_meta_atom;	
+	gen_impl_template;	
+	rrel_answer_is_absent_at_evident_view;
+	q_statement_validity;
+	q_initiated;
+	
+	here=/"I have entered VALIDITY EQ STATEMENT"/;
+	last=/"I have exited VALIDITY EQ STATEMENT"/;	
+]],
+[{	
+	
+	el,req_arc,arc,temp,template,currStat,currResStat1,currResStat2,statements,resstat,seg,segments,set,stat,handler,element,answer
+}],
+{[
+	1_: in_: handler,
+	2_: in_: element,
+	//проведенная дуга
+	3_: in_: arc,
+	//узел, к которому проведена дуга
+	4_: in_: stat
+]}
+)
+printNl([1_: here])
+
+sys_get_location([1_: stat,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+/////////////////////////////////////////////////////
+
+//#если отсутсвует "запрос истинности высказывания" операция завершается, иначе продолжает работу
+searchElStr3([
+	1_: fixed_: q_statement_validity,
+	2_: assign_: const_: pos_: req_arc,
+	3_: fixed_: stat
+],,exit)
+
+//#если отсутсвует атрибут "ответ отсутствует в явном виде_" операция завершается, иначе продолжает работу
+searchElStr3([
+	1_: fixed_: rrel_answer_is_absent_at_evident_view,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: req_arc
+],,exit)
+
+searchElStr3([
+	1_: fixed_: rrel_answer_is_present,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: req_arc
+],exit)
+searchElStr3([
+	1_: fixed_: rrel_answer_is_absent,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: req_arc
+],exit)
+
+genEl([1_: assign_: node_: const_: statements])
+
+searchElStr3([
+	1_: fixed_: stat,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: el
+],,exit)
+
+//#узел el является связкой отношения эквиваленция*, соответственно получаем множество,
+//#элементами которого являются элементы высказывания об эквивалентности (элемента два), чтобы можно было их перебрать
+searchSetStr3([
+	1_: fixed_: el,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp,
+	set3_: assign_: set
+],,exit)
+
+/////////////////////////////////////////////////////
+//#перебираем элементы высказывания об эквивалентности
+label(next)
+
+ifVarAssign([1_: currStat],,noerase)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: f_: arc,
+	3_: fixed_: currStat
+])
+
+label(noerase)
+
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: currStat,
+],,gen)
+
+//#вызываем процедуру, которая из элемента высказывания об эквивалентности, генерирует часть шаблона для дальнейшего поиска
+callReturn([1_: fixed_: gen_meta_atom,
+	    2_: fixed_:
+		{[
+			1_: fixed_: currStat,
+			2_: assign_: resstat
+		]}
+])
+//#"добавляем" сгенерированный шаблон из элемента высказывания об эквивалентности
+genElStr3([
+		1_: fixed_: statements,
+		2_: assign_: const_: pos_: temp,
+		3_: fixed_: resstat
+	],next,next)
+
+/////////////////////////////////////////////////////
+//#далее генерируем 2 шаблона импликации* следующего вида: currResStat1->currResStat2 и currResStat2->currResStat1, для дальнейшего поиска в БЗ
+label(gen)
+
+			
+searchElStr3([
+	1_: fixed_: statements,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: currResStat1,
+],,exit)
+
+eraseElStr3([
+	1_: fixed_: statements,
+	2_: assign_: f_: arc,
+	3_: fixed_: currResStat1
+])
+
+searchElStr3([
+	1_: fixed_: statements,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: currResStat2,
+],,exit)		
+
+//#генерируем шаблон импликации* currResStat1->currResStat2
+callReturn([1_: fixed_: gen_impl_template,
+	    2_: fixed_:
+		{[
+			1_: fixed_: currResStat1,
+			2_: fixed_: currResStat2,
+			3_: assign_:template
+		]}
+])
+
+//#поиск в БЗ импликации* по вышесгенерированному шаблону
+sys_search([
+	1_: fixed_: template,	
+],f, notf)
+
+/////////////////////////////////////////////////////
+//#если конструкция найдена
+label(f)
+
+//#генерируем шаблон импликации* currResStat2->currResStat1
+callReturn([1_: fixed_: gen_impl_template,
+	    2_: fixed_:
+		{[
+			1_: fixed_: currResStat2,
+			2_: fixed_: currResStat1,
+			3_: assign_:template
+		]}
+])
+
+//#поиск в БЗ импликации* по вышесгенерированному шаблону
+sys_search([
+	1_: fixed_: template,
+],, notf)
+
+//#добавляем атрибут "присутствует ответ_"
+genElStr3([
+		1_: fixed_: rrel_answer_is_present,
+		2_: assign_: const_: pos_: temp,
+		3_: fixed_: req_arc
+	])
+	
+genElStr3([
+	1_: assign_: node_: const_: answer,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: q_statement_validity
+])
+genElStr3([
+	1_: fixed_: answer,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: req_arc
+])
+genElStr3([
+	1_: fixed_: answer,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: temp
+])
+genElStr3([
+	1_: fixed_: answer,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: rrel_answer_is_present
+])
+genElStr3([
+	1_: fixed_: answer,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: stat
+])
+
+callReturn([
+	1_:	fixed_: answer_make,
+	2_:	fixed_: {[
+			1_: stat,
+			2_: answer
+		]}
+])
+
+//#добавляем "инициированный вопрос"	
+genElStr3([
+		1_: fixed_: q_initiated,
+		2_: assign_: const_: pos_: temp,
+		3_: fixed_: stat
+	],exit,exit)
+
+/////////////////////////////////////////////////////
+//#конструкции не были найдены в БЗ
+label(notf)
+
+//#добавляем атрибут "отсутствует ответ_"
+genElStr3([
+		1_: fixed_: rrel_answer_is_absent,
+		2_: assign_: const_: pos_: temp,
+		3_: fixed_: req_arc
+	])
+
+genElStr3([
+	1_: assign_: node_: const_: answer,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: q_statement_validity
+])
+genElStr3([
+	1_: fixed_: answer,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: req_arc
+])
+genElStr3([
+	1_: fixed_: answer,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: temp
+])
+genElStr3([
+	1_: fixed_: answer,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: rrel_answer_is_absent
+])
+genElStr3([
+	1_: fixed_: answer,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: stat
+])
+
+callReturn([
+	1_:	fixed_: answer_make,
+	2_:	fixed_: {[
+			1_: stat,
+			2_: answer
+		]}
+])
+//#добавляем "инициированный вопрос"
+genElStr3([
+		1_: fixed_: q_initiated,
+		2_: assign_: const_: pos_: temp,
+		3_: fixed_: stat
+	],exit,exit)	
+
+/////////////////////////////////////////////////////	
+label(exit)
+
+printNl([1_: last])
+
+
+return()
+end

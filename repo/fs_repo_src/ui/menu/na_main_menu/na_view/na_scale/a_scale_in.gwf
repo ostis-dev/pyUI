@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<GWF version="1.6">
+    <staticSector>
+        <node type="node/const/general_node" idtf="" shapeColor="255" id="68573312" parent="0" x="324.5" y="231.284" haveBus="false">
+            <content type="1" mime_type="content/term" file_name=""><![CDATA[Паменшыць]]></content>
+        </node>
+        <node type="node/const/general_node" idtf="" shapeColor="0" id="23329352" parent="0" x="322" y="184" haveBus="false">
+            <content type="1" mime_type="content/term" file_name=""><![CDATA[Уменьшить]]></content>
+        </node>
+        <node type="node/const/group" idtf="Белорусский язык" shapeColor="0" id="67439664" parent="0" left="0" top="0" right="113" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="425" y="229.784" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/relation" idtf="идентификация*" shapeColor="0" id="67052072" parent="0" left="0" top="0" right="109" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="138" y="115" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/asymmetry" idtf="" shapeColor="0" id="23743464" parent="0" x="184" y="184" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/group" idtf="атомарная команда" shapeColor="0" id="12803632" parent="0" left="0" top="0" right="126" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="69" y="69" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/general_node" idtf="$a_scale_in" shapeColor="0" id="22960632" parent="0" left="0" top="0" right="75" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="69" y="184" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/group" idtf="Русский язык" shapeColor="0" id="22570984" parent="0" left="0" top="0" right="86" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="322" y="115" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="22861112" parent="0" id_b="23743464" id_e="68573312" b_x="184" b_y="184" e_x="324.5" e_y="231.284" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="68599128" parent="0" id_b="67439664" id_e="68573312" b_x="425" b_y="229.784" e_x="324.5" e_y="231.284" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </arc>
+        <pair type="pair/const/orient" idtf="" shapeColor="0" id="22656920" parent="0" id_b="23743464" id_e="22960632" b_x="184" b_y="184" e_x="69" e_y="184" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="23779712" parent="0" id_b="23743464" id_e="23329352" b_x="184" b_y="184" e_x="322" e_y="184" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="68030152" parent="0" id_b="67052072" id_e="22656920" b_x="138" b_y="115" e_x="0" e_y="0" dotBBalance="0" dotEBalance="0.366279">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="23398552" parent="0" id_b="12803632" id_e="22960632" b_x="69" b_y="69" e_x="69" e_y="184" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="23106560" parent="0" id_b="22570984" id_e="23329352" b_x="322" b_y="115" e_x="322" e_y="184" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </arc>
+    </staticSector>
+</GWF>

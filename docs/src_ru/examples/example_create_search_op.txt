@@ -1,0 +1,326 @@
+﻿/*!
+\page example_create_search_operation Пример создания поисковой операции
+
+\section repo_struct Структура репозитория базы знаний
+- \b operation - каталог с исходными кодами операций написанных на scp
+- \b lib - каталог с библиотекой процедур (подпрограмм) написанных на scp
+- \b include - каталог с объявлениями ключевых узлов
+
+\section create_operation_source Создание файла с иходным кодом операции
+Процесс создания поисковой операции будет рассмотрен на примере создания операции поиска декомпозиции указанного объекта.
+
+В соответсвии со стурктурой репозитория базы знаний в папке \b include необходимо создать файл в котором будет записан код операции.
+Файлы с исходными кодами операции именуются по следющему правилу search_<название операции>. В нашем случае, создадим файл \e operation/search_decomposition.
+Файл должен иметь кодировку ANSI и содержать в начале коментарии с описанием лицензии под которой он будет распространяться (в нашем случае это лицензия LGPL).
+
+\code
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+\endcode
+
+Далее в исходном файле операции необходимо указать дополнительную информацию (перед каждой программой или процедурой в файле):
+- \b File: <em><название файла></em>
+- \b Description: <em><краткое описание программы или процедуры, исходный код которой записан ниже></em>
+- \b Author: <em><имя автора></em>
+- \b Date: <em><дата создания файла></em>
+- \b Modificatinon: <em><дата></em>, <em><автор></em> - <em><внесенные изменения></em>
+
+\code
+//----------------------------------------------------------------------
+//        File: search_decomposition.m4scp
+// Description: File contains operation for object decomposition search.
+//		Input arguments includes into result set.
+//----------------------------------------------------------------------
+// 		Author: Denis Koronchik
+//        Date: 25.12.10
+\endcode
+
+\remarks Рекомендуется на каждую операцию отводить отдельный файл с исходным текстом.
+
+Операция представляет собой самоинициируемого объекта. Поэтому нам необходимо организовать ее запуск по некоторому событию в sc-памяти.
+Необходимо разбить саму операцию на две части:
+- регистрация обработчика на событие в памяти
+- реализация логики операции
+
+Для этого в исходный код операции добавим программу \b init_op, которая будет регистрировать обработчик и процедуру \b run_op, которая 
+реализует логику операции.
+\code
+// program that initialize operation
+program(init_op,
+[[
+]],
+[{
+}])
+
+	
+return()
+end()
+
+// procedure, that process question and make answer
+procedure(run_op,
+[[
+]],
+[{
+	// input params
+	descr, element, arc, question_node,
+}],
+{[
+	1_: in_: descr,
+	2_: in_: element,
+	3_: in_: arc,
+	4_: in_: question_node
+]}
+)
+
+return()
+end()
+
+\endcode
+
+\section subsribe_event Подписка операции на событие
+Чтобы организовать запуск операции по событию в памяти необходимо использовать оператор \b sys_set_event_handler. В нашем случае мы реализуем
+операцию поиска декомпозиции объекта, которая запускается при появлении соответствующей конструкции в базе знаний (см. рис.).
+
+\image html example_search_decomp_init.png
+
+Конечно сложно организовать слежение за появлением всей конструкции в памяти, по этой причине существует договоренность, что дуга из узла 
+<b>инициированный вопрос</b> проводится в последнюю очередь. В соответствии с этим необходимо лишь подписаться на проведение выходящей дуги
+из узла <b><em>инициированный вопрос</em></b>.
+
+Ключевой узел <b><em>инициированный вопрос</em></b> можно использовать подключив файл <em>etc_questions.scsy</em>. В этом файле находятся 
+ключевые узлы связанные с языком вопросов.
+\code
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+\endcode
+
+\remarks Рекомендуется пользоваться переменными вместо прямого ипользования ключевого узла по идентификатору, так как это позволяет избежать 
+правки кода программы при изменении идентификатора узла
+
+Ключевой узел <b><em>инициированный вопрос</em></b> задан как значение для переменной <b>q_initiated</b>. Эту переменную добавим в константы
+программы \b init_op.
+\code
+program(init_op,
+[[
+	q_initiated;
+]]
+\endcode
+
+Оператор \b sys_set_event_handler принимает следующие параметры:
+- 1_: событие на которое необходимо подписать обработчик;
+- 2_: процедура, которую необходимо вызвать при происхождении события;
+- 3_: пронумерованнное атрибутами (1_, 2_, ...) множество элементов для которых будут отслеживаться события.
+
+В нашем случае нам необходимо отслеживать появление выходящих дуг, для этого используем событие <b>catch_output_arc</b> (ключевой узел описан в 
+scp_keynodes.scsy). 
+\code
+// program that initialize operation
+program(init_op,
+[[
+	q_initiated;
+	run_op;
+	catch_output_arc;
+]],
+[{
+}])
+
+// subscribe to handle output pairs from "initiated question" node
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: run_op,
+	3_: fixed_: {1_: q_initiated}
+	])
+        
+return()
+end()
+\endcode
+
+\attention Узлы обозначающие тип события (\b catch_output_arc) и процедуру вызываемую при происхождении события (\b run_op) необходимо добавить в константы программы.
+
+\section add_menu_item Добавление команды вопроса в главное меню
+
+Чтобы проверить реализованную программу необходимо добавить команду вопрос в главное меню. Для этого в редакторе scg-конструкций рисуем следующую
+конструкцию:
+\image html example_search_decomp_a.png
+
+\remarks Идентификатор <b><i>$a_decomposition</i></b> используется для склейки узлов (узел в базе знаний будет имет системный идентификатор, т.к. в исходном
+тексте БЗ он начинается с \b $). Поэтому команда вопрос описывается в одном файле, а описание структуры меню проихводится в другом.
+
+Исходные тексты БЗ описывающие структуру меню хранятся в папке <b>ui/menu/</b>. Имена файлов с исходными текстами атомарных команд именуются 
+по следующему правилу <b>a_<имя_команды></b>. Правило для неатомарных команд имеет вид: <b>na_<имя_команды></b>
+
+\image html example_search_classification_na.png
+
+\remarks Рекомендуется в одном исходном файле базы знаний описывать одну комаду (атомарную, неатомарную). Это дает возможность использовать их как компоненты БЗ.
+
+\section implement_search Реализация логики
+
+Реализация логики производится в процедуре \b run_op. Логика операции может быть реализована по разному в каждом отдельном случае, но рекуомендуется
+использовать уже готовые процедуры и подпрограммы из библиотеки. Это позволит уменьшить время разработки операции и повысить их качество.
+
+В нашем случае мы осущствляем поиск декомпозиции объекта. Поэтому будем использовать процедуру <b>/lib/search/base_rel_in_with_sheaf/base_rel_in_with_sheaf</b>.
+Эта процедура осуществляет поиск конструкций показанных на рисунке, по заданному элементу (\b $el) и узлу отношения (\b $relation), количество дуг выходящих
+из узла связки может быть произвольным.
+
+\image html example_search_decomp_base_rel.png
+
+Стоит упомянуть об еще одной процедуре, которая используется для поиска - это <b>/lib/search/base_cycle/base_cycle</b>. Ее суть заключается в том,
+для каждого элемента указанного множества (аргумент 1_) вызывается подпрограмма указанная вторым аргументом и результаты записываются во множество
+указанное третьим аргументом.
+
+Теперь рассмотрим операторы реализующие процедуру <b>run_op</b>.
+
+Полный код операции поиска:
+\code
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+//----------------------------------------------------------------------
+//        File: search_decomposition.m4scp
+// Description: File contains operation for object
+//				decomposition search.
+//				Input arguments includes into result set
+//----------------------------------------------------------------------
+// 		Author: Denis Koronchik
+//        Date: 25.12.10
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_search.scsy"
+#include "lib_set.scsy"
+#include "lib_answer.scsy"
+
+// program that initialize operation
+program(init_op,
+[[
+	q_initiated;
+	run_op;
+	catch_output_arc;
+]],
+[{
+}])
+
+// subscribe to handle output pairs from "initiated question" node
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: run_op,
+	3_: fixed_: {1_: q_initiated}
+	])
+        
+return()
+end()
+
+// procedure, that process question and make answer
+procedure(run_op,
+[[
+	q_search_decomposition;
+	set_sub;
+	set_rm_el;
+	set_merge;
+	search_decomposition;
+	search_base_cycle;
+]],
+[{
+        // input params
+        descr, element, arc, question_node,
+		// other
+		descr2, result, a, segment
+}],
+{[
+        1_: in_: descr,
+        2_: in_: element,
+        3_: in_: arc,
+        4_: in_: question_node
+]}
+)
+
+/* need to set segment that contains question node as default to generate answer in it */
+sys_get_location([1_: fixed_: question_node, 2_: assign_: segment])	
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+searchElStr3([
+	1_: fixed_: q_search_decomposition,
+	2_: assign_: const_: pos_: arc_: a,
+	3_: fixed_: question_node], ,finish_op)
+	
+/* call cycle to find decomposition for all elements in a question */
+callReturn([
+	1_: fixed_: search_base_cycle,
+	2_: fixed_: {[
+		1_: question_node,
+		2_: search_decomposition,
+		3_: result
+		]}
+	], descr2, , , goto_error)
+
+label(goto_answer)
+
+/* remove question node from result */
+callReturn([
+	1_: fixed_: set_rm_el,
+	2_: fixed_: {[
+		1_: result,
+		2_: question_node]}
+	], descr2, , , goto_error)
+
+/* make answer */
+callReturn([
+	1_:	fixed_: answer_make,
+	2_:	fixed_: {[
+		1_: question_node,
+		2_: result]}
+	], descr2, finish_op, , goto_error)
+	
+label(goto_error)
+	
+label(finish_op)
+
+return()
+end()
+
+\endcode
+
+
+\attention Не забудьте добавить все ключевые узлы, которые используются в gwf файлах в <b>include/_keynodes.scsy</b>.
+Это необходимо для корректной склейки элементов в БЗ.
+
+*/

@@ -1,0 +1,100 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+/////////////////////////////////////////////////////
+//        Файл: __file__
+//    Описание: программа <Привет, мир!>
+//  Размещение: /
+/////////////////////////////////////////////////////
+//       Автор: ИВП
+//        Дата: 9.02.2003
+//              создано
+
+#include "scp_keynodes.scsy" 
+#include "ui_keynodes.scsy"
+
+/////////////////////////////////////////////////////
+// текст программы
+procedure(hi_world,
+        [[ const_string = /"Hi, world!"/; // здесь объявляем константу,
+                                         // текстовым содержимым 
+                                         // которой является строка:
+                                         // "Hi, world!"
+			ui_Output;
+        ]],
+		[{
+			window, system, arc1, arc2, conn, segment
+		}],
+		{[
+			1_: in_: window
+		]})
+		
+genElStr3([
+	1_: assign_: system, 
+	2_: assign_: arc1, 
+	3_: fixed_: const_string
+])
+
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: window,
+		2_: system
+	]}
+])
+	
+//#ui_output([
+//#	1_: fixed_: window, 
+//#	2_: fixed_: system
+//#])
+		
+/////////////////////////////////////////////////////
+// с помощью оператора printNl подаём объявленную
+// строку на консольный вывод, предназначенный
+// для целей отладки
+printNl([1_: fixed_: const_string])
+
+// атрибут fixed_ говорит о том, что значение операнда
+// определено, последнее справедливо для всех констант 
+
+return()
+end
+/* результат работы программы в протоколе будет 
+выглядеть следующим образом:
+ ...
+ Executing hi_world_op1 of prg. hi_world(006BD350)
+ Hi, world!
+ Executing hi_world_op2 of prg. hi_world(006BD350)
+ ...
+*/
+
+// такого же эффекта можно добиться, если
+// использовать оператор print для константы,
+// содержащей строку "Hi, world!\n";
+// операторы print и printNl предназначены для целей
+// протоколирования работы интерпретатора
+// процессорного модуля, что полезно в режиме
+// отладки
+
+

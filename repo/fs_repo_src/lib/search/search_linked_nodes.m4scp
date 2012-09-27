@@ -1,0 +1,131 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modfirst_ely
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  first_el not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: search_linked_nodes.m4scp
+// Description: Файл содержит процедуру поиска
+//				связанных узлов теории
+/////////////////////////////////////////////////////
+// 		Author: Startsev Sergei
+//        Date: 22.01.2011 
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+/*!
+	Поиск связанных узлов теории
+	
+	@result	множество связанных узлов теории
+*/
+
+procedure(search_linked_nodes,
+[[	
+	first=1_;
+	second=2_;
+	
+	//#отладочная информация, закомментировать или убрать
+	linked_node=/"\n\nI find linked!\n\n"/;
+	not_linked_node=/"\n\nI find unlinked!\n\n"/;	
+	here=/"\n\nI have entered search_linked_nodes!!!\n\n"/;
+	exited=/"\n\nI have exited search_linked_nodes!!!\n\n"/;
+	
+]],
+[{	
+	if,then,linked,arc,arc1,value,handler,element,seg,segments,temp,set,set1,set2,theory,section,attr
+}],
+{[	
+	//посылка
+	1_: in_: if,
+	//следствие
+	2_: in_: then,	
+	3_: out_: linked
+]}
+)
+sys_get_location([1_: if,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+printNl([1_: here])
+
+///////////////////////////////
+genEl([1_: const_: node_: assign_: linked])
+
+///////////////////////////////
+searchSetStr3([
+	1_: fixed_: if,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: var_: set,
+	set3_: assign_: set1
+],,exit)
+
+searchSetStr3([
+	1_: fixed_: then,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: var_: set,
+	set3_: assign_: set2
+],,exit)
+///////////////////////////////
+
+//перебираем элементы
+label(next)
+
+ifVarAssign([1_: element],,noerase)
+eraseElStr3([
+	1_: fixed_: set1,
+	2_: assign_: f_: arc,
+	3_: fixed_: element
+])
+label(noerase)
+
+searchElStr3([
+	1_: fixed_: set1,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: element
+],,exit)
+
+searchElStr3([
+	1_: fixed_: set2,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: element
+],l_linked,next)
+
+label(l_linked)
+///////////////////////////////
+
+//#printNl([1_: linked_node])
+
+genElStr3([
+	1_: fixed_: linked,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: element
+],next,next)
+
+///////////////////////////////
+
+label(exit)
+
+printNl([1_: exited])
+return()
+end

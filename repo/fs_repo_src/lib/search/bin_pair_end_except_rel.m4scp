@@ -1,0 +1,106 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: bin_pair_end_except_rel.m4scp
+// Description: File contains procedure to search end element
+//				for a binary pair
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 05.12.11
+
+///////////////////////////////////////////////////////////////////////////////
+// ѕроцедура поиска начального элемента св€зки отношени€
+// 1-й аргумент - узел, вход€щий в св€зку отношени€ под атрибутом 1_
+// 2-й аргумент - знак отношени€
+// 3-й аргумент - узел, вход€щий в св€зку отношени€ под атрибутом 2_
+#include "scp_keynodes.scsy"
+#include "ordinal.scsy"
+
+procedure(bin_pair_end_except_rel,
+[[
+]],
+[{	
+	a, b, set, arc, arc1, node, rel, res, seg, segments, out_rel
+}],
+{[
+	1_: in_: a,	
+	2_: in_: rel,
+	3_: out_: res,
+	4_: out_: out_rel
+]}
+)
+sys_get_location([1_: a, 2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg, 2_: assign_: segments])
+//#printEl([1_: a])
+searchSetStr5([
+	1_: assign_: const_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: a,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 1_,
+	set1_: assign_: set
+])
+//#printEl([1_: set])
+ifVarAssign([1_: set],,exit)
+
+label(next_node)
+ifVarAssign([1_: node],,no_erase_node)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: fixed_: node
+])
+
+label(no_erase_node)
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: const_: node
+],,exit)
+
+searchElStr3([
+	1_: fixed_: rel,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: node
+],next_node)
+
+searchElStr5([
+	1_: fixed_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node_: res,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: 2_
+],,next_node)
+
+searchElStr3([
+	1_: assign_: const_: out_rel,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: node
+],,next_node)
+
+label(exit)
+
+return()
+end()

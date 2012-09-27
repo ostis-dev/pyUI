@@ -1,0 +1,353 @@
+ 
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+
+Автор: Житко Владимир Александрович
+*/
+
+#include "scp_keynodes.scsy"
+#include "nsm_keynodes.scsy"
+//#include "im_keynodes.scsy"
+#include "ui_keynodes.scsy"
+
+/* программа регистрации процедуры run_operation_handler 
+	на событие проведение дуги из инициированный вопрос*/
+program(set_operation_handler,
+[[	
+	init_question = "/seb/lingvistic/инициированный вопрос";
+	elmn_pattern = {1_: init_question};
+	run_operation_handler;
+	catch_output_arc;
+	catch_gen_output_arc;
+	
+	/* тестовый вывод */
+	answer_question = "/seb/lingvistic/ответ*";
+	elmn_pattern2 = {1_: answer_question};
+	out_to_main_window;
+]],
+[{
+}])
+
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: run_operation_handler,
+	3_: fixed_: elmn_pattern
+	])
+	
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: out_to_main_window,
+	3_: fixed_: elmn_pattern2
+	])
+
+return()
+end
+
+procedure(out_to_main_window,
+[[	
+	2_;
+	ui_Output;	// процедура вывода конструкций пользователю
+	ui_main_window;
+]],
+[{
+	elmn, node, arc, link, 
+	descr, answer_reciever, 
+	arc1, arc2, node1, node2,
+	result_set
+}],
+[{
+	1_: in_: elmn,
+	2_: in_: node,
+	3_: in_: arc,
+	4_: in_: link
+}])
+/* поиск результата для вывода */
+searchElStr5([
+	1_: fixed_: link,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node_: const_: result_set,
+	4_: assign_: arc_: pos_: const_: arc2,
+	5_: 2_
+	])
+
+/* поиск окна для вывода */
+searchElStr3([
+	1_: fixed_: ui_main_window,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node_: const_: node1
+	])
+
+genElStr3([
+	1_: assign_: node_: const_: answer_reciever,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: node1
+	])
+	
+printEl([1_: fixed_: result_set])
+
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: result_set
+	]}
+	])
+
+return()
+end
+
+/* процедура запуска проверки условия инициализации операции и 
+	запуска операций*/
+procedure(run_operation_handler,
+[[
+	1_;
+	2_;
+	ge = "/seb/planimetry/Геометрия Евклида";
+	/* множество связок 
+		1_: функция проверки условия инициализации
+		2_: функция запуска операции
+	*/
+	operations_set = {
+		{	1_: "/operation/search_full_semantic/search_full_semantic_ckeck",
+			2_: "/operation/search_full_semantic/search_full_semantic_oper" },
+		{	1_: "/operation/search_classification/search_classification_ckeck",
+			2_: "/operation/search_classification/search_classification_oper" },
+		{	1_: "/operation/search_decomp/search_decomp_ckeck",
+			2_: "/operation/search_decomp/search_decomp_oper" },
+		{	1_: "/operation/search_example/search_example_ckeck",
+			2_: "/operation/search_example/search_example_oper" }
+	};
+	set_operation_handler_beg = /"...operations begin...\n"/;
+	set_operation_handler_end = /"...operations end...\n"/;
+	
+	init_question = "/seb/lingvistic/инициированный вопрос";
+	finish_question = "/seb/lingvistic/отработанный вопрос";
+	good_question = "/seb/lingvistic/успешный вопрос";
+	non_atom_question = "/seb/lingvistic/неатомарный вопрос";
+	atom_question = "/seb/lingvistic/атомарный вопрос";
+	answer_question = "/seb/lingvistic/ответ*";
+	
+]],
+[{
+	t_set,
+	c_sheaf, 
+	f_check, c_check_res,
+	f_oper, c_result,
+	arc1, arc2, node1, node2, node3,
+	e, segment,
+	elmn, node, arc, link
+}],
+[{
+	1_: in_: elmn,
+	2_: in_: node,
+	3_: in_: arc,
+	4_: in_: link
+}])
+/* в памяти возник вопрос */
+printNl([1_: fixed_: set_operation_handler_beg])
+
+/* поочередно запускаем функцию проверки условия выполнения операции,
+	если она вернула непустое значение, запускаем функцию операции */
+	
+/* копируем множество operations_set во временное множество для 
+	перебора значений */
+searchSetStr3([
+	1_: fixed_: operations_set,
+	2_: assign_: arc_: pos_: const_: arc,
+	3_: assign_: node_: const_: node1,
+	set3_: assign_: t_set
+	],,run_oper_handler_oper_set_empty)
+	
+label(run_oper_check_begin)
+
+	/* получаем связку */
+	searchElStr3([
+		1_: fixed_: t_set,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node_: const_: c_sheaf
+		],,run_oper_check_end_with_ans)
+		
+	/* удаляем ее из множества */
+	eraseEl([1_: f_: arc1])
+	
+//#	printEl([1_: c_sheaf])
+	
+	/* получаем функцию проверки условия выполнения */
+	searchElStr5([
+		1_: fixed_: c_sheaf,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node_: const_: f_check,
+		4_: assign_: arc_: pos_: const_: arc2,
+		5_: fixed_: 1_
+		],,run_oper_check_begin)
+//#		],,run_oper_handler_f_check_not_found)
+		
+	genEl([1_: node_: const_: c_check_res])
+		
+	/* запуск процедуры проверки условия выполнения операции */
+	callReturn([
+		1_: fixed_: f_check,
+		2_: fixed_: {[
+			1_: link,
+			2_: c_check_res
+		]}
+	], e)
+	
+//#	printNl([1_: fixed_: /"hello1"/])
+	
+	/* проверяем вернула ли процедура проверки условия
+		выполнения, какой либо результат*/
+	ifVarAssign([1_: c_check_res],,run_oper_check_begin)
+	
+//#	printNl([1_: fixed_: /"hello2"/])
+	
+	/* проверка прошла успешно, выполняем операцию */
+	
+	/* ищем процедуру запуска операции */
+	searchElStr5([
+		1_: fixed_: c_sheaf,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node_: const_: f_oper,
+		4_: assign_: arc_: pos_: const_: arc2,
+		5_: fixed_: 2_
+		],,run_oper_check_begin)
+//#		],,run_oper_handler_f_oper_not_found)
+
+//#	printNl([1_: fixed_: /"hello3"/])
+		
+	genEl([1_: assign_: node_: const_: c_result])
+	
+//#	printNl([1_: fixed_: /"hello4"/])
+		
+	/* запускаем процедуру операции */
+	callReturn([
+		1_: fixed_: f_oper,
+		2_: fixed_: {[
+			1_: c_check_res,
+			2_: c_result
+		]}
+	], e)
+	
+	/* проверяем есть ли результат, если есть то
+		завершаем запуск операций */
+	ifVarAssign([1_: c_result],,run_oper_check_begin)
+	searchElStr3([
+		1_: fixed_: c_result,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node1
+		],run_oper_check_end_with_ans)
+
+	/* переход к следующей связке */
+	nop(run_oper_check_begin)
+	
+label(run_oper_check_end_with_ans)
+
+/* с этого момента необходимо работать не во временном сегменте */
+sys_get_location([1_: fixed_: init_question, 2_: assign_: segment])	
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+/*  */
+ifVarAssign([1_: c_result],,run_oper_check_end_no_ans)
+searchElStr3([
+	1_: fixed_: c_result,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node1
+	],,run_oper_check_end_no_ans)
+
+/* генерация связки ответа */
+genEl([1_: assign_: node_: const_: node3])
+	
+genElStr5([
+	1_: fixed_: node3,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: link,
+	4_: assign_: arc_: pos_: const_: arc2,
+	5_: fixed_: 1_
+	])
+	
+genElStr5([
+	1_: fixed_: node3,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node_: const_: node2,
+	4_: assign_: arc_: pos_: const_: arc2,
+	5_: fixed_: 2_
+	])
+	
+searchSetStr3([
+	1_: fixed_: c_result,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node1,
+	set3_: fixed_: node2
+	])
+	
+genElStr3([
+	1_: fixed_: answer_question,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: node3
+	])
+
+/* устанавливаем что вопрос успешно отвечен */
+genElStr3([
+	1_: fixed_: good_question,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: link
+	])
+
+label(run_oper_check_end_no_ans)
+
+/* убираем текущий вопрос из множества инициированный вопрос */
+eraseElStr3([
+	1_: fixed_: init_question,
+	2_: assign_: arc_: pos_: const_: f_: arc1,
+	3_: fixed_: link
+	])
+	
+/* устанавливаем что вопрос был отработан */ 
+genElStr3([
+	1_: fixed_: finish_question,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: link
+	])
+	
+/* закрытие сегмента */
+sys_close_segment([1_: fixed_: segment])
+	
+nop(run_oper_handler_end)
+
+label(run_oper_handler_f_oper_not_found)
+	printNl([1_: /"Error: Procedure run operation not found in Operation_set"/])
+	nop(run_oper_handler_end)
+
+label(run_oper_handler_f_check_not_found)
+	printNl([1_: /"Error: Procedure check operation not found in Operation_set"/])
+	nop(run_oper_handler_end)
+
+label(run_oper_handler_oper_set_empty)
+	printNl([1_: /"Error: Operation_set is empty"/])
+	nop(run_oper_handler_end)
+
+label(run_oper_handler_end)
+
+printNl([1_: fixed_: set_operation_handler_end])
+
+return()
+end

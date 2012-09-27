@@ -1,0 +1,83 @@
+// 
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+procedure(search_if_and_then,
+[[
+	//#TODO answerIsPresent = "/seb/planimetry/присутствует ответ_";
+	answerIsPresent=rrel_answer_is_present;
+	
+	//#TODO answerIsAbsent = "/seb/planimetry/отсутствует ответ_";
+	answerIsAbsent=rrel_answer_is_absent;
+		
+	//#TODO th = "/seb/planimetry/теория";
+	th=group_theory;
+	
+	//#TODO req="/seb/planimetry/запрос значения величины";
+	req=q_production;
+	
+	first=1_;
+	second=2_;
+	
+	//#отладочная информация, закомментировать или убрать
+	find_if=/"\n\nI find if!\n\n"/;
+	not_find_if=/"\n\nI don't find if!\n\n"/;
+	find_then=/"\n\nI find then!\n\n"/;
+	not_find_then=/"\n\nI don't find then!\n\n"/;
+	here=/"\n\nI have entered get_if_then!!!\n\n"/;
+	exited=/"\n\nI have exited get_if_then!!!\n\n"/;
+	
+]],
+[{	
+	if,then,arc,arc1,value,handler,element,seg,segments,temp,set,set2,theory,section,attr
+}],
+{[	
+	//теория
+	1_: in_: theory,
+	2_: in_: value,
+	3_: out_: if,
+	4_: out_: then
+]}
+)
+sys_get_location([1_: value,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+printNl([1_: here])
+
+//определяем посылку
+
+searchElStr5([
+	1_: fixed_: theory,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: if,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: first
+],,l_not_find_if)
+
+printNl([1_: find_if])
+
+//определяем следствие
+
+searchElStr5([
+	1_: fixed_: theory,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: then,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: second
+],,l_not_find_then)
+
+printNl([1_: find_then],exit,exit)
+
+label(l_not_find_if)
+printNl([1_: not_find_if],exit,exit)
+
+label(l_not_find_then)
+printNl([1_: not_find_then],exit,exit)
+
+label(exit)
+
+printNl([1_: exited])
+return()
+end

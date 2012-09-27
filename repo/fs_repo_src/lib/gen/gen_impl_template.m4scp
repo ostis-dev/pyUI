@@ -1,0 +1,334 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: gen_impl_template.m4scp
+// Description: Файл содержит процедуру генерации
+//				шаблона (template) импликации
+/////////////////////////////////////////////////////
+// 		Author: Startsev Sergei
+//        Date: 29.01.2011
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+/*!
+	Генерация шаблона (template) импликации.
+	
+	@result	шаблон импликации
+*/
+
+procedure(gen_impl_template,
+[[				
+	//атрибут условия
+	if=1_;
+	//атрибут следствия
+	then=2_;
+	//ключевой узел импликации, он предметнонезависимый
+	nrel_impl;
+	//ключевой узел теории, он предметнонезависимый
+	group_theory;
+]],
+[{	
+	arc,arc1,arc2,temp,rel,attr1,attr2,template,currResStat1,currResStat2,currNode1,currArc1,currNode2,currArc2,set1,set2,node
+}],
+{[	
+	//#условие высказывания об импликации*
+	1_: in_: currResStat1,
+	//#следствие высказывания об импликации*
+	2_: in_: currResStat2,
+	//#шаблон (template) импликации
+	3_: out_:template
+]}
+)
+
+/////////////////////////////////////////////////////
+//генерируем шаблон
+genEl([1_: assign_: template])
+//генерируем связку отношения импликация*
+genEl([1_: assign_: node_: var_: rel])
+
+//проводим переменную дугу из узла "теория"
+genElStr3([
+		1_: fixed_: group_theory,
+		2_: assign_: arc_: var_: arc1,
+		3_: assign_: node_: var_: node
+	])
+//проводим дугу из шаблона в узел "теория"	
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: group_theory
+	])	
+//"добавляем" к шаблону	сгенерированную выше дугу
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: arc1
+	])	
+//"добавляем" к шаблону	сгенерированный выше узел
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: node
+	])	
+//проводим переменную дугу к связке отношения импликация*
+genElStr3([
+		1_: fixed_: node,
+		2_: assign_: arc_: var_: arc1,
+		3_: fixed_: rel
+	])	
+//"добавляем" к шаблону	сгенерированную выше дугу
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: arc1
+	])	
+	
+//проводим переменную дугу от ключевого узла импликация* к связке отношения импликация*	
+genElStr3([
+		1_: fixed_: nrel_impl,
+		2_: assign_: arc_: var_: arc1,
+		3_: fixed_: rel
+	])
+//"добавляем" к шаблону	ключевой узел импликация*
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: nrel_impl
+	])
+//"добавляем" к шаблону	связку отношения импликация*
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: rel
+	])
+
+//"добавляем" к шаблону	сгенерированную выше дугу
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: arc1
+	])
+	
+//проводим переменную дугу от связки отношения импликация* к условию под атрибутом если_
+genElStr5([
+		1_: fixed_: rel,
+		2_: assign_: arc_: var_: arc1,
+		3_: fixed_: currResStat1,
+		4_: assign_: arc_: var_: attr1,
+		5_: fixed_: if
+	])
+//проводим переменную дугу от связки отношения импликация* к следствию под атрибутом то_
+genElStr5([
+		1_: fixed_: rel,
+		2_: assign_: arc_: var_: arc2,
+		3_: fixed_: currResStat2,
+		4_: assign_: arc_: var_: attr2,
+		5_: fixed_: then
+	])	
+	
+//"добавляем" к шаблону	условие
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: currResStat1
+	])	
+//"добавляем" к шаблону	следствие
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: currResStat2
+	])	
+
+//"добавляем" к шаблону	сгенерированную выше дугу
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: arc1
+	])
+//"добавляем" к шаблону	сгенерированную выше дугу
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: arc2
+	])		
+	
+//"добавляем" к шаблону	сгенерированную выше дугу
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: attr1
+	])
+//"добавляем" к шаблону	атрибут если_
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: if
+	])	
+//"добавляем" к шаблону	сгенерированную выше дугу
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: attr2
+	])
+//"добавляем" к шаблону	атрибут то_
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: then
+	])
+/////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////	
+//перебираем элементы в условии и следствии
+
+//перебираем элементы в условии
+searchSetStr3([
+	1_: fixed_: currResStat1,
+	2_: assign_: arc,
+	3_: assign_: temp,
+	set3_: assign_: set1
+])
+
+searchSetStr3([
+	1_: fixed_: currResStat1,
+	2_: assign_: arc,
+	3_: assign_: temp,
+	set2_: assign_: set2
+])	
+
+/////////////////////////////////////////////////////
+label(first_st)
+
+ifVarAssign([1_: currNode1],,noerase2)
+eraseElStr3([
+	1_: fixed_: set1,
+	2_: assign_: f_: arc,
+	3_: fixed_: currNode1
+])
+label(noerase2)
+searchElStr3([
+	1_: fixed_: set1,
+	2_: assign_: arc,
+	3_: assign_: currNode1,
+],,arcs_st1)
+//"добавляем" к шаблону узлы из условия
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: currNode1
+	],first_st,first_st)
+
+/////////////////////////////////////////////////////
+label(arcs_st1)
+
+ifVarAssign([1_: currArc1],,noerase3)
+eraseElStr3([
+	1_: fixed_: set2,
+	2_: assign_: f_: arc,
+	3_: fixed_: currArc1
+])
+label(noerase3)
+searchElStr3([
+	1_: fixed_: set2,
+	2_: assign_: arc,
+	3_: assign_: currArc1,
+],,second_st)
+//"добавляем" к шаблону дуги из условия
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: currArc1
+	],arcs_st1,arcs_st1)
+
+	
+/////////////////////////////////////////////////////
+//перебираем элементы в следствии
+label(second_st)
+
+searchSetStr3([
+	1_: fixed_: currResStat2,
+	2_: assign_: arc,
+	3_: assign_: temp,
+	set3_: assign_: set1
+])
+
+searchSetStr3([
+	1_: fixed_: currResStat2,
+	2_: assign_: arc,
+	3_: assign_: temp,
+	set2_: assign_: set2
+])
+
+/////////////////////////////////////////////////////
+label(node_st2)
+
+ifVarAssign([1_: currNode2],,noerase4)
+eraseElStr3([
+	1_: fixed_: set1,
+	2_: assign_: f_: arc,
+	3_: fixed_: currNode2
+])
+label(noerase4)
+searchElStr3([
+	1_: fixed_: set1,
+	2_: assign_: arc,
+	3_: assign_: currNode2,
+],,arcs_st2)
+//"добавляем" к шаблону узлы из следствия
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: currNode2
+	],node_st2,node_st2)
+
+/////////////////////////////////////////////////////	
+label(arcs_st2)
+
+ifVarAssign([1_: currArc2],,noerase5)
+eraseElStr3([
+	1_: fixed_: set2,
+	2_: assign_: f_: arc,
+	3_: fixed_: currArc2
+])
+label(noerase5)
+searchElStr3([
+	1_: fixed_: set2,
+	2_: assign_: arc,
+	3_: assign_: currArc2,
+],,exit)
+//"добавляем" к шаблону дуги из следствия
+genElStr3([
+		1_: fixed_: template,
+		2_: assign_: temp,
+		3_: fixed_: currArc2
+	],arcs_st2,arcs_st2)
+	
+/////////////////////////////////////////////////////
+label(exit)
+
+return()
+end	

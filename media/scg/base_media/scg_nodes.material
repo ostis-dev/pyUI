@@ -1,0 +1,27 @@
+import * from "scg_base.material"
+// *********************
+// nodes
+// *********************
+material scg_Node_Normal :  scg_Normal
+{
+}
+
+material scg_Node_Selected : scg_Selected
+{
+}
+
+material scg_Node_Highlighted : scg_Highlighted
+{
+}
+
+material scg_Node_WasInMemory : scg_WasInMemory
+{
+}
+
+material scg_Node_NewInMemory : scg_NewInMemory
+{
+}
+
+material scg_Node_Merged : scg_Merged
+{
+}

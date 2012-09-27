@@ -1,0 +1,120 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: answer.m4scp
+// Description: File contains procedures for working
+//				with answers
+/////////////////////////////////////////////////////
+// 		Author: Denis Koronchik
+//        Date: 26.11.10
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_segment.scsy"
+#include "meta_info.scsy"
+#include "lib_questions.scsy"
+
+/*!
+	Generate answer relation for a question.
+	
+	@note	Do not erase answer_node.
+*/
+procedure(answer_make,
+[[	// constants
+	1_;
+	2_;
+	question;
+	nrel_answer;
+	open_segment;	// procedure for segment opening
+	// meta-info
+	stype_sheaf;
+	mark_as_succesful;
+]],
+[{	// variables
+
+	// input
+	question_node,
+	answer_node,
+	// other
+	segment, t_seg,
+	sheaf_node, a1, a2, a3, a4,
+	descr
+}],
+{[	// params
+	1_:	in_: question_node,	// node that designate question
+	2_:	in_: answer_node	// node that designate answer
+]}
+)
+/* mark question as successful */
+callReturn([
+	1_: fixed_: mark_as_successful,
+	2_: fixed_: {[
+		1_: question_node
+		]}
+	])
+
+/* need to set segment that contains question node as default to generate answer in it */
+sys_get_location([1_: fixed_: question_node, 2_: assign_: segment])	
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+// generate sheaf node
+genEl([ 
+	1_: assign_: node_: const_: sheaf_node
+])
+genElStr3([
+	1_: fixed_: stype_sheaf,
+	2_: assign_: const_: pos_: arc_: a1,
+	3_: fixed_: sheaf_node
+])
+
+// genarate arc to a question
+genElStr5([
+	1_: fixed_: sheaf_node,
+	2_: assign_: const_: pos_: arc_: a1,
+	3_: fixed_: question_node,
+	4_: assign_: const_: pos_: arc_: a2,
+	5_: fixed_: 1_
+])
+
+// generate arc to an answer
+genElStr5([
+	1_: fixed_: sheaf_node,
+	2_: assign_: const_: pos_: arc_: a3,
+	3_: fixed_: answer_node,
+	4_: assign_: const_: pos_: arc_: a4,
+	5_: fixed_: 2_
+])
+// generate: answer* -> sheaf_node
+genElStr3([
+	1_: fixed_: nrel_answer,
+	2_: assign_: a1,
+	3_: fixed_: sheaf_node
+])
+
+/* закрытие сегмента */
+//#sys_close_segment([1_: fixed_: segment])
+
+return()
+end()

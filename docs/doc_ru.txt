@@ -1,0 +1,8 @@
+﻿/*! \mainpage Главный раздел документации
+
+\section operation Операции
+- \ref message_op_page
+
+\section Примеры
+- \ref example_create_search_operation
+*/

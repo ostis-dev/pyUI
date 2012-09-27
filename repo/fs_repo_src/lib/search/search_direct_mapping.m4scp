@@ -1,0 +1,293 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: search_direct_mapping.m4scp
+// Description: Файл содержит процедуру поиска соответствия
+//				заданных конкретных узлов из БЗ и переменных из шаблона
+/////////////////////////////////////////////////////
+// 		Author: Startsev Sergei
+//        Date: 22.01.2011
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+/*!
+	Поиск соответствия заданных конкретных узлов из БЗ и переменных из шаблона
+	
+	@result	результирующее мн-во, которое представляет собой мн-во связок, где под 1_ находится переменная из шаблона, а под 2_ - соответствующей ей узел из БЗ
+	
+		  1_	mapping_set	  2_
+		  |			 |		  |
+		  |			 |		  |
+		  v			 v		  v
+	var<------------ O ---------->object
+*/
+
+procedure(search_direct_mapping,
+[[	
+	
+	first=1_;
+	second=2_;
+	set_attr=set_;
+	fixed_attr=fixed_;
+	
+	//#отладочная информация, закомментировать или убрать
+	l_find_t=/"\n\nI find t!!!\n\n"/;
+	here=/"\n\nI have entered search_direct_mapping!!!\n\n"/;
+	exited=/"\n\nI have exited search_direct_mapping!!!\n\n"/;
+	
+]],
+[{	
+	rel,temp_rel_mapping_set,temp_mapping_set,copy_objects_set,rel_mapping_set,
+	temp_objects,rel_set,temp_set,search_res,mapping_set,objects_set,temp_obj,t,
+	template,arc,arc1,node,handler,element,el,seg,segments,temp,set,object
+}],
+{[		
+	//#шаблон
+	1_: in_: template,
+	//#множество заданных конкретных узлов из БЗ
+	2_: in_: objects_set,
+	//#результирующее мн-во, которое представляет собой мн-во связок, где под 1_ находится переменная из шаблона, а под 2_ - соответствующей ей узел из БЗ
+	3_: out_: mapping_set
+]}
+)
+sys_get_location([1_: template,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+printNl([1_: here])
+
+///////////////////////////////
+//#поиск по шаблону
+sys_search([
+	1_: fixed_: template,
+	2_: assign_: search_res
+])
+///////////////////////////////
+
+///////////////////////////////
+searchSetStr3([
+	1_: fixed_: search_res,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: set,
+	set3_: assign_: temp_set
+])
+
+//#перебираем элементы
+label(next)
+
+ifVarAssign([1_: element],,noerase)
+eraseElStr3([
+	1_: fixed_: temp_set,
+	2_: assign_: f_: arc,
+	3_: fixed_: element
+])
+label(noerase)
+
+searchElStr3([
+	1_: fixed_: temp_set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: element,
+],,exit)
+
+searchSetStr3([
+	1_: fixed_: element,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: set,
+	set3_: assign_: rel_set
+],,exit)
+
+///////////////////////////////////////////
+//#делаем копию объектов для того, чтобы потом убедиться, что мы пошли по верной ветке и все объекты из objects_set найдены
+searchSetStr3([
+	1_: fixed_: objects_set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp,
+	set3_: assign_: copy_objects_set
+],,exit)
+///////////////////////////////////////////
+
+///////////////////////////////////////////
+//#в temp_mapping_set будем временно хранить множество текущих связок соответствия, которое при определенных условиях может стать результирующим mapping_set
+ifVarAssign([1_: temp_mapping_set],,noerase_temp_mapping_set)
+eraseEl([1_: fixed_: temp_mapping_set])
+
+label(noerase_temp_mapping_set)
+
+genEl([1_: node_: const_: assign_: temp_mapping_set])
+///////////////////////////////////////////
+
+label(next2)
+///////////////////////////////////////////
+//перебираем элементы
+
+ifVarAssign([1_: el],,noerase2)
+eraseElStr3([
+	1_: fixed_: rel_set,
+	2_: assign_: f_: arc,
+	3_: fixed_: el
+])
+label(noerase2)
+
+searchElStr3([
+	1_: fixed_: rel_set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: el
+],,next)
+
+searchElStr5([
+	1_: fixed_: el,
+	2_: assign_: arc,
+	3_: assign_: object,
+	4_: assign_: arc1,
+	5_: fixed_: second
+],,exit)
+
+///////////////////////////////////////////
+//#сравнение текущего объекта с объектами из входящего множества objects_set
+
+searchSetStr3([
+	1_: fixed_: objects_set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp,
+	set3_: assign_: temp_objects
+])
+
+label(search_obj)
+
+ifVarAssign([1_: temp_obj],,search_obj_noerase)
+eraseElStr3([
+	1_: fixed_: temp_objects,
+	2_: assign_: f_: arc,
+	3_: fixed_: temp_obj
+])
+label(search_obj_noerase)
+
+searchElStr3([
+	1_: fixed_: temp_objects,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp_obj
+],,next2)
+
+
+ifCoin([
+	1_: fixed_: object,
+	2_: fixed_: temp_obj
+],find_object,search_obj)
+
+/////////////////////////////////////////
+
+
+label(find_object)
+/////////////////////////////////////////
+
+eraseElStr3([
+	1_: fixed_: copy_objects_set,
+	2_: assign_: f_: arc,
+	3_: fixed_: object
+])
+
+searchElStr5([
+	1_: fixed_: el,
+	2_: assign_: arc,
+	3_: assign_: t,
+	4_: assign_: arc1,
+	5_: fixed_: first
+],,exit)
+
+//#printEl([1_: t])
+//#printNl([1_: l_find_t])
+
+/////////////////////////////////////////
+//#формируем временное хранение множество текущих связок соответствия
+genEl([1_: node_: const_: assign_: temp_rel_mapping_set])
+
+genElStr5([
+	1_: fixed_: temp_rel_mapping_set,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: t,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: first
+])
+
+genElStr5([
+	1_: fixed_: temp_rel_mapping_set,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: object,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: second
+])
+
+genElStr3([
+	1_: fixed_: temp_mapping_set,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: temp_rel_mapping_set
+])
+
+searchElStr3([
+	1_: fixed_: copy_objects_set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp
+],next2,gen_result)
+
+/////////////////////////////////////////
+
+
+label(gen_result)
+/////////////////////////////////////////
+//#формируем результат при помощи переноса связок соответствия из временного хранилища temp_mapping_set в результирующее mapping_set
+
+genEl([1_: node_: const_: assign_: mapping_set])
+
+label(next3)
+
+ifVarAssign([1_: rel],,noerase3)
+eraseElStr3([
+	1_: fixed_: temp_mapping_set,
+	2_: assign_: f_: arc,
+	3_: fixed_: rel
+])
+label(noerase3)
+
+searchElStr3([
+	1_: fixed_: temp_mapping_set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: rel
+],,exit)
+
+genElStr3([
+	1_: fixed_: mapping_set,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: rel
+],next3,next3)
+
+/////////////////////////////////////////
+
+label(exit)
+
+printNl([1_: exited])
+return()
+end

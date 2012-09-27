@@ -1,0 +1,118 @@
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "com_keynodes.scsy"
+#include "lib_search.scsy"
+
+procedure(generation,
+[[
+	// Ключевой узел, обозначающий отношение "значение*"
+	nrel_value;
+	// Ключевой узел, обозначающий отношение "идентификация*"
+	nrel_identification;
+	// Процедура поиска начала бинарной пары
+	search_bin_pair_begin_proc;	
+]],
+[{
+	location, segments,
+	quantity, resultValue, 
+	valueRelationLink, valueRelationNode,
+	identificationNode, identificationRelationLink, identificationRelationNode,
+	valueNode, kindOfValue,
+	arc, attributeArc, attributeNode
+}],
+{[
+	1_: in_: quantity,
+	2_: in_: kindOfValue,
+	3_: out_: valueNode
+]}
+)
+// Получение сегмента, в котором находится узел искомой величины
+sys_get_location([
+	1_: fixed_: quantity,
+	2_: assign_: location
+])
+
+// Установка найденного сегмента как основного
+sys_set_default_segment([
+	1_: fixed_: location
+])
+
+//Разворачивание установленного сегмента
+sys_spin_segment([
+	1_: fixed_: location,
+	2_: assign_: segments
+])
+
+// Генерируем связку отношения "значение*"
+genElStr5([
+	1_: assign_: const_: node_: valueRelationLink,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: fixed_: quantity,
+	4_: assign_: const_: pos_: arc_: attributeArc,
+	5_: fixed_: 2_
+], , , goto_error)
+
+// Генерируем первый элемент отношения "значение*" (сам узел значения)
+genElStr5([
+	1_: fixed_: valueRelationLink,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: assign_: const_: node_: valueRelationNode,
+	4_: assign_: const_: pos_: arc_: attributeArc,
+	5_: fixed_: 1_
+], , , goto_error)
+
+// Генерируем дугу от отношения "значение*" к связке этого отношения
+genElStr3([
+	1_: fixed_: nrel_value,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: fixed_: valueRelationLink
+], , , goto_error)
+
+// Генерируем узел идентификации
+genElStr3([
+	1_: fixed_: valueRelationNode,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: assign_: const_: node_: identificationNode
+], , , goto_error)
+
+// Генерируем связку отношения "идентификация*"
+genElStr5([
+	1_: assign_: const_: node_: identificationRelationLink,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: fixed_: identificationNode,
+	4_: assign_: const_: pos_: arc_: attributeArc,
+	5_: fixed_: 2_
+], , , goto_error)
+
+// Генерируем первый элемент отношения "идентификация*" (множество идентифицирующих значений)
+genElStr5([
+	1_: fixed_: identificationRelationLink,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: assign_: const_: node_: identificationRelationNode,
+	4_: assign_: const_: pos_: arc_: attributeArc,
+	5_: fixed_: 1_
+], , , goto_error)
+
+// Генерируем дугу от отношения "идентификация*" к связке этого отношения
+genElStr3([
+	1_: fixed_: nrel_identification,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: fixed_: identificationRelationLink
+], , , goto_error)
+
+// Генерируем конкретную идентификацию заданного значения, используя входной параметр в качестве типа
+genElStr5([
+	1_: fixed_: identificationRelationNode,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: assign_: const_: node_: valueNode,
+	4_: assign_: const_: pos_: arc_: attributeArc,
+	5_: fixed_: kindOfValue
+], , , goto_error)
+
+// Завершение в случае ошибки
+label(goto_error)
+
+return()
+	
+end

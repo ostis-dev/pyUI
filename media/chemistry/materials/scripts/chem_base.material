@@ -1,0 +1,54 @@
+material chemistry_empty
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.000 0.000 0.000 0.000
+			diffuse 0.0 0.0 0.0 1.000
+			depth_write on
+		}
+	}
+}
+
+material chemistry_Normal
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.000 0.000 0.000
+			cull_hardware none
+			depth_write on
+		}
+	}
+}
+
+material chemistry_Selected
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.337 0.455 0.882
+			cull_hardware none
+			depth_write on
+		}
+	}
+}
+
+material chemistry_Highlighted
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			ambient 0.000 0.000 0.000
+			diffuse 0.741 0.643 0.204
+			cull_hardware none
+			depth_write on
+		}
+	}
+}

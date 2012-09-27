@@ -1,0 +1,168 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+#include "scp_keynodes.scsy"
+#include "ui_keynodes.scsy"
+
+procedure(search_concept_level_ui,
+[[
+	f_search = "/operation/search_concept_level/search_concept_level";
+	ui_Output;		// процедура вывода конструкций пользователю
+]],
+[{
+	wnd, selected_el, sheet, shift, 
+	arc, target, result_set, e, answer_reciever
+}],
+{[
+	1_: in_: selected_el,
+	2_: in_: sheet,
+	3_: in_: answer_reciever
+]}
+)
+//# Получение целевого объекта
+searchElStr3([
+	1_: fixed_: selected_el,
+	2_: assign_: arc_: pos_: const_: arc,
+	3_: assign_: node_: target
+	])
+	
+genEl([
+	1_: assign_: node_: const_: result_set
+	])
+
+callReturn([
+	1_: fixed_: f_search,
+	2_: fixed_: {[
+		1_: fixed_: target,
+		2_: fixed_: result_set
+		]}
+	], e)
+
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: result_set
+	]}
+	])
+
+return()
+end
+
+
+procedure(search_concept_level,
+[[	
+	decompozition = "/seb/planimetry/декомпозиция*";
+	main_semantic = "/operation/search_semantic/binrel_by_target_rel";
+	theory = "/seb/planimetry/теория";
+	levels = "/seb/planimetry/уровни понятий";
+]],
+[{
+	target, result_set,
+	e, 
+	node1, node2, 
+	arc1, arc2, arc3, arc4,
+	set1, set2	
+}],
+{[
+	1_: in_: target,
+	2_: in_: out_: result_set
+]}
+)
+
+searchSetStr3([
+	1_: fixed_: levels,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: assign_: node_: const_: node1,
+	set3_: assign_: set1
+	],,exit)
+	
+label(beg)
+
+	searchElStr3([
+		1_: fixed_: set1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node_: const_: node2
+		],,exit)
+		
+	eraseEl([1_: fixed_: arc1])
+	
+	searchSetStr5([
+		1_: assign_: node_: const_: node1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: target,
+		4_: assign_: arc_: pos_: const_: arc2,
+		5_: fixed_: node2,
+		set2_: assign_: set2
+		])
+		
+	label(beg_out)
+	
+		searchElStr3([
+			1_: fixed_: set2,
+			2_: assign_: arc_: pos_: const_: arc1,
+			3_: assign_: arc2
+			],,beg)
+			
+		eraseEl([1_: fixed_: arc1])
+		
+		searchElStr5([
+			1_: assign_: node_: const_: node1,
+			2_: fixed_: arc2,
+			3_: fixed_: target,
+			4_: assign_: arc_: pos_: const_: arc1,
+			5_: fixed_: node2
+			])
+			
+		genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc4, 3_: fixed_: node1])
+		genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc4, 3_: fixed_: arc2])
+		genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc4, 3_: fixed_: target])
+		genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc4, 3_: fixed_: arc1])
+		genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc4, 3_: fixed_: node2]
+			,beg_out,beg_out,beg_out)
+	
+	label(end_out)
+	
+label(exit)
+	
+return()
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

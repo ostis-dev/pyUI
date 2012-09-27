@@ -1,0 +1,9 @@
+#include "ordinal.scsy"
+#include "meta_info.scsy"
+#include "ui_keynodes.scsy"
+space_src\mercury.gwf
+space_src\sun_planets.gwf
+space_src\sun_system.gwf
+space_src\venus.gwf
+space_src\_keynodes.gwf
+

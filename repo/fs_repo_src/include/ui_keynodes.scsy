@@ -1,0 +1,100 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+////////////////////////////////////////////////////
+// Ссылки на ключевые узлы пользовательского интерфейса
+////////////////////////////////////////////////////
+
+// классы ip-компонентов ПИ
+ui_viewers		=	"/ui/core/просмотрщик";
+ui_editors		=	"/ui/core/редактор";
+ui_translator	=	"/ui/core/транслятор";
+ui_main_window	=	"/ui/core/главное окно";
+ui_sc_window		=	"/ui/core/sc-окно";
+
+
+
+
+////////////////
+// неролевые
+////////////////
+ui_nrel_child_window				=	"/ui/core/дочернее окно*";
+ui_nrel_set_of_supported_formats 	= 	"/ui/core/множество поддерживаемых форматов*";
+ui_nrel_set_of_supported_input_formats			=	"/ui/core/множество поддерживаемых входных форматов*";
+ui_nrel_set_of_supported_output_formats			=	"/ui/core/множество поддерживаемых выходных форматов*";
+
+// распечатать в консоль
+ui_nrel_print2console				=	"/ui/core/распечатать в консоль*";
+
+////////////////
+// ролевые
+////////////////
+
+////////////////////////////////////////////////////
+// Форматы
+////////////////////////////////////////////////////
+ui_format					=	"/ui/core/формат";
+
+
+// форматы
+ui_format_sc				=	"/ui/core/SC";
+ui_format_scgx			=	"/ui/core/SCGx";
+ui_format_geomx		=	"/ui/core/GEOMx";
+
+ui_format_jpg				=	"/ui/core/JPG";
+ui_format_jpeg			=	"/ui/core/JPEG";
+ui_format_bmp			=	"/ui/core/BMP";
+ui_format_png			=	"/ui/core/PNG";
+
+ui_format_term 			=	"/ui/core/TERM";
+ui_format_string			=	"/ui/core/STRING";
+
+ui_format_int			=	"/ui/core/INT";
+ui_format_real			=	"/ui/core/REAL";
+
+ui_format_wmv			=	"/ui/core/WMV";
+ui_format_avi			=	"/ui/core/AVI";
+ui_format_mp4			=	"/ui/core/MP4";
+ui_format_flv			=	"/ui/core/FLV";
+ui_format_mpg			=	"/ui/core/MPG";
+
+ui_format_swf			=	"/ui/core/SWF";
+
+ui_format_midmif		=	"/ui/core/MIDMIF";
+
+ui_format_objx			=	"/ui/core/OBJx";
+
+ui_format_space			=	"/ui/core/SPACEx";
+
+ui_format_graph			=	"/ui/core/GRAPH";
+
+ui_format_chemistry	=	"/ui/core/CHEMISTRY";
+
+////////////////////////////////////////////////////
+// Команды
+////////////////////////////////////////////////////
+ui_atom_command	=	"/ui/core/атомарная команда";
+ui_noatom_command	=	"/ui/core/неатомарная команда";
+ui_question_command = "/ui/core/команда вопрос";
+ui_user						=	"/ui/core/пользователь";

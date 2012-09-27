@@ -1,0 +1,8 @@
+#include "ordinal.scsy"
+#include "meta_info.scsy"
+#include "ui_keynodes.scsy"
+com_keynodes_src\bel_lang.gwf
+com_keynodes_src\com_keynodes.gwf
+com_keynodes_src\eng_lang.gwf
+com_keynodes_src\rus_lang.gwf
+

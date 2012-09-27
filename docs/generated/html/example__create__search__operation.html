@@ -1,0 +1,366 @@
+﻿<head>
+	<meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<p class="header" align="center"><img alt="" src="ostis-logo.png"></p>
+<p class="header" align="center">OSTIS (Open Semantic Technology for Intelligent Systems)</p>
+<!-- Создано системой Doxygen 1.6.2 -->
+<script type="text/javascript"><!--
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+--></script>
+<script type="text/javascript">
+<!--
+function changeDisplayState (e){
+  var num=this.id.replace(/[^[0-9]/g,'');
+  var button=this.firstChild;
+  var sectionDiv=document.getElementById('dynsection'+num);
+  if (sectionDiv.style.display=='none'||sectionDiv.style.display==''){
+    sectionDiv.style.display='block';
+    button.src='open.gif';
+  }else{
+    sectionDiv.style.display='none';
+    button.src='closed.gif';
+  }
+}
+function initDynSections(){
+  var divs=document.getElementsByTagName('div');
+  var sectionCounter=1;
+  for(var i=0;i<divs.length-1;i++){
+    if(divs[i].className=='dynheader'&&divs[i+1].className=='dynsection'){
+      var header=divs[i];
+      var section=divs[i+1];
+      var button=header.firstChild;
+      if (button!='IMG'){
+        divs[i].insertBefore(document.createTextNode(' '),divs[i].firstChild);
+        button=document.createElement('img');
+        divs[i].insertBefore(button,divs[i].firstChild);
+      }
+      header.style.cursor='pointer';
+      header.onclick=changeDisplayState;
+      header.id='dynheader'+sectionCounter;
+      button.src='closed.gif';
+      section.id='dynsection'+sectionCounter;
+      section.style.display='none';
+      section.style.marginLeft='14px';
+      sectionCounter++;
+    }
+  }
+}
+window.onload = initDynSections;
+-->
+</script>
+<div class="navigation" id="top">
+  <div class="tabs">
+    <ul>
+      <li><a href="index.html"><span>Титульная&nbsp;страница</span></a></li>
+      <li class="current"><a href="pages.html"><span>Описания</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <img id="MSearchSelect" src="search/search.png"
+             onmouseover="return searchBox.OnSearchSelectShow()"
+             onmouseout="return searchBox.OnSearchSelectHide()"
+             alt=""/>
+        <input type="text" id="MSearchField" value="Поиск" accesskey="S"
+             onfocus="searchBox.OnSearchFieldFocus(true)" 
+             onblur="searchBox.OnSearchFieldFocus(false)" 
+             onkeyup="searchBox.OnSearchFieldChange(event)"/>
+        <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="contents">
+<h2><a class="anchor" id="repo_struct">
+Структура репозитория базы знаний</a></h2>
+<ul>
+<li><b>operation</b> - каталог с исходными кодами операций написанных на scp</li>
+<li><b>lib</b> - каталог с библиотекой процедур (подпрограмм) написанных на scp</li>
+<li><b>include</b> - каталог с объявлениями ключевых узлов</li>
+</ul>
+<h2><a class="anchor" id="create_operation_source">
+Создание файла с иходным кодом операции</a></h2>
+<p>Процесс создания поисковой операции будет рассмотрен на примере создания операции поиска декомпозиции указанного объекта.</p>
+<p>В соответсвии со стурктурой репозитория базы знаний в папке <b>include</b> необходимо создать файл в котором будет записан код операции. Файлы с исходными кодами операции именуются по следющему правилу search_&lt;название операции&gt;. В нашем случае, создадим файл <em>operation/search_decomposition</em>. Файл должен иметь кодировку ANSI и содержать в начале коментарии с описанием лицензии под которой он будет распространяться (в нашем случае это лицензия LGPL).</p>
+<div class="fragment"><pre class="fragment"><span class="comment">/*</span>
+<span class="comment">-----------------------------------------------------------------------------</span>
+<span class="comment">This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)</span>
+<span class="comment">For the latest info, see http://www.ostis.net</span>
+<span class="comment"></span>
+<span class="comment">Copyright (c) 2010 OSTIS</span>
+<span class="comment"></span>
+<span class="comment">OSTIS is free software: you can redistribute it and/or modify</span>
+<span class="comment">it under the terms of the GNU Lesser General Public License as published by</span>
+<span class="comment">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="comment">(at your option) any later version.</span>
+<span class="comment"></span>
+<span class="comment">OSTIS is distributed in the hope that it will be useful,</span>
+<span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="comment">GNU Lesser General Public License for more details.</span>
+<span class="comment"></span>
+<span class="comment">You should have received a copy of the GNU Lesser General Public License</span>
+<span class="comment">along with OSTIS.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="comment">-----------------------------------------------------------------------------</span>
+<span class="comment">*/</span>
+</pre></div><p>Далее в исходном файле операции необходимо указать дополнительную информацию (перед каждой программой или процедурой в файле):</p>
+<ul>
+<li><b>File:</b> <em>&lt;название файла&gt;</em></li>
+<li><b>Description:</b> <em>&lt;краткое описание программы или процедуры, исходный код которой записан ниже&gt;</em></li>
+<li><b>Author:</b> <em>&lt;имя автора&gt;</em></li>
+<li><b>Date:</b> <em>&lt;дата создания файла&gt;</em></li>
+<li><b>Modificatinon:</b> <em>&lt;дата&gt;</em>, <em>&lt;автор&gt;</em> - <em>&lt;внесенные изменения&gt;</em></li>
+</ul>
+<div class="fragment"><pre class="fragment"><span class="comment">//----------------------------------------------------------------------</span>
+<span class="comment">//        File: search_decomposition.m4scp</span>
+<span class="comment">// Description: File contains operation for object decomposition search.</span>
+<span class="comment">//              Input arguments includes into result set.</span>
+<span class="comment">//----------------------------------------------------------------------</span>
+<span class="comment">//              Author: Denis Koronchik</span>
+<span class="comment">//        Date: 25.12.10</span>
+</pre></div><dl class="remark"><dt><b>Прим.:</b></dt><dd>Рекомендуется на каждую операцию отводить отдельный файл с исходным текстом.</dd></dl>
+<p>Операция представляет собой самоинициируемого объекта. Поэтому нам необходимо организовать ее запуск по некоторому событию в sc-памяти. Необходимо разбить саму операцию на две части:</p>
+<ul>
+<li>регистрация обработчика на событие в памяти</li>
+<li>реализация логики операции</li>
+</ul>
+<p>Для этого в исходный код операции добавим программу <b>init_op</b>, которая будет регистрировать обработчик и процедуру <b>run_op</b>, которая реализует логику операции. </p>
+<div class="fragment"><pre class="fragment"><span class="comment">// program that initialize operation</span>
+program(init_op,
+[[
+]],
+[{
+}])
+
+        
+<span class="keywordflow">return</span>()
+end()
+
+<span class="comment">// procedure, that process question and make answer</span>
+procedure(run_op,
+[[
+]],
+[{
+        <span class="comment">// input params</span>
+        descr, element, arc, question_node,
+}],
+{[
+        1_: in_: descr,
+        2_: in_: element,
+        3_: in_: arc,
+        4_: in_: question_node
+]}
+)
+
+<span class="keywordflow">return</span>()
+end()
+</pre></div><h2><a class="anchor" id="subsribe_event">
+Подписка операции на событие</a></h2>
+<p>Чтобы организовать запуск операции по событию в памяти необходимо использовать оператор <b>sys_set_event_handler</b>. В нашем случае мы реализуем операцию поиска декомпозиции объекта, которая запускается при появлении соответствующей конструкции в базе знаний (см. рис.).</p>
+<div align="center">
+<img src="example_search_decomp_init.png" alt="example_search_decomp_init.png"/>
+</div>
+<p>Конечно сложно организовать слежение за появлением всей конструкции в памяти, по этой причине существует договоренность, что дуга из узла <b>инициированный вопрос</b> проводится в последнюю очередь. В соответствии с этим необходимо лишь подписаться на проведение выходящей дуги из узла <b><em>инициированный вопрос</em></b>.</p>
+<p>Ключевой узел <b><em>инициированный вопрос</em></b> можно использовать подключив файл <em>etc_questions.scsy</em>. В этом файле находятся ключевые узлы связанные с языком вопросов. </p>
+<div class="fragment"><pre class="fragment"><span class="preprocessor">#include &quot;scp_keynodes.scsy&quot;</span>
+<span class="preprocessor">#include &quot;etc_questions.scsy&quot;</span>
+</pre></div><dl class="remark"><dt><b>Прим.:</b></dt><dd>Рекомендуется пользоваться переменными вместо прямого ипользования ключевого узла по идентификатору, так как это позволяет избежать правки кода программы при изменении идентификатора узла</dd></dl>
+<p>Ключевой узел <b><em>инициированный вопрос</em></b> задан как значение для переменной <b>q_initiated</b>. Эту переменную добавим в константы программы <b>init_op</b>. </p>
+<div class="fragment"><pre class="fragment">program(init_op,
+[[
+        q_initiated;
+]]
+</pre></div><p>Оператор <b>sys_set_event_handler</b> принимает следующие параметры:</p>
+<ul>
+<li>1_: событие на которое необходимо подписать обработчик;</li>
+<li>2_: процедура, которую необходимо вызвать при происхождении события;</li>
+<li>3_: пронумерованнное атрибутами (1_, 2_, ...) множество элементов для которых будут отслеживаться события.</li>
+</ul>
+<p>В нашем случае нам необходимо отслеживать появление выходящих дуг, для этого используем событие <b>catch_output_arc</b> (ключевой узел описан в scp_keynodes.scsy). </p>
+<div class="fragment"><pre class="fragment"><span class="comment">// program that initialize operation</span>
+program(init_op,
+[[
+        q_initiated;
+        run_op;
+        catch_output_arc;
+]],
+[{
+}])
+
+<span class="comment">// subscribe to handle output pairs from &quot;initiated question&quot; node</span>
+sys_set_event_handler([
+        1_: fixed_: catch_output_arc,
+        2_: fixed_: run_op,
+        3_: fixed_: {1_: q_initiated}
+        ])
+        
+<span class="keywordflow">return</span>()
+end()
+</pre></div><dl class="attention"><dt><b>Внимание:</b></dt><dd>Узлы обозначающие тип события (<b>catch_output_arc</b>) и процедуру вызываемую при происхождении события (<b>run_op</b>) необходимо добавить в константы программы.</dd></dl>
+<h2><a class="anchor" id="add_menu_item">
+Добавление команды вопроса в главное меню</a></h2>
+<p>Чтобы проверить реализованную программу необходимо добавить команду вопрос в главное меню. Для этого в редакторе scg-конструкций рисуем следующую конструкцию: </p>
+<div align="center">
+<img src="example_search_decomp_a.png" alt="example_search_decomp_a.png"/>
+</div>
+<dl class="remark"><dt><b>Прим.:</b></dt><dd>Идентификатор <b><em>$a_decomposition</em></b> используется для склейки узлов (узел в базе знаний будет имет системный идентификатор, т.к. в исходном тексте БЗ он начинается с <b>$</b>). Поэтому команда вопрос описывается в одном файле, а описание структуры меню проихводится в другом.</dd></dl>
+<p>Исходные тексты БЗ описывающие структуру меню хранятся в папке <b>ui/menu/</b>. Имена файлов с исходными текстами атомарных команд именуются по следующему правилу <b>a_&lt;имя_команды&gt;</b>. Правило для неатомарных команд имеет вид: <b>na_&lt;имя_команды&gt;</b></p>
+<div align="center">
+<img src="example_search_classification_na.png" alt="example_search_classification_na.png"/>
+</div>
+<dl class="remark"><dt><b>Прим.:</b></dt><dd>Рекомендуется в одном исходном файле базы знаний описывать одну комаду (атомарную, неатомарную). Это дает возможность использовать их как компоненты БЗ.</dd></dl>
+<h2><a class="anchor" id="implement_search">
+Реализация логики</a></h2>
+<p>Реализация логики производится в процедуре <b>run_op</b>. Логика операции может быть реализована по разному в каждом отдельном случае, но рекуомендуется использовать уже готовые процедуры и подпрограммы из библиотеки. Это позволит уменьшить время разработки операции и повысить их качество.</p>
+<p>В нашем случае мы осущствляем поиск декомпозиции объекта. Поэтому будем использовать процедуру <b>/lib/search/base_rel_in_with_sheaf/base_rel_in_with_sheaf</b>. Эта процедура осуществляет поиск конструкций показанных на рисунке, по заданному элементу (<b>$el</b>) и узлу отношения (<b>$relation</b>), количество дуг выходящих из узла связки может быть произвольным.</p>
+<div align="center">
+<img src="example_search_decomp_base_rel.png" alt="example_search_decomp_base_rel.png"/>
+</div>
+<p>Стоит упомянуть об еще одной процедуре, которая используется для поиска - это <b>/lib/search/base_cycle/base_cycle</b>. Ее суть заключается в том, для каждого элемента указанного множества (аргумент 1_) вызывается подпрограмма указанная вторым аргументом и результаты записываются во множество указанное третьим аргументом.</p>
+<p>Теперь рассмотрим операторы реализующие процедуру <b>run_op</b>.</p>
+<p>Полный код операции поиска: </p>
+<div class="fragment"><pre class="fragment"><span class="comment">/*</span>
+<span class="comment">-----------------------------------------------------------------------------</span>
+<span class="comment">This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)</span>
+<span class="comment">For the latest info, see http://www.ostis.net</span>
+<span class="comment"></span>
+<span class="comment">Copyright (c) 2010 OSTIS</span>
+<span class="comment"></span>
+<span class="comment">OSTIS is free software: you can redistribute it and/or modify</span>
+<span class="comment">it under the terms of the GNU Lesser General Public License as published by</span>
+<span class="comment">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="comment">(at your option) any later version.</span>
+<span class="comment"></span>
+<span class="comment">OSTIS is distributed in the hope that it will be useful,</span>
+<span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="comment">GNU Lesser General Public License for more details.</span>
+<span class="comment"></span>
+<span class="comment">You should have received a copy of the GNU Lesser General Public License</span>
+<span class="comment">along with OSTIS.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="comment">-----------------------------------------------------------------------------</span>
+<span class="comment">*/</span>
+
+<span class="comment">//----------------------------------------------------------------------</span>
+<span class="comment">//        File: search_decomposition.m4scp</span>
+<span class="comment">// Description: File contains operation for object</span>
+<span class="comment">//                              decomposition search.</span>
+<span class="comment">//                              Input arguments includes into result set</span>
+<span class="comment">//----------------------------------------------------------------------</span>
+<span class="comment">//              Author: Denis Koronchik</span>
+<span class="comment">//        Date: 25.12.10</span>
+
+<span class="preprocessor">#include &quot;scp_keynodes.scsy&quot;</span>
+<span class="preprocessor">#include &quot;etc_questions.scsy&quot;</span>
+<span class="preprocessor">#include &quot;lib_search.scsy&quot;</span>
+<span class="preprocessor">#include &quot;lib_set.scsy&quot;</span>
+<span class="preprocessor">#include &quot;lib_answer.scsy&quot;</span>
+
+<span class="comment">// program that initialize operation</span>
+program(init_op,
+[[
+        q_initiated;
+        run_op;
+        catch_output_arc;
+]],
+[{
+}])
+
+<span class="comment">// subscribe to handle output pairs from &quot;initiated question&quot; node</span>
+sys_set_event_handler([
+        1_: fixed_: catch_output_arc,
+        2_: fixed_: run_op,
+        3_: fixed_: {1_: q_initiated}
+        ])
+        
+<span class="keywordflow">return</span>()
+end()
+
+<span class="comment">// procedure, that process question and make answer</span>
+procedure(run_op,
+[[
+        q_search_decomposition;
+        set_sub;
+        set_rm_el;
+        set_merge;
+        search_decomposition;
+        search_base_cycle;
+]],
+[{
+        <span class="comment">// input params</span>
+        descr, element, arc, question_node,
+                <span class="comment">// other</span>
+                descr2, result, a, segment
+}],
+{[
+        1_: in_: descr,
+        2_: in_: element,
+        3_: in_: arc,
+        4_: in_: question_node
+]}
+)
+
+<span class="comment">/* need to set segment that contains question node as default to generate answer in it */</span>
+sys_get_location([1_: fixed_: question_node, 2_: assign_: segment])     
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+searchElStr3([
+        1_: fixed_: q_search_decomposition,
+        2_: assign_: const_: pos_: arc_: a,
+        3_: fixed_: question_node], ,finish_op)
+        
+<span class="comment">/* call cycle to find decomposition for all elements in a question */</span>
+callReturn([
+        1_: fixed_: search_base_cycle,
+        2_: fixed_: {[
+                1_: question_node,
+                2_: search_decomposition,
+                3_: result
+                ]}
+        ], descr2, , , goto_error)
+
+label(goto_answer)
+
+<span class="comment">/* remove question node from result */</span>
+callReturn([
+        1_: fixed_: set_rm_el,
+        2_: fixed_: {[
+                1_: result,
+                2_: question_node]}
+        ], descr2, , , goto_error)
+
+<span class="comment">/* make answer */</span>
+callReturn([
+        1_:     fixed_: answer_make,
+        2_:     fixed_: {[
+                1_: question_node,
+                2_: result]}
+        ], descr2, finish_op, , goto_error)
+        
+label(goto_error)
+        
+label(finish_op)
+
+return()
+end()
+</pre></div><dl class="attention"><dt><b>Внимание:</b></dt><dd>Не забудьте добавить все ключевые узлы, которые используются в gwf файлах в <b>include/_keynodes.scsy</b>. Это необходимо для корректной склейки элементов в БЗ. </dd></dl>
+</div>
+<!--- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+﻿<hr width="90%">
+<p align="center">Copyright &copy; 2010 by The OSTIS Team</p>
+<center>Generated: Sun Dec 26 01:00:13 2010</center>

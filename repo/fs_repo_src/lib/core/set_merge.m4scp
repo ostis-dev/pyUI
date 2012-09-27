@@ -1,0 +1,87 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+/////////////////////////////////////////////////////
+//        File: set_merge.m4scp
+// Description: File contains procedure to merge 
+//				two sets
+/////////////////////////////////////////////////////
+// 		Author: Denis Koronchik
+//        Date: 28.11.10
+
+#include "scp_keynodes.scsy"
+
+/* Procedure for merge set1 into set2
+*/
+procedure(set_merge,
+[[	// constants
+]],
+[{	// variables
+
+	// input
+	set1, set2,
+	// other
+	set, el, arc, segment
+	
+}],
+{[	// arguments
+	1_:	in_: set1,		//	first set to merge
+	2_: in_: set2		//  second set to merge (result)
+]}
+)
+
+/* need to set segment that contains result node as default to generate answer in it */
+sys_get_location([1_: fixed_: set2, 2_: assign_: segment])	
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+// copy elements from set1 for processing
+searchSetStr3([
+	1_: fixed_: set1,
+	2_: assign_: arc_: pos_: const_: arc,
+	3_: assign_: el,
+	set3_: assign_: set
+	], , , goto_error)
+
+label(process_set1)
+// iterate elements of set1 and append them into result set
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: assign_: el], , goto_finish, goto_error)
+	
+eraseEl([1_: fixed_: arc])
+	
+genElStr3([
+	1_:	fixed_: set2,
+	2_: assign_: const_: pos_: arc_: arc,
+	3_: fixed_: el], process_set1, , goto_error)
+	
+label(goto_error)
+//!	FIXME:	add error processing (grabage cleaning)
+
+label(goto_finish)
+
+eraseEl([1_: fixed_: set])
+
+return()
+end()

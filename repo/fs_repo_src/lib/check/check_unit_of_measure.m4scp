@@ -1,0 +1,124 @@
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "com_keynodes.scsy"
+#include "lib_search.scsy"
+
+procedure(check,
+[[
+	//  лючевой узел, обозначающий отношение "величина*"
+	nrel_value;
+	// ѕроцедура поиска начала бинарной пары
+	search_bin_pair_begin_proc;	
+]],
+[{
+	checkedValues, result, location, segments, checkedValue,
+	foundValue, unitOfMeasure, number, commonUnitOfMeasure,
+	arc, attributeArc
+}],
+{[
+	1_: in_: checkedValues,
+	2_: out_: result
+]}
+)
+// ѕолучение сегмента, в котором находитс€ узел множества провер€емых величин
+sys_get_location([
+	1_: fixed_: checkedValues,
+	2_: assign_: location
+])
+
+// ”становка найденного сегмента как основного
+sys_set_default_segment([
+	1_: fixed_: location
+])
+
+//–азворачивание установленного сегмента
+sys_spin_segment([
+	1_: fixed_: location,
+	2_: assign_: segments
+])
+
+// ѕросмотр провер€емых величин
+label(checkValuesView)
+	// Ќаходим очередную просматриваемую величину
+	searchElStr3([
+		1_: fixed_: checkedValues,
+		2_: assign_: arc_: const_: pos_: arc,
+		3_: assign_: node_: const_: checkedValue
+	], , positiveResult)
+	
+	// ”дал€ем дугу, котора€ идет к просматриваемой величине
+	eraseEl([
+		1_: fixed_: f_: arc
+	])
+	
+	// Ќаходим значение величины, просматриваемой в данный момент
+	callReturn([
+		1_: fixed_: search_bin_pair_begin_proc,
+		2_: fixed_: {[
+			1_: checkedValue,
+			2_: nrel_value,
+			3_: foundValue
+		]}
+	], , , checkValuesView)
+	
+	// ѕровер€ем найденное значение величины
+	ifVarAssign([
+		1_: foundValue
+	], , checkValuesView)
+		
+	// ѕровер€ем значение единицы измерени€ общей дл€ всех провер€емых величин
+	ifVarAssign([
+		1_: commonUnitOfMeasure
+	], not_assignUnitOfMeasure, assignUnitOfMeasure)
+	
+	// ѕолагаем, что единица измерени€ всех провер€емых величин - перва€ найденна€
+	label(assignUnitOfMeasure)
+	
+		// Ќаходим атрибут единиц измерени€
+		searchElStr5([
+			1_: fixed_: foundValue,
+			2_: assign_: arc_: const_: pos_: arc,
+			3_: assign_: node_: const_: number,
+			4_: assign_: arc_: const_: pos_: attributeArc,
+			5_: assign_: node_: const_: commonUnitOfMeasure
+		], checkValuesView, checkValuesView)
+	
+	// ѕровер€ем найденную единицу измерени€ с единицей измерени€ всех остальных
+	label(not_assignUnitOfMeasure)
+	
+		// Ќаходим атрибут единиц измерени€
+		searchElStr5([
+			1_: fixed_: foundValue,
+			2_: assign_: arc_: const_: pos_: arc,
+			3_: assign_: node_: const_: number,
+			4_: assign_: arc_: const_: pos_: attributeArc,
+			5_: assign_: node_: const_: unitOfMeasure
+		])
+				
+		// ѕровер€ем, что единицы измерени€ известны
+		ifVarAssign([
+			1_: unitOfMeasure
+		], , checkValuesView)
+		
+		// ѕровер€ем, что найденна€ единица
+		ifCoin([
+			1_: fixed_: commonUnitOfMeasure,
+			2_: fixed_: unitOfMeasure
+		], checkValuesView, negativeResult)
+	
+// ¬се единицы измерени€ одинаковы
+label(positiveResult)
+	// √енераци€ узла, который €вл€етс€ ответом
+	genEl([
+		1_: assign_: node_: const_: result
+	])
+// Ќе все единицы измерени€ одинаковы
+label(negativeResult)
+	
+// ќшибочна€ ситуаци€ в операции	
+label(goto_error)
+
+return()
+	
+end

@@ -1,0 +1,197 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: mark question.m4scp
+// Description: File contains procedures for marking
+//				questions
+/////////////////////////////////////////////////////
+// 		Author: Zhitko Vladimir
+//        Date: 21.02.11
+
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+procedure(as_active,
+[[	// constants
+	q_active;
+]],
+[{	// variables
+	// input
+	question_node,
+	// other
+	segment,
+	arc
+}],
+{[	// params
+	1_:	in_: question_node	// node that designate question
+]}
+)
+/* need to set segment that contains question node as default to generate question mark in it */
+sys_get_location([1_: fixed_: question_node, 2_: assign_: segment])
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+genElStr3([
+	1_: fixed_: q_active,
+	2_: assign_: arc_: pos_: const_: arc,
+	3_: fixed_: question_node
+	])
+	
+sys_close_segment([1_: fixed_: segment])
+
+return()
+end()
+
+procedure(as_successful,
+[[	// constants
+	q_succesful;
+]],
+[{	// variables
+	// input
+	question_node,
+	// other
+	segment,
+	arc
+}],
+{[	// params
+	1_:	in_: question_node	// node that designate question
+]}
+)
+/* need to set segment that contains question node as default to generate question mark in it */
+sys_get_location([1_: fixed_: question_node, 2_: assign_: segment])	
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+genElStr3([
+	1_: fixed_: q_successful,
+	2_: assign_: arc_: pos_: const_: arc,
+	3_: fixed_: question_node
+	])
+	
+sys_close_segment([1_: fixed_: segment])
+
+return()
+end()
+
+procedure(as_finished,
+[[	// constants
+	q_finished;
+]],
+[{	// variables
+	// input
+	question_node,
+	// other
+	segment,
+	arc
+}],
+{[	// params
+	1_:	in_: question_node	// node that designate question
+]}
+)
+/* need to set segment that contains question node as default to generate question mark in it */
+sys_get_location([1_: fixed_: question_node, 2_: assign_: segment])	
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+genElStr3([
+	1_: fixed_: q_finished,
+	2_: assign_: arc_: pos_: const_: arc,
+	3_: fixed_: question_node
+	])
+	
+sys_close_segment([1_: fixed_: segment])
+
+return()
+end()
+
+procedure(check_and_mark_as_finished,
+[[	// constants
+	q_active;
+	as_finished;
+]],
+[{	// variables
+	// input
+	question_node,
+	// other
+	segment,
+	arc
+}],
+{[	// params
+	1_:	in_: question_node	// node that designate question
+]}
+)
+searchElStr3([
+	1_: fixed_: q_active,
+	2_: assign_: arc_: pos_: arc,
+	3_: fixed_: question_node
+	],question_is_active)
+	
+callReturn([
+	1_: fixed_: as_finished,
+	2_: fixed_: {[
+		1_: question_node
+		]}
+	])
+
+label(question_is_active)
+	
+return()
+end()
+
+procedure(as_not_active,
+[[	// constants
+	q_active;
+	check_and_mark_as_finished;
+]],
+[{	// variables
+	// input
+	question_node,
+	// other
+	segment,
+	arc
+}],
+{[	// params
+	1_:	in_: question_node	// node that designate question
+]}
+)
+searchElStr3([
+	1_: fixed_: q_active,
+	2_: assign_: arc_: pos_: arc,
+	3_: fixed_: question_node
+	],question_is_active_2)
+	
+eraseEl([1_: fixed_: arc])
+	
+callReturn([
+	1_: fixed_: check_and_mark_as_finished,
+	2_: fixed_: {[
+		1_: question_node
+		]}
+	])
+
+label(question_is_active_2)
+	
+return()
+end()

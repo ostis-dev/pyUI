@@ -1,0 +1,231 @@
+#include "_keynodes.scsy"
+#include "nsm_keynodes.scsy"
+
+@undf -> _undef1, _undef2, _undef3, __undef1;
+@node -> _attr, _a, _b, _c, _d;
+
+nsm_command -> descr_nsm_cmd_sample -> nsm_command_: Descr_nsm_cmd_sample = {
+	class_: nsm_cmd_sample,
+	nsm_command_pattern_: [
+		a ->> "пример_" :: _undef1;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	трансляция 
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_translate_ru -> nsm_command_: Descr_nsm_cmd_translate_ru = {
+	class_: nsm_cmd_translate_ru,
+	nsm_command_pattern_: [
+		"/etc/com_keynodes/трансляция*" ->> {. 1_::a, 2_::_b .};
+		_b ->> _c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+//	синонимия 
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_syn -> nsm_command_: Descr_nsm_cmd_syn = {
+	class_: nsm_cmd_syn,
+	nsm_command_pattern_: [
+		"идентификация*" ->> {. 1_::_b, 2_::a .};
+		"синонимы*" ->> _b;
+		_b ->> _c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	подмножество 
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_subset -> nsm_command_: Descr_nsm_cmd_subset = {
+	class_: nsm_cmd_subset,
+	nsm_command_pattern_: [
+		"строгое включение*" ->> {. "надмножество_"::a, "подмножество_"::_b .};
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	надмножество 
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_superset -> nsm_command_: Descr_nsm_cmd_superset = {
+	class_: nsm_cmd_superset,
+	nsm_command_pattern_: [
+		"строгое включение*" ->> {. "надмножество_"::_b, "подмножество_"::a .};
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+//	отношения, области определения которых являются надмножеством описываемого множества и каждая связка которых связывает элементы описываемого множества между собой*
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl1 -> nsm_command_: Descr_nsm_cmd_dl1 = {
+	class_: nsm_cmd_dl1,
+	nsm_command_pattern_: [
+		"отношения, области определения которых являются надмножеством описываемого множества и каждая связка которых связывает элементы описываемого множества между собой*" ->> {. 1_::a, 2_::_b .};
+		_b ->> _c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	отношения, области определения которых являются надмножеством описываемого множества и связки которых, в общем случае, связывают элементы описываемого множества с другими объектами*
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl2 -> nsm_command_: Descr_nsm_cmd_dl2 = {
+	class_: nsm_cmd_dl2,
+	nsm_command_pattern_: [
+		"отношения, области определения которых являются надмножеством описываемого множества и связки которых, в общем случае, связывают элементы описываемого множества с другими объектами*" ->> {. 1_::a, 2_::_b .};
+		_b ->> _c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	отношения, области определения которых строго пересекаются с описываемым множеством*
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl3 -> nsm_command_: Descr_nsm_cmd_dl3 = {
+	class_: nsm_cmd_dl3,
+	nsm_command_pattern_: [
+		"отношения, области определения которых строго пересекаются с описываемым множеством*" ->> {. 1_::a, 2_::_b .};
+		_b ->> _c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	схема отношения*
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl4 -> nsm_command_: Descr_nsm_cmd_dl4 = {
+	class_: nsm_cmd_dl4,
+	nsm_command_pattern_: [
+		"схема отношения*" ->> {. 1_::a, 2_::_b .};
+		_b ->> _c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	область определения*
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl5 -> nsm_command_: Descr_nsm_cmd_dl5 = {
+	class_: nsm_cmd_dl5,
+	nsm_command_pattern_: [
+		"область определения*" ->> {. 1_::a, 2_::_b .};
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	домен*
+// 		"домен*" ->> {. 1_::a, 2_::_b .};
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl6 -> nsm_command_: Descr_nsm_cmd_dl6 = {
+	class_: nsm_cmd_dl6,
+	nsm_command_pattern_: [
+		"домен*" ->> _b;
+		_b ->>1_::a;
+		_b ->>2_::_c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	определение* 
+//	 "определение*" ->> {. 1_::a, 2_::_b .};
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl7 -> nsm_command_: Descr_nsm_cmd_dl7 = {
+	class_: nsm_cmd_dl7,
+	nsm_command_pattern_: [
+		"определение*" ->> _b;
+		_b ->>1_::a;
+		_b ->>2_::_c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	пояснение*
+//  "пояснение*" ->> {. 1_::a, 2_::_b .};
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl8 -> nsm_command_: Descr_nsm_cmd_dl8 = {
+	class_: nsm_cmd_dl8,
+	nsm_command_pattern_: [
+		"пояснение*" ->> {. 1_::_b, 2_::a .};
+		_b ->> _c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	используемые константы*
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl9 -> nsm_command_: Descr_nsm_cmd_dl9 = {
+	class_: nsm_cmd_dl9,
+	nsm_command_pattern_: [
+		"используемые константы*" ->> {. 1_::a, 2_::_b .};
+		_b ->> _c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	утверждение определяющего типа*
+// 	"утверждение определяющего типа*" ->> {. 1_::a, 2_::_b .};
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl10 -> nsm_command_: Descr_nsm_cmd_dl10 = {
+	class_: nsm_cmd_dl10,
+	nsm_command_pattern_: [
+		"утверждение определяющего типа*" ->> _b;
+		_b ->>1_::a;
+		_b ->>2_::_c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	утверждение об однозначном задании*
+// 	"утверждение об однозначном задании*" ->> {. 1_::a, 2_::_b .};
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl11 -> nsm_command_: Descr_nsm_cmd_dl11 = {
+	class_: nsm_cmd_dl11,
+	nsm_command_pattern_: [
+		"утверждение об однозначном задании*" ->> _b;
+		_b ->>1_::a;
+		_b ->>2_::_c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	утверждение*
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl12 -> nsm_command_: Descr_nsm_cmd_dl12 = {
+	class_: nsm_cmd_dl12,
+	nsm_command_pattern_: [
+		"утверждение*" ->> {. 1_::_b, 2_::a .};
+		_b ->> _c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	разбиение*
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl13 -> nsm_command_: Descr_nsm_cmd_dl13 = {
+	class_: nsm_cmd_dl13,
+	nsm_command_pattern_: [
+		"разбиение*" ->> {. 1_::_b, 2_::a .};
+		_b ->> _c;
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+
+//	иллюстрация*
+// 	"иллюстрация*" ->> {. 1_::_b, 2_::a .};
+///////////////////////////////////////////////////////////////////////////////////
+nsm_command -> descr_nsm_cmd_dl14 -> nsm_command_: Descr_nsm_cmd_dl14 = {
+	class_: nsm_cmd_dl14,
+	nsm_command_pattern_: [
+		"иллюстрация*" ->> _b;
+		_b ->>1_::a;
+		_b ->>2_::_c;
+		
+	],
+	nsm_command_elem_:  { 1_: a }
+};
+nsm_command -> descr_nsm_cmd_dl15 -> nsm_command_: Descr_nsm_cmd_dl15 = {
+	class_: nsm_cmd_dl15,
+	nsm_command_pattern_: [
+		//z ->> "пример_" :: _d;
+		z ->> _a;
+		"иллюстрация*" ->> _b;
+		_b ->>1_::_a;
+		_b ->>2_::_c;
+		
+	],
+	nsm_command_elem_:  { 1_: z }
+};

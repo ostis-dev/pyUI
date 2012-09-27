@@ -1,0 +1,148 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: search_node_theory.m4scp
+// Description: Файл содержит процедуру поиска
+//				элемента из мн-ва элемнтов, который является высказыванием из теории
+/////////////////////////////////////////////////////
+// 		Author: Startsev Sergei
+//        Date: 22.01.2011 
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+
+/*!
+	Поиск элемента из мн-ва элемнтов, который является высказыванием из теории
+	
+	@result	результирующее мн-во, которое представляет собой узел высказывание из теории
+*/
+
+procedure(search_node_theory_stat,
+[[	
+		
+	th=group_theory;		
+	
+	//#отладочная информация, закомментировать или убрать
+	find_th=/"\n\nI find theory!\n\n"/;
+	not_find_th=/"\n\nI don't find theory!\n\n"/;	
+	here=/"\n\nI have entered search_node_theory!!!\n\n"/;
+	exited=/"\n\nI have exited search_node_theory!!!\n\n"/;	
+]],
+[{	
+	arc,arc1,value,handler,element,seg,segments,temp,set,set2,theory,section,attr
+}],
+{[
+	//узел, к которому проведена дуга
+	1_: in_: value,
+	//результирующее мн-во, которое представляет собой узел теории
+	2_: out_: theory
+]}
+)
+sys_get_location([1_: value,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+printNl([1_: here])
+
+///////////////////////////////
+//пытаемся определить, где конкретная теория
+
+searchSetStr3([
+	1_: fixed_: value,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp,
+	set3_: assign_: set
+],,not_find_theory)
+
+label(next)
+///////////////////////////////
+//перебираем элементы
+ifVarAssign([1_: theory],,noerase)
+eraseElStr3([
+	1_: fixed_: set,
+	2_: assign_: f_: arc,
+	3_: fixed_: theory
+])
+label(noerase)
+
+searchElStr3([
+	1_: fixed_: set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: theory,
+],,not_find_theory)
+
+//ищем мн-ва, в которые входит конкретная теория
+searchSetStr3([
+	1_: assign_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: theory,
+	set1_: assign_: set2
+],,next)
+
+
+label(next2)
+///////////////////////////////
+//перебираем элементы
+//#section - раздел (например, Геометрия)
+ifVarAssign([1_: section],,noerase2)
+eraseElStr3([
+	1_: fixed_: set2,
+	2_: assign_: f_: arc,
+	3_: fixed_: section
+])
+label(noerase2)
+
+searchElStr3([
+	1_: fixed_: set2,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: section,
+],,next)
+
+searchElStr3([
+	1_: fixed_: th,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: section,
+],find_theory,next2)
+///////////////////////////////
+
+label(find_theory)
+///////////////////////////////
+//#нашли узел теории
+printNl([1_: find_th],exit,exit)
+///////////////////////////////
+
+label(not_find_theory)
+///////////////////////////////
+//#не нашли узел теории
+printNl([1_: not_find_th])
+eraseEl([1_: fixed_: theory])
+///////////////////////////////
+
+label(exit)
+
+printNl([1_: exited])
+return()
+end

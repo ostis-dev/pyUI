@@ -1,0 +1,863 @@
+
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_gen.scsy"
+#include "lib_answer.scsy"
+
+program(init_op,
+[[
+	// Ключевой узел, обозначающий инициированный вопрос
+	q_initiated;
+	// Событие, на которое реагирует обработчик(проведение выходящей дуги из узла)
+	catch_output_arc;
+]],
+[{
+}],
+{[
+]}
+)
+// Установка обработчика события на проведение дуги  из узла "инициированный вопрос" 
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: check_validity,
+	3_: fixed_: {1_: q_initiated}
+])
+return()
+end
+
+procedure(check_validity,
+[[
+	// Ключевой узел, обозначающий запрос
+	q_statement_validity;
+	// Ключевой узел, обозначающий отношение импликации
+	nrel_impl;
+	// Ключевой узел, обозначающий отношение эквиваленции
+	nrel_eq;
+	
+	// Ключевой узел, обозначающий теорию
+	group_theory;
+	
+	// Атрибут присутствия ответа
+	rrel_answer_is_present;
+	// Атрибут отсутствия ответа в явном виде
+	rrel_answer_is_absent_at_evident_view;
+	// Операция генерации шаблона для контура
+	gen_meta_atom;
+	
+	// Процедура для генерации ответа
+	answer_make;
+	
+	here=/"I have entered CHECK VALIDITY"/;
+	last=/"I have exited CHECK VALIDITY"/;
+]],
+[{
+	handler, element,
+	arcFromRequest, arcFromQuestion, 
+	location, segments,
+	statementLink, statements, 
+	statementLinkVar, questionLink,
+	statement1, statement2,
+	arcVar, nodeVar, arcVar1,
+	attribute1, attribute2,
+	template1Copy, template2Copy,
+	arcToLink, arcToStatement1, arcToStatement2, arcToElement,
+	logicalRelation, pattern,
+	template1, template2,
+	concreteTheory, answer
+	
+}],
+{[
+	1_: in_: handler, 
+	2_: in_: element, 
+	3_: in_: arcFromQuestion, 
+	4_: in_: questionLink
+]}
+)
+printNl([1_: here])
+// Получение сегмента, в котором находится связка вопроса
+sys_get_location([
+	1_: fixed_: questionLink,
+	2_: assign_: location
+])
+
+// Установка найденного сегмента как основного
+sys_set_default_segment([
+	1_: fixed_: location
+])
+
+//# Разворачивание установленного сегмента
+sys_spin_segment([
+	1_: fixed_: location,
+	2_: assign_: segments
+])
+
+// Проверяем, что в узел запроса проведена дуга из узла "запрос истинности"
+searchElStr3([
+	1_: fixed_: q_statement_validity,
+	2_: assign_: const_: pos_: arc_: arcFromRequest,
+	3_: fixed_: questionLink
+], , exit)
+
+// Поиск связки логического утверждения, к которому проведен запрос с атрибутом "присутствует ответ_"
+// Если такой атрибут есть, то работа программы прекращается
+searchElStr5([
+	1_: fixed_: q_statement_validity,
+	2_: fixed_: arcFromRequest,
+	3_: fixed_: questionLink,
+	4_: assign_: arc_: const_: pos_: arcVar,
+	5_: fixed_: rrel_answer_is_present
+], exit)
+
+// Поиск связки логического утверждения, к которому проведен запрос с атрибутом "ответ отсутствует в явном виде_"
+// Если такой атрибут есть, то работа программы прекращается
+searchElStr5([
+	1_: fixed_: q_statement_validity,
+	2_: fixed_: arcFromRequest,
+	3_: fixed_: questionLink,
+	4_: assign_: arc_: const_: arcVar,
+	5_: fixed_: rrel_answer_is_absent_at_evident_view
+], exit)
+
+// Поиск узла, являющегося связкой логического утверждения
+searchElStr3([
+	1_: fixed_: questionLink,
+	2_: assign_: arc_: const_: pos_: arcVar,
+	3_: assign_: node_: const_: statementLink
+], , exit)
+
+
+// Устанавливаем факт того, что это высказывание об импликации
+// Если это высказывание не об импликации, то переходим к соответствующей части программы
+searchElStr3([
+	1_: fixed_: nrel_impl,
+	2_: assign_: pos_: actual_: arc_: arcVar,
+	3_: fixed_: statementLink
+], implication_label, another_logical_operation_label)
+
+// Случай неимпликативного высказывания
+label(another_logical_operation_label)
+
+	// Ищем части высказывания (правую и левую часть)
+	// Подразумевается, что высказывание состоит ровно из двух частей
+	searchSetStr3([
+		1_: fixed_: statementLink,
+		2_: assign_: pos_: actual_: arc_: arcVar,
+		3_: assign_: pos_: const_: node_: nodeVar,
+		set3_: assign_: const_: node_: statements
+	])
+	
+	// Находим первую часть высказывания. 
+	// Поскольку высказывание не импликативное, то не важно, какую именно
+	searchElStr3([
+		1_: fixed_: statements,
+		2_: assign_: pos_: actual_: arc_: arcVar,
+		3_: assign_: const_: node_: statement1
+	])
+	
+	// Удаляем дугу из множества частей высказывания к первой части высказывания
+	eraseEl([
+		1_: fixed_: arcVar
+	])
+	
+	// Находим вторую часть высказывания. 
+	searchElStr3([
+		1_: fixed_: statements,
+		2_: assign_: pos_: actual_: arc_: arcVar,
+		3_: assign_: const_: node_: statement2
+	])
+	
+	// Удаляем дугу от множества частей высказывания ко второй части
+	eraseEl([
+		1_: fixed_: arcVar
+	])
+	
+	// Удаляем множество частей высказывания
+	eraseEl([
+		1_: fixed_: statements
+	])
+	
+	// Генерируем шаблон для поиска первой части высказывания (контура)
+	callReturn([
+		1_: fixed_: gen_meta_atom,
+	    2_: fixed_:
+		{[
+			1_: fixed_: statement1,
+			2_: assign_: template1
+		]}
+	])
+	
+	// Генерируем шаблон для поиска второй части высказывания (контура)
+	callReturn([
+		1_: fixed_: gen_meta_atom,
+	    2_: fixed_:
+		{[
+			1_: fixed_: statement2,
+			2_: assign_: template2
+		]}
+	])
+	
+	// Ищем логическое отношение, которое задает данное утверждение
+	searchElStr3([
+		1_: fixed_: nrel_eq,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: fixed_: statementLink
+	], , exit)
+
+	// Создаем шаблон для поиска утверждения
+	genEl([
+		1_: assign_: node_: pattern
+	])
+	
+	// Заносим в шаблон множество всех теорий
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: fixed_: group_theory
+	])
+	
+	// Генерируем узел конкретной теории и переменную дугу к нему	
+	genElStr3([
+		1_: fixed_: group_theory,
+		2_: assign_: pos_: arc_: var_: arcVar1,
+		3_: assign_: node_: var_: concreteTheory
+	])
+	
+	// Заносим в шаблон дугу от узла все теорий к конкретной теории
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: fixed_: arcVar1
+	])
+	
+	// Заносим в шаблон узел конкретной теории
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: fixed_: concreteTheory
+	])
+	
+	// Генерируем дугу от конкретной теории к высказыванию
+	genElStr3([
+		1_: fixed_: concreteTheory,
+		2_: assign_: pos_: arc_: var_: arcVar1,
+		3_: fixed_: statementLink
+	])
+	
+	// Заносим в шаблон дугу от конкретной теории к высказыванию
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: fixed_: arcVar1
+	])
+	
+	// Заносим в шаблон связку отношения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: assign_: var_: node_: statementLinkVar
+	])
+	
+	// Создаем  переменную дугу от отношения к связке 
+	genElStr3([
+		1_: fixed_: nrel_eq,
+		2_: assign_: pos_: actual_: arc_: var_: arcToLink,
+		3_: fixed_: statementLinkVar
+	])
+	
+	// Заносим в шаблон логическое отношение
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: nrel_eq
+	])
+	
+	// Заносим в шаблон дугу между отношением и связкой отношения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: arcToLink
+	])
+	
+	// Генерируем переменную дугу от связки к первой части логического утверждения
+	genElStr3([
+		1_: fixed_: statementLinkVar,
+		2_: assign_: pos_: actual_: arc_: var_: arcToStatement1,
+		3_: fixed_: template1
+	])
+	
+	// Генерируем переменную дугу от связки ко второй части логического утверждения
+	genElStr3([
+		1_: fixed_: statementLinkVar,
+		2_: assign_: pos_: actual_: arc_: var_: arcToStatement2,
+		3_: fixed_: template2
+	])
+	
+	// Заносим в шаблон дугу, идущую от связки отношения к первой части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: arcToStatement1
+	])
+	
+	// Заносим в шаблон дугу, идущую от связки отношения ко второй части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: arcToStatement2
+	])
+	
+	// Заносим в шаблон множество, содержащее шаблон для первой части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: template1
+	])
+	
+	// Заносим в шаблон множество, содержащее шаблон для второй части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: template2
+	])	
+	
+	// Делаем копию множества, содержащегося в шаблоне первой части высказывания
+	searchSetStr3([
+		1_: fixed_: template1,
+		2_: assign_: pos_: actual_: arc_: var_: arcVar,
+		3_: assign_: pos_: nodeVar,
+		set3_: assign_: node_: template1Copy
+	])
+	
+	// Цикл для обработки элементов шаблона для первой части логического высказывания
+	label(firstTemplateElementsBegin)
+	
+		// Если еще остались элементы, то обрабатываем их.
+		// Если нет, то прекращаем их обработку и переходим к концу цикла.
+		searchElStr3([
+			1_: fixed_: template1Copy,
+			2_: assign_: pos_: actual_: arc_: arcVar,
+			3_: assign_: pos_: nodeVar
+		], , firstTemplateElementsEnd)
+		
+		// Удаляем дугу к найденному элементу логического высказывания
+		eraseEl([
+			1_: fixed_: arcVar
+		])
+		
+		// Находим дугу от узла шаблона до найденного элемента
+		searchElStr3([
+			1_: fixed_: template1,
+			2_: assign_: pos_: actual_: arc_: arcToElement,
+			3_: fixed_: nodeVar
+		])
+		
+		// Заносим в шаблон элемент логического утверждения
+		genElStr3([
+			1_: fixed_: pattern,
+			2_: assign_: pos_: actual_: arc_: const_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+		// Заносим в шаблон дугу к элементу логического утверждения
+		genElStr3([
+			1_: fixed_: pattern,
+			2_: assign_: pos_: actual_: arc_: const_: arcVar,
+			3_: fixed_: arcToElement
+		])
+		
+		// Возвращаемся в начало цикла
+		nop(firstTemplateElementsBegin)
+	
+	// Конец цикла
+	label(firstTemplateElementsEnd)
+	
+	// Делаем копию множества, содержащегося в шаблоне второй части высказывания
+	searchSetStr3([
+		1_: fixed_: template2,
+		2_: assign_: pos_: actual_: arc_: arcVar,
+		3_: assign_: pos_: nodeVar,
+		set3_: assign_: node_: template2Copy
+	])
+	
+	// Цикл для обработки элементов шаблона для первой части логического высказывания
+	label(secondTemplateElementsBegin)
+
+		// Если еще остались элементы, то обрабатываем их.
+		// Если нет, то прекращаем их обработку и переходим к концу цикла.
+		searchElStr3([
+			1_: fixed_: template2Copy,
+			2_: assign_: pos_: actual_: arc_: arcVar,
+			3_: assign_: pos_: nodeVar
+		], , secondTemplateElementsEnd)
+		
+		// Удаляем дугу к найденному элементу логического высказывания
+		eraseEl([
+			1_: fixed_: arcVar
+		])
+		
+		// Находим дугу от узла шаблона до найденного элемента
+		searchElStr3([
+			1_: fixed_: template2,
+			2_: assign_: pos_: actual_: arc_: arcToElement,
+			3_: fixed_: nodeVar
+		])
+		
+		// Заносим в шаблон элемент логического утверждения
+		genElStr3([
+			1_: fixed_: pattern,
+			2_: assign_: pos_: actual_: arc_: const_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+		// Заносим в шаблон дугу к элементу логического утверждения
+		genElStr3([
+			1_: fixed_: pattern,
+			2_: assign_: pos_: actual_: arc_: const_: arcVar,
+			3_: fixed_: arcToElement
+		])
+		
+		// Возвращаемся в начало цикла
+		nop(secondTemplateElementsBegin)
+	
+	// Конец цикла
+	label(secondTemplateElementsEnd)
+	
+	// Поиск по шаблону неимпликативного высказывания
+	sys_search([
+		1_: pattern
+	], another_logical_statement_success_label, another_logical_statement_not_success_label)
+	
+// Случай импликативного высказывания	
+label(implication_label)
+
+	// Ищем часть высказывания об имликации (часть "если")
+	searchElStr5([
+		1_: fixed_: statementLink,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: assign_: node_: statement1,
+		4_: assign_: pos_: arc_: const_: arcVar1,
+		5_: fixed_: 1_
+	])
+	
+	// Ищем часть высказывания об имликации (часть "то")
+	searchElStr5([
+		1_: fixed_: statementLink,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: assign_: node_: statement2,
+		4_: assign_: pos_: arc_: const_: arcVar1,
+		5_: fixed_: 2_
+	])
+	
+	// Генерируем шаблон для поиска первой части импликации (контура)
+	callReturn([
+		1_: fixed_: gen_meta_atom,
+	    2_: fixed_:
+		{[
+			1_: fixed_: statement1,
+			2_: assign_: template1
+		]}
+	])
+	
+	// Генерируем шаблон для поиска второй части импликации (контура)
+	callReturn([
+		1_: fixed_: gen_meta_atom,
+	    2_: fixed_:
+		{[
+			1_: fixed_: statement2,
+			2_: assign_: template2
+		]}
+	])
+	
+	// Создаем шаблон для поиска утверждения
+	genEl([
+		1_: assign_: node_: pattern
+	])
+	
+	// Заносим в шаблон множество всех теорий
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: fixed_: group_theory
+	])
+	
+	// Генерируем узел конкретной теории и переменную дугу к нему	
+	genElStr3([
+		1_: fixed_: group_theory,
+		2_: assign_: pos_: arc_: var_: arcVar1,
+		3_: assign_: node_: var_: concreteTheory
+	])
+	
+	// Заносим в шаблон дугу от узла все теорий к конкретной теории
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: fixed_: arcVar1
+	])
+	
+	// Заносим в шаблон узел конкретной теории
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: fixed_: concreteTheory
+	])
+	
+	// Генерируем дугу от конкретной теории к высказыванию
+	genElStr3([
+		1_: fixed_: concreteTheory,
+		2_: assign_: pos_: arc_: var_: arcVar1,
+		3_: fixed_: statementLink
+	])
+	
+	// Заносим в шаблон дугу от конкретной теории к высказыванию
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: fixed_: arcVar1
+	])
+	
+	// Заносим в шаблон связку отношения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: arc_: const_: arcVar,
+		3_: assign_: var_: node_: statementLinkVar
+	])
+	
+	// Создаем  переменную дугу от отношения к связке 
+	genElStr3([
+		1_: fixed_: nrel_impl,
+		2_: assign_: pos_: actual_: arc_: var_: arcToLink,
+		3_: fixed_: statementLinkVar
+	])
+	
+	// Заносим в шаблон логическое отношение
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: nrel_impl
+	])
+	
+	// Заносим в шаблон дугу между отношением и связкой отношения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: arcToLink
+	])
+	
+	// Генерируем переменную дугу от связки к первой части логического утверждения
+	genElStr5([
+		1_: fixed_: statementLinkVar,
+		2_: assign_: pos_: actual_: arc_: var_: arcToStatement1,
+		3_: fixed_: template1,
+		4_: assign_: pos_: actual_: arc_: var_: attribute1,
+		5_: fixed_: 1_
+	])
+	
+	// Генерируем переменную дугу от связки ко второй части логического утверждения
+	genElStr5([
+		1_: fixed_: statementLinkVar,
+		2_: assign_: pos_: actual_: arc_: var_: arcToStatement2,
+		3_: fixed_: template2,
+		4_: assign_: pos_: actual_: arc_: var_: attribute2,
+		5_: fixed_: 2_
+	])
+	
+	// Заносим в шаблон дугу, идущую от связки отношения к первой части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: arcToStatement1
+	])
+	
+	// Заносим в шаблон дугу, идущую от связки отношения ко второй части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: arcToStatement2
+	])
+	
+	// Заносим в шаблон множество, содержащее шаблон для первой части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: template1
+	])
+	
+	// Заносим в шаблон множество, содержащее шаблон для второй части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: template2
+	])
+
+	// Заносим в шаблон дугу, идущую от связки отношения к первой части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: attribute1
+	])
+	
+	// Заносим в шаблон дугу, идущую от связки отношения ко второй части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: attribute2
+	])
+	
+	// Заносим в шаблон дугу, идущую от связки отношения к первой части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: 1_
+	])
+	
+	// Заносим в шаблон дугу, идущую от связки отношения ко второй части логического утверждения
+	genElStr3([
+		1_: fixed_: pattern,
+		2_: assign_: pos_: actual_: arc_: const_: arcVar,
+		3_: fixed_: 2_
+	])
+	
+	// Делаем копию множества, содержащегося в шаблоне первой части высказывания об импликации
+	searchSetStr3([
+		1_: fixed_: template1,
+		2_: assign_: pos_: actual_: arc_: var_: arcVar,
+		3_: assign_: pos_: nodeVar,
+		set3_: assign_: pos_: template1Copy
+	])
+	
+	// Цикл для обработки элементов шаблона для первой части логического высказывания об импликации
+	label(firstTemplateElementsBegin)
+	
+		// Если еще остались элементы, то обрабатываем их.
+		// Если нет, то прекращаем их обработку и переходим к концу цикла.
+		searchElStr3([
+			1_: fixed_: template1Copy,
+			2_: assign_: pos_: actual_: arc_: arcVar,
+			3_: assign_: pos_: nodeVar
+		], , firstTemplateElementsEnd)
+		
+		// Удаляем дугу к найденному элементу логического высказывания
+		eraseEl([
+			1_: fixed_: arcVar
+		])
+		
+		// Находим дугу от узла шаблона до найденного элемента
+		searchElStr3([
+			1_: fixed_: template1,
+			2_: assign_: pos_: actual_: arc_: arcToElement,
+			3_: fixed_: nodeVar
+		])
+		
+		// Заносим в шаблон элемент логического утверждения
+		genElStr3([
+			1_: fixed_: pattern,
+			2_: assign_: pos_: actual_: arc_: const_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+		// Заносим в шаблон дугу к элементу логического утверждения
+		genElStr3([
+			1_: fixed_: pattern,
+			2_: assign_: pos_: actual_: arc_: const_: arcVar,
+			3_: fixed_: arcToElement
+		])
+		
+		// Возвращаемся в начало цикла
+		nop(firstTemplateElementsBegin)
+	
+	// Конец цикла
+	label(firstTemplateElementsEnd)
+	
+	// Делаем копию множества, содержащегося в шаблоне второй части высказывания об импликации
+	searchSetStr3([
+		1_: fixed_: template2,
+		2_: assign_: pos_: actual_: arc_: arcVar,
+		3_: assign_: pos_: nodeVar,
+		set3_: assign_: pos_: template2Copy
+	])
+	
+	// Цикл для обработки элементов шаблона для второй части логического высказывания об импликации
+	label(secondTemplateElementsBegin)
+	
+		// Если еще остались элементы, то обрабатываем их.
+		// Если нет, то прекращаем их обработку и переходим к концу цикла.
+		searchElStr3([
+			1_: fixed_: template2Copy,
+			2_: assign_: pos_: actual_: arc_: arcVar,
+			3_: assign_: pos_: nodeVar
+		], , secondTemplateElementsEnd)
+		
+		// Удаляем дугу к найденному элементу логического высказывания
+		eraseEl([
+			1_: fixed_: arcVar
+		])
+		
+		// Находим дугу от узла шаблона до найденного элемента
+		searchElStr3([
+			1_: fixed_: template2,
+			2_: assign_: pos_: actual_: arc_: arcToElement,
+			3_: fixed_: nodeVar
+		])
+		
+		// Заносим в шаблон элемент логического утверждения
+		genElStr3([
+			1_: fixed_: pattern,
+			2_: assign_: pos_: actual_: arc_: const_: arcVar,
+			3_: fixed_: nodeVar
+		])
+		
+		// Заносим в шаблон дугу к элементу логического утверждения
+		genElStr3([
+			1_: fixed_: pattern,
+			2_: assign_: pos_: actual_: arc_: const_: arcVar,
+			3_: fixed_: arcToElement
+		])
+		
+		// Возвращаемся в начало цикла
+		nop(secondTemplateElementsBegin)
+	
+	// Конец цикла
+	label(secondTemplateElementsEnd)
+	
+	// Поиск по шаблону импликативного высказывания
+	sys_search([
+		1_: pattern
+	], another_logical_statement_success_label, another_logical_statement_not_success_label)
+
+// Случай когда логическое высказывание найдено в базе знаний
+label(another_logical_statement_success_label)
+
+	// Генерируем конструкцию с атрибутом "присутствует ответ_"
+	genElStr5([
+		1_: fixed_: q_statement_validity,
+		2_: fixed_: arcFromRequest,
+		3_: fixed_: questionLink,
+		4_: assign_: pos_: arc_: const_: arcVar1,
+		5_: fixed_: rrel_answer_is_present
+	])
+	
+	// Генерируем узел для вывода ответа
+	genEl([
+		1_: assign_: const_: node_: answer
+	])
+		
+	// Добавляем в ответ узел запроса истинности
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: q_statement_validity
+	])
+	
+	// Добавляем в ответ дугу из узла запроса истинности
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: arcFromRequest
+	])
+	
+	// Добавляем в ответ связку запроса истинности
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: questionLink
+	])
+	
+	// Добавляем в ответ узел "присутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: rrel_answer_is_present
+	])
+	
+	// Добавляем в ответ дугу из узла "присутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: arcVar1
+	])
+	
+	// Генерация ответа операции
+	callReturn([
+		1_:	fixed_: answer_make,
+		2_:	fixed_: {[
+			1_: statementLink,
+			2_: answer
+		]}
+	], exit, exit)
+	
+// Случай когда логическое высказывание не найдено в базе знаний
+label(another_logical_statement_not_success_label)
+	
+	// Генерируем конструкцию с атрибутом "ответ отсутствует в явном виде_"
+	genElStr5([
+		1_: fixed_: q_statement_validity,
+		2_: fixed_: arcFromRequest,
+		3_: fixed_: questionLink,
+		4_: assign_: pos_: arc_: const_: arcVar1,
+		5_: fixed_: rrel_answer_is_absent_at_evident_view
+	])
+	
+	genElStr3([
+		1_: fixed_: q_initiated,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: questionLink
+	])
+	
+	// Генерируем узел для вывода ответа
+	genEl([
+		1_: assign_: const_: node_: answer
+	])
+		
+	// Добавляем в ответ узел запроса истинности
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: q_statement_validity
+	])
+	
+	// Добавляем в ответ дугу из узла запроса истинности
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: arcFromRequest
+	])
+	
+	// Добавляем в ответ связку запроса истинности
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: questionLink
+	])
+	
+	// Добавляем в ответ узел "присутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: rrel_answer_is_absent_at_evident_view
+	])
+	
+	// Добавляем в ответ дугу из узла "присутствует ответ_"
+	genElStr3([
+		1_: fixed_: answer,
+		2_: assign_: const_: pos_: arc_: arcVar,
+		3_: fixed_: arcVar1
+	])
+	
+	// Генерация ответа операции
+	callReturn([
+		1_:	fixed_: answer_make,
+		2_:	fixed_: {[
+			1_: questionLink,
+			2_: answer
+		]}
+	])
+
+// Завершение программы, когда запрос содержит атрибуты
+label(exit)
+printNl([1_: last])
+
+return()
+	
+end

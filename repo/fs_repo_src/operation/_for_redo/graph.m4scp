@@ -1,0 +1,356 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+///////////////////////////////////////////////////////////////////////////////
+//	way - процедура нахождения минимального пути в графе от одного элемента до всех остальных методом поиска в ширину
+//	waytest - вызывает way, на входе принимает сырую конструкцию из ТМа.
+//	
+//
+#include "scp_keynodes.scsy"
+//#include "../seb/planimetry.scsy"
+//#include "meta_info.scsy"
+
+
+procedure(waytest,
+[[
+	sheet_title =c= /"Shortest way"/;
+	layout =c= /"logical"/;
+	start_msg      = /"...waytest begin...\n"/;
+	end_msg	       = /"...waytest end...\n"/;  
+	SCsSheet = "/proc/agents/shell/keynode/SCgSheet";
+	countway = "/operation/graph/way";
+	start = "начальная точка";
+	stop = "конечная точка";
+]],
+
+[{
+	terms,
+	termin_in,
+	arc,
+	input,
+	descr,
+	sheet, graph, src, dest,e1,e2, result,
+	graph_nodes
+}],
+{[
+	1_: in_: termin_in
+]}
+)
+
+searchElStr3([1_: fixed_: termin_in, 2_: assign_: e1, 3_: assign_: graph], , end1)
+//узлы должны быть не системынми, относиться только к заданному графу
+selectYStr3([
+	1_: fixed_: graph,
+	2_: assign_: e1,
+	3_: assign_: e2,
+	set3_: fixed_: start
+],,,)
+searchElStr3([1_: fixed_: start, 2_: assign_: e1, 3_: assign_: src], , end_waytest)
+
+selectYStr3([
+	1_: fixed_: graph,
+	2_: assign_: e1,
+	3_: assign_: e2,
+	set3_: fixed_: stop
+],,,)
+searchElStr3([1_: fixed_: stop, 2_: assign_: e1, 3_: assign_: dest], , end_waytest)
+
+genEl([1_: node_: const_: graph_nodes])
+
+// подчистим кратные дуги в графе
+label(begClean)
+searchElStr3([1_: fixed_: graph, 2_: assign_: e1, 3_: assign_: node_: const_: e2], , endClean)
+
+label(killArcs)
+searchElStr3([1_: fixed_: graph, 2_: assign_: e1, 3_: fixed_: e2], , endKillArcs)
+eraseEl([1_: fixed_: e1 ], killArcs,)
+label(endKillArcs)
+
+genElStr3([1_: fixed_: graph_nodes, 2_: assign_: e1, 3_: fixed_: e2])
+
+nop(begClean)
+label(endClean)
+
+
+genEl([1_: node_: const_: result])
+callReturn([1_: fixed_: countway,
+            2_: fixed_: {[1_: src, 2_: dest, 3_: graph_nodes, 4_: result]}
+           ])
+
+
+ui_sheet_create([ 1_:  assign_: sheet,
+	          2_:  fixed_: SCsSheet,
+	          3_:  fixed_: sheet_title,
+	          4_:  fixed_: layout
+	          ])
+
+ui_output([1_: fixed_: sheet, 2_: fixed_: result])
+label(end_waytest)
+return()
+end
+
+
+
+
+procedure(way,
+[[	
+	rel; attr;
+	unlim	=n=10000;
+	0	=n=0;
+	1	=n=1;
+
+	seb_segment = "/seb/META/planimetry";
+	graph_node;
+	min_way;
+	prev_node;
+	queue_next;
+	addInOutExt = "/operation/searchEnvironmentSmart/addInOutExt";
+	mnozh_append = "/operation/lib/mnozh_append";
+	tuple, attr, struct, family, rel;
+]],
+[{
+	node_info,queue,graph_nodes,
+	e1,e2,temp,while_arc,curnode,curinfo,curway,
+	src_node,src_info,dest_node,
+	sosedi,sosed_node,sosed_way,inc_curway,diff,sosed_info,
+	dest_info, result, sheet, segment,
+	path,cur_node,cur_prev_node,cur_info,dest_way,
+	queue_start,queue_cur,queue_nextc,queue_end,queue_temp,queue_last,
+	descr,inc2_curway
+}],
+{[
+	1_: in_: src_node,
+	2_: in_: dest_node,
+	3_: in_: graph_nodes,
+	4_: in_: out_: result
+]}
+)
+
+genEl([1_: node_: const_: node_info])
+
+genEl([1_: node_: const_: queue])
+genEl([1_: node_: const_: queue_start])
+genEl([1_: node_: const_: queue_end])
+
+genElStr3([1_: fixed_: node_info, 2_: assign_: e1, 3_: assign_: src_info])
+genElStr5([1_: fixed_: src_info, 2_: assign_: e1, 3_: fixed_: src_node, 4_: assign_: e2, 5_: fixed_: graph_node])
+genElStr5([1_: fixed_: src_info, 2_: assign_: e1, 3_: assign_: node_:const_: curway, 4_: assign_: e2, 5_: fixed_: min_way])
+add([1_: fixed_: curway, 2_: fixed_: 0, 3_: fixed_: 0])
+
+genElStr3([1_: fixed_: node_info, 2_: assign_: e1, 3_: assign_: dest_info])
+genElStr5([1_: fixed_: dest_info, 2_: assign_: e1, 3_: fixed_: dest_node, 4_: assign_: e2, 5_: fixed_: graph_node])
+genElStr5([1_: fixed_: dest_info, 2_: assign_: e1, 3_: assign_: node_:const_: dest_way, 4_: assign_: e2, 5_: fixed_: min_way])
+add([1_: fixed_: dest_way, 2_: fixed_: unlim, 3_: fixed_: 0])
+//13
+
+//добавить src_info  в очередь
+genElStr3([1_: fixed_: queue, 2_: assign_: e1, 3_: fixed_: src_info])
+//сгенерить новый узел очереди
+genEl([1_: node_: const_: queue_temp])
+//связать его с узлом графа
+genElStr3([1_: fixed_: queue_temp, 2_: assign_: e1, 3_: fixed_: src_info])
+//поставить на него указатель начала очереди
+genElStr3([1_: fixed_: queue_start, 2_: assign_: e1, 3_: fixed_: queue_temp])
+//поставить на него указатель конца очереди
+genElStr3([1_: fixed_: queue_end, 2_: assign_: e1, 3_: fixed_: queue_temp])
+//21
+
+
+//main cycle, поиск в ширину пути от src_node до dest_node
+/////////////
+//cycle begins
+label(mainstart)
+//берем узел из очереди
+searchElStr3([1_: fixed_: queue_start, 2_: assign_: while_arc, 3_: assign_: queue_cur], , mainend)
+eraseEl([1_: fixed_: while_arc ], ,)
+//ищем следующий узел в очереди
+searchElStr5([1_: fixed_: queue_cur, 2_: assign_: e1, 3_: assign_: queue_nextc, 4_: assign_: e2, 5_: fixed_: queue_next], ,skipNextq)
+//если нашли, то пеерставляем указатель начала очереди, удаляем ненужные дуги
+eraseEl([1_: fixed_: e2 ], ,)
+eraseEl([1_: fixed_: e1 ], ,)
+genElStr3([1_: fixed_: queue_start, 2_: assign_: e1, 3_: fixed_: queue_nextc])
+label(skipNextq)
+//берем узел info, удаляем ненужный узел очереди и дугу из него
+searchElStr3([1_: fixed_: queue_cur, 2_: assign_: while_arc, 3_: assign_: curinfo], , mainend)
+eraseEl([1_: fixed_: while_arc ], ,)
+eraseEl([1_: fixed_: queue_cur ], ,)
+//удаляем из списка узлов в очереди текущий узел графа
+searchElStr3([1_: fixed_: queue, 2_: assign_: e1, 3_: fixed_: curinfo], , mainend)
+eraseEl([1_: fixed_: e1 ], ,)
+//32
+
+searchElStr5([1_: fixed_: curinfo, 2_: assign_: e1, 3_: assign_: curnode, 4_: assign_: e2, 5_: fixed_: graph_node], ,end_program)
+searchElStr5([1_: fixed_: curinfo, 2_: assign_: e1, 3_: assign_: curway, 4_: assign_: e2, 5_: fixed_: min_way], ,end_program)
+
+add([1_:assign_: inc_curway, 2_: fixed_: 1, 3_: fixed_: curway])
+add([1_:assign_: inc2_curway, 2_: fixed_: 1, 3_: fixed_: inc_curway])
+ifGr([1_: fixed_: inc2_curway, 2_: fixed_: dest_way], mainstart, ,)
+
+searchSetStr3([1_: fixed_: curnode, 2_:	assign_: e1, 3_:	assign_: const_: e2, set3_: assign_: sosedi], L1, )
+searchSetStr3([1_: assign_: const_: e1, 2_:	assign_: e2, 3_:	fixed_: curnode, set1_: assign_: sosedi], , )
+nop(L2)
+label(L1)
+searchSetStr3([1_: assign_: const_: e1, 2_:	assign_: e2, 3_:	fixed_: curnode, set1_: fixed_: sosedi], , )
+label(L2)
+
+//узлы должен быть не системынми, относиться только к заданному графу
+//41
+
+//обходим все входящие и выходящие дуги из текущего узла
+/////////////
+//cycle begins
+label(sosedistart)
+	searchElStr3([1_: fixed_: sosedi, 2_: assign_: e1, 3_: assign_: sosed_node], , sosediend)
+	eraseEl([1_: fixed_: e1 ], ,)
+	//сосед не должен быть attr, rel
+	searchElStr3([1_: fixed_: rel,	2_:	assign_: e1,	3_: fixed_: sosed_node], sosedistart, )
+	searchElStr3([1_: fixed_: attr,	2_:	assign_: e1,	3_: fixed_: sosed_node], sosedistart, )
+	//идем только по связкам - или сосед или текущий узел должен быть туплом
+	searchElStr3([1_: fixed_: tuple,	2_:	assign_: e1,	3_: fixed_: curnode], tupleFilterOk, )
+	searchElStr3([1_: fixed_: tuple,	2_:	assign_: e1,	3_: fixed_: sosed_node], , sosedistart)
+	label(tupleFilterOk)
+	/*
+	if (isset(sosed->min_way))
+	{
+		if (curway+1 < sosed->min_way && curway+1 < dest_way )
+		{
+			sosed->min_way = curway+1;
+			add_to_queue(sosed);
+		}
+	}
+	else
+	{
+		sosed->min_way = curway+1;
+		add_to_queue(sosed);
+	}
+	*/
+	
+	//get sosed_info
+	searchElStr5([1_: assign_: sosed_info, 2_: assign_: e1, 3_: fixed_: sosed_node, 4_: assign_: e2, 5_: fixed_: graph_node], gotSosedinfo,)
+	//if not found, gen sosed_info
+	genElStr3([1_: fixed_: node_info, 2_: assign_: e1, 3_: assign_: sosed_info])
+	genElStr5([1_: fixed_: sosed_info, 2_: assign_: e1, 3_: fixed_: sosed_node, 4_: assign_: e2, 5_: fixed_: graph_node])
+	genElStr5([1_: fixed_: sosed_info, 2_: assign_: e1, 3_: assign_: node_:const_: sosed_way, 4_: assign_: e2, 5_: fixed_: min_way])
+	add([1_: fixed_: sosed_way, 2_: fixed_: unlim, 3_: fixed_: 0 ])
+	label(gotSosedinfo)
+	//get sosed_way
+	searchElStr5([1_: fixed_: sosed_info, 2_: assign_: e1, 3_: assign_: sosed_way, 4_: assign_: e2, 5_: fixed_: min_way], ,addToQueue)
+	//got sosed_way
+	//проверим можно ли улучшить sosed_way
+	ifGr([1_: fixed_: sosed_way, 2_: fixed_: inc_curway], , skipAddToQueue,)
+	ifGr([1_: fixed_: dest_way, 2_: fixed_: inc_curway], addToQueue, skipAddToQueue,)
+	
+	label(addToQueue)
+	//записать новый, уменьшенный путь
+	add([1_:fixed_: sosed_way, 2_: fixed_: 0, 3_: fixed_: inc_curway])
+	//прописать текущий элемент как предка в пути
+	genElStr5([1_: fixed_: sosed_info, 2_: assign_: e1, 3_: fixed_: curnode, 4_: assign_: e2, 5_: fixed_: prev_node], , )
+	
+	//если элемента еще нет в очереди,
+	searchElStr3([1_: fixed_: queue, 2_: assign_: e1, 3_: fixed_: sosed_info],skipAddToQueue,,)
+	//то добавить в очередь
+	genElStr3([1_: fixed_: queue, 2_: assign_: e1, 3_: fixed_: sosed_info])
+	//сгенерить новый узел очереди
+	genEl([1_: node_: const_: queue_temp])
+	//связать его с узлом графа
+	genElStr3([1_: fixed_: queue_temp, 2_: assign_: e1, 3_: fixed_: sosed_info])
+	
+	//найти указатель на последний элемент очереди
+	searchElStr3([1_: fixed_: queue_end, 2_: assign_: e1, 3_: assign_: queue_last],,noQueueEnd,)
+	//удалить его
+	eraseEl([1_: fixed_: e1 ], ,)
+	//связать его с последним узлом в очереди
+	genElStr5([1_: fixed_: queue_last, 2_: assign_: e1, 3_: fixed_: queue_temp, 4_: assign_: e2, 5_: fixed_: queue_next], , )
+	nop(yesQueueEnd)
+	
+	label(noQueueEnd)
+	//поставить на него указатель начала очереди
+	genElStr3([1_: fixed_: queue_start, 2_: assign_: e1, 3_: fixed_: queue_temp])
+	
+	label(yesQueueEnd)
+	//поставить на него указатель конца очереди
+	genElStr3([1_: fixed_: queue_end, 2_: assign_: e1, 3_: fixed_: queue_temp])
+	
+	label(skipAddToQueue)
+	
+	label(sosedicont)
+	nop(sosedistart)
+label(sosediend)
+
+nop(mainstart)
+label(mainend)
+
+
+
+
+//work on result
+
+genEl([1_: node_: const_: path])
+searchElStr5([1_: assign_: cur_info, 2_: assign_: e1, 3_: fixed_: dest_node, 4_: assign_: e2, 5_: fixed_: graph_node], ,endResult)
+
+label(begResult)
+//находим текущую вершину
+searchElStr5([1_: fixed_: cur_info, 2_: assign_: e1, 3_: assign_: cur_node, 4_: assign_: e2, 5_: fixed_: graph_node], ,endResult)
+//добавляем в путь текущую вершину
+genElStr3([1_: fixed_: path, 2_: assign_: e1, 3_: fixed_: cur_node])
+
+//находим предыдущую вершину для текущей
+searchElStr5([1_: fixed_: cur_info, 2_: assign_: e1, 3_: assign_: cur_prev_node, 4_: assign_: e2, 5_: fixed_: prev_node], ,endResult)
+
+//добавляем в путь все дуги, соединяющие текущую и предыдущую вершину
+searchSetStr3([
+	1_: fixed_: cur_node,
+	2_:	assign_: e1,
+	3_:	fixed_: cur_prev_node,
+	set2_: fixed_: path
+], , )
+
+searchSetStr3([
+	1_: fixed_: cur_prev_node,
+	2_:	assign_: e1,
+	3_:	fixed_: cur_node,
+	set2_: fixed_: path
+], , )
+
+//находим инфу по предыдущей вершине
+searchElStr5([1_: assign_: cur_info, 2_: assign_: e1, 3_: fixed_: cur_prev_node, 4_: assign_: e2, 5_: fixed_: graph_node], ,endResult)
+nop(begResult)
+label(endResult)
+
+searchSetStr3([
+	1_: fixed_: path,
+	2_:	assign_: e1,
+	3_:	assign_: e2,
+	set3_: fixed_: result
+], , )
+
+callReturn([1_: fixed_: mnozh_append,
+            2_: fixed_: {[1_: result]}
+           ])
+
+
+
+label(end_program)
+return()
+end

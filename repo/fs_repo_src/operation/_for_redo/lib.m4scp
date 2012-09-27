@@ -1,0 +1,318 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+///////////////////////////////////////////////////////////////////////////////
+//	Разные функции, в основом по навигации
+//	mnozh_unique - делает из переданного множества канторово. Т.е. удаляет все кратные дуги.
+//	mnozh_append - раскрывает (дополняет) переданную окрестность. Работает в основном по наличию нераскрытых узлов типа tuple.
+//
+#include "scp_keynodes.scsy"
+//#include "../seb/planimetry.scsy"
+//#include "info.scsy"
+
+
+procedure(mnozh_unique,
+[[
+	msgbeg = /"...mnozh_unique begin...\n"/;
+	msgend = /"...mnozh_unique end...\n"/;
+	tuple, attr, struct, family, rel;
+]],
+[{
+	mnozh, temp, e1, e2
+}],
+{[
+	1_: in_: out_: mnozh
+]}
+)
+
+genEl([1_: node_: const_: temp ])
+
+label(begC)
+searchElStr3([1_: fixed_: mnozh,	2_:	assign_: e1,	3_: assign_: e2], , endC)
+label(killArcs)
+searchElStr3([1_: fixed_: mnozh,	2_:	assign_: e1,	3_: fixed_: e2], , endkillArcs)
+eraseEl([ 1_: fixed_: e1 ], killArcs,)
+label(endkillArcs)
+
+nop(addNode)
+ifType([1_: arc_: e2], addNode,)
+searchElStr3([1_: fixed_: rel,	2_:	assign_: e1,	3_: fixed_: e2], addNode, )
+searchElStr3([1_: fixed_: family,	2_:	assign_: e1,	3_: fixed_: e2], addNode, )
+searchElStr3([1_: fixed_: struct,	2_:	assign_: e1,	3_: fixed_: e2], addNode, )
+searchElStr3([1_: fixed_: tuple,	2_:	assign_: e1,	3_: fixed_: e2], addNode, )
+searchElStr3([1_: fixed_: attr,	2_:	assign_: e1,	3_: fixed_: e2], addNode, )
+nop(begC)
+label(addNode)
+genElStr3([1_: fixed_: temp, 2_: assign_: e1, 3_: fixed_: e2])
+
+nop(begC)
+label(endC)
+
+
+searchSetStr3([
+	1_: fixed_: temp,
+	2_:	assign_: e1,
+	3_:	assign_: e2,
+	set3_: fixed_: mnozh
+], , )
+
+eraseEl([ 1_: fixed_: temp ], ,)
+
+label(end_program)
+return()
+end
+
+
+procedure(mnozh_append,
+[[
+	start_append_msg = /"...mnozh_append begin...\n"/;
+	end_append_msg = /"...mnozh_append end...\n"/;
+	added_attr = /"...added attr...\n"/;
+	tuple, attr, struct, family, rel, subj;
+	addInOutExt = "/operation/searchEnvironmentSmart/addInOutExt";
+	mnozh_unique = "/operation/lib/mnozh_unique";
+	seb_segment = "/seb/META/planimetry";
+	seb_segment_im = "/META/im";
+	"1_";
+	"2_";
+	
+]],
+[{
+	opened_tuples,mnozh,mnozh_temp,new_tuples,e1,e2,e3,while_arc,while_elem,attr_node,attr_arc,while_tuple,
+	in_arc,in_node,out_arc,out_node,temp_arcs,temp_node,
+	outout_nodes,outout_node,outout_arc
+}],
+{[
+	1_: in_: out_: mnozh
+]}
+)
+
+//while(1)
+//{
+//	if (!find_new_tuples()) break;
+//	foreach($newtuples as $tuple)
+//		addInOutExt($tuple)
+//}
+//
+//find_attrs();
+
+printNl([1_: start_append_msg])
+// здесь мы будем хранить туплы, которые мы уже раскрыли, чтобы не открывать их повторно
+genEl([1_: node_: const_: opened_tuples])
+
+label(openMain_beg)
+	//ищем в заданном множестве все необработанные туплы
+	//записываем их в new_tuples
+	genEl([1_: node_: const_: new_tuples])
+	//mnozh - наше заданное множество, которое мы дополняем
+	//делаем его копию mnozh_temp. Она юзается для поиска новых нераскрытых туплов.
+	searchSetStr3([1_: fixed_: mnozh, 2_:	assign_: e1, 3_:	assign_: e2, set3_: assign_: mnozh_temp], , )
+
+	//foreach($mnozh_temp as $while_elem)
+	//if (is_tuple($while_elem) && !in_opened_tuples($while_elem))
+	//{
+	//	$opened_tuples []= $while_elem;
+	//	$new_tuples []= $while_elem;
+	//}
+	label(findNewTuples_beg)
+		//берем очередной элемент из mnozh_temp
+		searchElStr3([1_: fixed_: mnozh_temp,	2_:	assign_: while_arc,	3_: assign_: while_elem], , findNewTuples_end)
+		eraseEl([1_:while_arc])
+		//проверяем, чтобы он был туплом
+		searchElStr3([1_: fixed_: tuple,	2_:	assign_: e1,	3_: fixed_: while_elem], , findNewTuples_beg)
+		//проверяем, не был ли он обработан раньше
+		searchElStr3([1_: fixed_: opened_tuples,	2_:	assign_: e1,	3_: fixed_: while_elem], findNewTuples_beg, )
+		//while_elem - new tuple
+		//добавляем его в список обработанных туплов
+		genElStr3([1_: fixed_: opened_tuples, 2_: assign_: e1, 3_: fixed_: while_elem])
+		//и в список новых туплов для обработки
+		genElStr3([1_: fixed_: new_tuples, 2_: assign_: e1, 3_: fixed_: while_elem])
+		nop(findNewTuples_beg)
+	label(findNewTuples_end)
+
+	//if (empty(new_tuples)) break;
+	//если новых туплов не было найдено, то заканчиваем проходы
+	searchElStr3([1_: fixed_: new_tuples,	2_:	assign_: e1,	3_: assign_: e2], , openMain_end)
+
+	//foreach($new_tuples as $while_tuple) addInOutExt($while_tuple, $mnozh);
+	//для всех найденных необработанных туплов раскрываем их окрестность
+	label(openNewTuples_beg)
+		//берем очередной тупл
+		searchElStr3([1_: fixed_: new_tuples,	2_:	assign_: while_arc,	3_: assign_: while_tuple], , openNewTuples_end)
+		eraseEl([1_:while_arc])
+
+		//search outgoing 
+		//ищем все исходящие дуги и элементы
+		searchSetStr3([
+			1_: fixed_: while_tuple,
+			2_:	assign_: e1,
+			3_:	assign_: e2,
+			set2_: assign_: temp_arcs,
+			set3_: assign_: temp_nodes
+		], , )
+		//проходим по всем исходящим дугам
+		label(outgoing_beg)
+			searchElStr3([1_: fixed_: temp_arcs,	2_:	assign_: e1,	3_: assign_: out_arc], , outgoing_end)
+			eraseEl([1_:e1])
+			//out_node - элемент, в который входит исходящая дуга
+			searchElStr3([1_: fixed_: while_tuple,	2_:	fixed_: out_arc,	3_: assign_: out_node], , outgoing_beg)
+			//проверяем, чтобы этот элемент был в нашем сегменте планиметрии
+			sys_get_location([1_: fixed_: out_node, 2_: assign_: e1])
+			ifCoin([
+			        1_: seb_segment,
+			        2_: e1
+			       ],segmentOK1, )
+			ifCoin([
+			        1_: seb_segment_im,
+			        2_: e1
+			       ],, outgoing_beg)
+			label(segmentOK1)
+			//все ок, элемент нам подходит
+			//добавляем исходящую дугу в исходное множество (если ее там нет)
+			searchElStr3([1_: fixed_: mnozh,	2_:	assign_: e1,	3_: fixed_: out_arc], tryOutArc, )
+			genElStr3([1_: fixed_: mnozh, 2_: assign_: e1, 3_: fixed_: out_arc])
+			label(tryOutArc)
+			//добавляем исходящий элемент в исходное множество (если его там нет)
+			searchElStr3([1_: fixed_: mnozh,	2_:	assign_: e1,	3_: fixed_: out_node], outgoing_beg, )
+			genElStr3([1_: fixed_: mnozh, 2_: assign_: e1, 3_: fixed_: out_node])
+			nop(outgoing_beg)
+		label(outgoing_end)
+
+		//search incoming 
+		//ищем все входящие дуги и элементы
+		searchSetStr3([
+			1_:	assign_: const_: e1,
+			2_:	assign_: const_: pos_: e2,
+			3_: fixed_: while_tuple,
+			set1_: assign_: temp_nodes,
+			set2_: assign_: temp_arcs
+		], , )
+		//проходим по всем входящим дугам
+		label(incoming_beg)
+			searchElStr3([1_: fixed_: temp_arcs,	2_:	assign_: e1,	3_: assign_: in_arc], , incoming_end)
+			eraseEl([1_:e1])
+			searchElStr3([1_: assign_: in_node,	2_:	fixed_: in_arc,	3_: fixed_: while_tuple], , incoming_beg)
+
+			// проверяем: если в данный тупл входит дуга из другого тупла, причем это не часть пары, то пропускаем такое
+			searchElStr3([1_: fixed_: tuple,	2_:	assign_: e1,	3_: fixed_: in_node], , skipTupleFilter)
+			searchElStr3([1_: fixed_: "1_",	2_:	assign_: e1,	3_: fixed_: in_arc], skipTupleFilter, )
+			searchElStr3([1_: fixed_: "2_",	2_:	assign_: e1,	3_: fixed_: in_arc], , incoming_beg)
+			label(skipTupleFilter)
+
+			sys_get_location([1_: fixed_: in_node, 2_: assign_: e1])
+			ifCoin([
+			        1_: seb_segment,
+			        2_: e1
+			       ],segmentOK2, )
+			ifCoin([
+			        1_: seb_segment_im,
+			        2_: e1
+			       ],, incoming_beg)
+			label(segmentOK2)
+			searchElStr3([1_: fixed_: mnozh,	2_:	assign_: e1,	3_: fixed_: in_arc], tryInNode, )
+			genElStr3([1_: fixed_: mnozh, 2_: assign_: e1, 3_: fixed_: in_arc])
+			label(tryInNode)
+			searchElStr3([1_: fixed_: mnozh,	2_:	assign_: e1,	3_: fixed_: in_node], incoming_beg, )
+			genElStr3([1_: fixed_: mnozh, 2_: assign_: e1, 3_: fixed_: in_node])
+			nop(incoming_beg)
+		label(incoming_end)
+
+		nop(openNewTuples_beg)
+	label(openNewTuples_end)
+
+	eraseEl([1_:new_tuples])
+	eraseEl([1_:mnozh_temp])
+	nop(openMain_beg)
+label(openMain_end)
+
+searchSetStr3([1_: fixed_: mnozh, 2_:	assign_: e1, 3_:	assign_: e2, set3_: assign_: mnozh_temp], , )
+
+//искать атрибуты для всех дуг из mnozh_temp
+label(findAttrs_beg)
+	searchElStr3([1_: fixed_: mnozh_temp,	2_:	assign_: while_arc,	3_: assign_: while_elem], , findAttrs_end)
+	eraseEl([1_:while_arc])
+	ifType([1_: arc_: while_elem], workArcs,)	
+
+
+	searchElStr3([1_: fixed_: tuple,	2_:	assign_: e1,	3_: fixed_: while_elem], findAttrs_beg, )
+	searchElStr3([1_: fixed_: attr,	2_:	assign_: e1,	3_: fixed_: while_elem], findAttrs_beg, )
+	searchElStr3([1_: fixed_: rel,	2_:	assign_: e1,	3_: fixed_: while_elem], findAttrs_beg, )
+	searchElStr3([1_: fixed_: family,	2_:	assign_: e1,	3_: fixed_: while_elem], findAttrs_beg, )
+	//workNodes
+	//если в этот узел входит дуга из элемента, который является семейством (/info/family),
+	//то добавляем и его
+	//outout_nodes - список всех входящих узлов
+	searchSetStr3([1_: assign_: const_: e1, 2_: assign_: e2, 3_: fixed_: while_elem, set1_: assign_: outout_nodes], , )
+	label(addOutgoingFamily_beg)
+		//берем очередной входящий узел
+		searchElStr3([1_: fixed_: outout_nodes,	2_:	assign_: e1,	3_: assign_: outout_node], , addOutgoingFamily_end)
+		eraseEl([1_:e1])
+		//смотрим, является ли он семейством
+		searchElStr3([1_: fixed_: family,	2_:	assign_: e1,	3_: fixed_: outout_node], , addOutgoingFamily_beg)
+		//если да, то находим дугу из него в наш текущий узел
+		searchElStr3([1_: fixed_: outout_node,	2_:	assign_: outout_arc,	3_: fixed_: while_elem], , addOutgoingFamily_beg)
+		//добавляем все в исходное множество, если их там еще нет
+		searchElStr3([1_: fixed_: mnozh,	2_:	assign_: e1,	3_: fixed_: outout_arc], tryOutoutnode, )
+		genElStr3([1_: fixed_: mnozh, 2_: assign_: e1, 3_: fixed_: outout_arc])
+		label(tryOutoutnode)
+		searchElStr3([1_: fixed_: mnozh,	2_:	assign_: e1,	3_: fixed_: outout_node], addOutgoingFamily_beg, )
+		genElStr3([1_: fixed_: mnozh, 2_: assign_: e1, 3_: fixed_: outout_node])
+		nop(addOutgoingFamily_beg)
+	label(addOutgoingFamily_end)
+	nop(findAttrs_beg)
+
+	label(workArcs)
+	sys_get_location([1_: fixed_: while_elem, 2_: assign_: e1])
+	ifCoin([
+	        1_: seb_segment,
+	        2_: e1
+	       ],arcSegmentOK, )
+	ifCoin([
+	        1_: seb_segment_im,
+	        2_: e1
+	       ],, findAttrs_beg)
+	label(arcSegmentOK)
+	//seacrh for attr
+	searchElStr3([1_: assign_: attr_node,	2_:	assign_: attr_arc,	3_: fixed_: while_elem], , findAttrs_beg)
+	searchElStr3([1_: fixed_: attr,	2_:	assign_: e3,	3_: fixed_: attr_node], , findAttrs_beg)
+	//add attr to result
+
+	genElStr3([1_: fixed_: mnozh, 2_: assign_: e3, 3_: fixed_: attr_node])
+	label(checkArc)
+
+	genElStr3([1_: fixed_: mnozh, 2_: assign_: e3, 3_: fixed_: attr_arc])
+	printNl([1_:added_attr])
+	nop(findAttrs_beg)
+label(findAttrs_end)
+
+
+
+
+
+
+eraseEl([1_: mnozh_temp])
+eraseEl([1_: opened_tuples])
+
+return()
+end

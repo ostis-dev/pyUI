@@ -1,0 +1,120 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: verify_all_handler.m4scp
+// Description: File contains program to set handler
+//				for verification operation
+//                                      and procedure to start verification procedure
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich, Sergei Startsev, Sergei Zalivako, Olga Savelieva
+//        Date: 05.12.11
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_answer.scsy"
+#include "lib_other.scsy"
+
+program(init_op,
+[[	
+	q_initiated;
+	catch_output_arc;
+]],
+[{
+	nodeVar
+}],
+{[
+]}
+)
+
+/////////////////////////////////////////////////////
+// Setting handler for verification operation
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: verify_start,
+	3_: fixed_: {1_: q_initiated},
+	4_: assign_: nodeVar
+])
+return()
+end
+
+procedure(verify_start,
+[[	
+	verify_all;
+	q_verification;
+	answer_make;
+	group_all_equivalent_constructions;
+]],
+[{
+	handler,element,inputarc,question_node,arc,shift,elements,segment,result,result1,t_seg
+}],
+{[
+	1_: in_: handler,
+	2_: in_: element,
+	3_: in_: inputarc,
+	4_: in_: question_node
+]}
+)
+
+sys_get_location([1_: fixed_: group_all_equivalent_constructions, 2_: assign_: segment])
+sys_spin_segment([1_: fixed_: segment, 2_: assign_: t_seg])
+sys_set_default_segment([1_: fixed_: segment])
+
+/////////////////////////////////////////////////////
+// Checking operation start full condition
+searchElStr3([
+	1_: fixed_: q_verification,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: question_node
+],,exit)
+
+genEl([1_: node_: assign_: const_: result])
+genEl([1_: node_: assign_: const_: result1])
+
+/////////////////////////////////////////////////////
+// Call of the verification procedure
+callReturn([1_: fixed_: verify_all,
+	    2_: fixed_:
+		{[
+			1_: fixed_: result,
+			2_: fixed_: result1,
+			3_: fixed_: "/seb/planimetry/образец ошибки"
+		]}
+])
+
+/////////////////////////////////////////////////////
+// Call of the answer making procedure
+callReturn([
+	1_:	fixed_: answer_make,
+	2_:	fixed_: {[
+			1_: question_node,
+			2_: result
+		]}
+	]
+)
+
+label(exit)
+
+return()
+end

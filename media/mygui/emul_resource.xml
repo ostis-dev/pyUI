@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<MyGUI type="Resource" version="1.1">
+
+  <Resource type="ResourceImageSet" name="pic_EmulationSet" id="{9B68E5CF-A473-45ae-BE33-42F8F1835FD3}">
+    <Group name="Mouse"  texture="emul.png" size="128 128">
+      <Index name="EmulationMouse" >
+        <Frame point="0 0"/>
+      </Index>
+    </Group>
+	
+	<Group name="MouseButton" texture="emul.png" size="34 61">
+		<Index name="EmulationMouseButton">
+			<Frame point="4 134"/>
+		</Index>
+	</Group>
+
+	<Group name="MouseMiddleUp" texture="emul.png" size="25 30">
+		<Index name="EmulationMouseMiddleUp">
+			<Frame point="40 133"/>
+		</Index>
+	</Group>
+	
+	<Group name="MouseMiddleDown" texture="emul.png" size="25 30">
+		<Index name="EmulationMouseMiddleDown">
+			<Frame point="40 163"/>
+		</Index>
+	</Group>
+	
+	<Group name="Key"  texture="emul.png" size="128 128">
+      <Index name="EmulationKey">
+        <Frame point="128 0"/>
+      </Index>
+    </Group>
+	
+  </Resource>
+
+</MyGUI>

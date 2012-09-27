@@ -1,0 +1,57 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+// Location: /users
+#include "include/administrator.scsy"
+//#include "include/im_keynodes.scsy"
+
+
+user -> {
+	1_: guest,
+	2_: /"guest"/,
+	3_: "/META/users"
+};
+guest = {};
+
+
+profile -> {
+	identifier_: /"guest"/,
+	interface_: "im",
+	workspace_: {
+		"/proc/META/keynode",
+		"/proc/META/im_keynode",
+		"/home/nsm/META/config",
+		"/META/users",
+		"/META/info",
+		send_: "/home/META/mimes",
+		send_: "/etc/META/events",
+		send_: "/etc/META/im_keynode",
+		send_: "/ui/scg/META/menu",
+		send_: "/META/im",
+		default_: send_named_ : "/seb/META/planimetry"
+	},
+	startup_:	{
+	}
+};
+

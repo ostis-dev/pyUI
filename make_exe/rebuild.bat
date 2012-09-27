@@ -1,0 +1,1 @@
+rule_builder.exe --bin . --fs_repo_src fs_repo_src --fs_repo fs_repo

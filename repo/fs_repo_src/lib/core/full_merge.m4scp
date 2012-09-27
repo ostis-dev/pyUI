@@ -1,0 +1,117 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+/////////////////////////////////////////////////////
+//        File: set_merge.m4scp
+// Description: File contains procedure to merge 
+//				two sets
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 28.11.10
+
+#include "scp_keynodes.scsy"
+#include "meta_info.scsy"
+
+/* Procedure for merge set1 into set2
+*/
+procedure(full_merge,
+[[	// constants
+	stype_sheaf;
+	seg1="/operation/META/temp";
+]],
+[{	// variables
+
+	// input
+	set1, set2,
+	// other
+	set, node, arc, segment, currarc,
+	seg2
+}],
+{[	// arguments
+	1_:	in_: set1,		//	first set to merge
+	2_: in_: set2		//  second set to merge (result)
+]}
+)
+//#sys_get_default_segment([1_: assign_: seg1])
+
+/* need to set segment that contains result node as default to generate answer in it */
+sys_get_location([1_: fixed_: set2, 2_: assign_: segment])	
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+
+//#printEl([1_: 1_])
+//#printEl([1_: stype_sheaf])
+
+/////////////////////////////////////////////////////
+// Check all output arcs
+label(next_out_arc)
+searchElStr3([
+	1_: fixed_: set1,
+	2_: assign_: currarc,
+	3_: assign_: node
+],,next_in_arc)
+sys_get_location([1_: fixed_: currarc, 2_: assign_: segment])
+printEl([1_: segment])
+ifCoin([1_: fixed_: seg1,2_: fixed_: segment],,no_erase_out1)
+eraseElStr3([
+	1_: fixed_: set1,
+	2_: fixed_: f_: currarc,
+	3_: fixed_: node
+],next_out_arc,next_out_arc)
+label(no_erase_out1)
+//#printEl([1_: segment])
+genElStr3([
+	1_: fixed_: set2,
+	2_: fixed_: currarc,
+	3_: fixed_: node
+],next_out_arc,next_out_arc)
+
+/////////////////////////////////////////////////////
+// Check all input arcs
+label(next_in_arc)
+searchElStr3([
+	1_: assign_: node,
+	2_: assign_: currarc,
+	3_: fixed_: set1
+],,exit)
+sys_get_location([1_: fixed_: currarc, 2_: assign_: segment])
+ifCoin([1_: fixed_: seg1,2_: fixed_: segment],,no_erase_in1)
+eraseElStr3([
+	1_: fixed_: node,
+	2_: fixed_: f_: currarc,
+	3_: fixed_: set1
+],next_in_arc,next_in_arc)
+label(no_erase_in1)
+//#printEl([1_: segment])
+genElStr3([
+	1_: fixed_: node,
+	2_: fixed_: currarc,
+	3_: fixed_: set2
+],next_in_arc)
+
+label(exit)
+
+eraseEl([1_: fixed_: set1])
+
+return()
+end()

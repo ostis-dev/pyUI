@@ -1,0 +1,66 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+question = "/etc/questions/вопрос";
+q_initiated = "/etc/questions/инициированный вопрос";
+q_atom = "/etc/questions/атомарный вопрос";
+q_noatom = "/etc/questions/неатомарный вопрос";
+q_active = "/etc/questions/активный вопрос";
+q_finished = "/etc/questions/отработанный вопрос";
+q_successful = "/etc/questions/успешный вопрос";
+
+q_search_subsets = "/etc/questions/поиск подмножеств";
+q_search_supersets = "/etc/questions/поиск надмножеств";
+q_search_all_pos_in_arcs = "/etc/questions/поиск позитивных входящих дуг";
+q_search_all_pos_out_arcs = "/etc/questions/поиск позитивных выходящих дуг";
+q_search_authors = "/etc/questions/поиск авторов";
+q_search_identifiers = "/etc/questions/поиск внешних идентификаторов";
+q_search_decomposition = "/etc/questions/поиск декомпозиции объекта";
+q_search_illustration = "/etc/questions/поиск иллюстрации объекта";
+
+q_verification = "/etc/questions/запрос верификации";
+q_add_child_command = "/etc/questions/запрос добавления дочерней команды";
+q_remove_child_command = "/etc/questions/запрос удаления дочерней команды";
+
+q_generate_construct = "/etc/questions/запрос генерации SC-конструкции";
+q_erase_set_elements = "/etc/questions/запрос удаления элементов множества";
+q_el_content = "/etc/questions/запрос содержимого элемента";
+
+q_square = "/etc/questions/запрос площади";
+
+q_addition = "/etc/questions/запрос суммы";
+q_multiplication = "/etc/questions/запрос произведения";
+q_exponention = "/etc/questions/запрос степени";
+q_calculation = "/etc/questions/запрос вычисления";
+
+q_statement_validity = "/etc/questions/запрос истинности высказывания";
+q_var_value = "/etc/questions/запрос значения величины";
+q_postorder_tree_search = "/etc/questions/запрос поиска в глубину";
+q_production = "/etc/questions/запрос продукции";
+q_gen_all_accessory_links = "/etc/questions/запрос генерации всех связок принадлежности";
+q_gen_all_trans_relation_links = "/etc/questions/запрос генерации всех связок отношения";
+
+nrel_action_area = "/etc/questions/область действия вопроса*";
+nrel_key_fragment = "/etc/questions/ключевой фрагмент вопроса*";
+nrel_answer = "/etc/questions/ответ*";
+nrel_general_formulation = "/etc/questions/обобщенная формулировка вопроса*";

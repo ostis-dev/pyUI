@@ -1,0 +1,200 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+
+/*
+//////////////////////////////////////////////
+// результирующие множества не удаляются, они будут удалены позже
+//
+*/
+
+#include "scp_keynodes.scsy"
+#include "ui_keynodes.scsy"
+//#include "../keynode.scsy"
+//#include "../seb/planimetry.scsy"
+
+procedure(all_output_all_types,
+[[	
+	sheet_type = "/proc/agents/shell/keynode/SCgSheet";
+	layout =c= /"logical"/;
+	sheet_title =c= /"Найденные выходящие sc-дуги входящие не в sc-дугу"/;
+	ui_Output;		// процедура вывода конструкций пользователю
+]],
+[{
+	t1, t2, elForProcess, result,segment,
+	selected_els, sheet, answer_reciever
+}],
+{[
+	1_: in_: selected_els,
+	2_: in_: sheet,			// окно с которого получаются данные
+	3_: in_: answer_reciever		//	получатель ответа (окно, содержимое и т.д.)
+]}
+)
+
+
+// ищем элементы для обработки
+searchElStr3([
+	1_: fixed_: selected_els, 
+	2_: assign_: const_: pos_: t1, 
+	3_: assign_: elForProcess
+])
+
+// открываем сегмент для работы
+sys_get_location([
+	1_: fixed_: elForProcess, 
+	2_: assign_: segment
+])
+sys_spin_segment([
+	1_: fixed_: segment, 
+	2_: assign_: t1
+])
+
+// необходимо закрыть сегменты и удалить t1
+
+genEl([
+	1_: assign_: node_: const_: result
+])
+
+// включаем входной узел в результирующее множество для вывода
+genElStr3([
+	1_:fixed_: result,
+	2_:assign_:arc_:pos_:const_: t1,
+	3_:fixed_: elForProcess
+])
+// выводим промежуточный результат (узел для которого осуществляем поиск)
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: result
+	]}
+])
+
+// создаем результирующее множество для вывода результатов поиска
+genEl([
+	1_: assign_: node_: const_: result
+])
+
+// ищем по выходящим дугам
+searchSetStr3([
+	set2_: set3_: fixed_: result,
+		1_: fixed_: elForProcess,
+		2_: assign_: arc_: t1,
+		3_: assign_: t2
+])
+
+// добавляем найденые элементы в множество
+genElStr3([
+	1_:fixed_: result,
+	2_:assign_:arc_:pos_:const_: t1,
+	3_:fixed_: elForProcess
+])
+
+// выводим результаты пользователю
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: result
+	]}
+])
+
+return()
+end
+
+procedure(all_output_const_in_all_types,
+[[	
+	sheet_type;
+	layout;
+	aoc_sheet_title =c= /"Найденные выходящие позитивные константные sc-дуги, входящие не в sc-дугу"/;
+	ui_Output;		// процедура вывода конструкций пользователю
+]],
+[{
+	t1, t2, elForProcess, result,segment,
+	selected_els, sheet, answer_reciever
+}],
+{[
+	1_: in_: selected_els,
+	2_: in_: sheet,			//	окно с которого был отправлен запрос
+	3_: in_: answer_reciever		//	место куда надо вывести ответ (может быть окном, узлом с содержимым и так далее)
+]}
+)
+
+// добавить сборку мусора
+
+// ищем элементы для обработки
+searchElStr3([
+	1_: fixed_: selected_els,
+	2_: assign_: const_: pos_:  t1,
+	3_: assign_: elForProcess
+])
+
+// открываем сегмент для работы
+sys_get_location([
+	1_: fixed_: elForProcess,
+	2_: assign_: segment
+])
+						   
+sys_spin_segment([
+	1_: fixed_: segment, 
+	2_: assign_: t1
+])
+
+genEl([
+	1_: assign_: node_: const_: result
+])
+
+searchSetStr3([
+	set2_: set3_: fixed_: result,
+		1_: fixed_: elForProcess,
+		2_: assign_: arc_: pos_: const_: t1,
+		3_: assign_: t2
+])
+
+genElStr3([
+	1_:fixed_: result,
+	2_:assign_:arc_:pos_:const_: t1,
+	3_:fixed_: elForProcess
+])
+
+//#ifVarAssign([1_: shift],aoc_def_sameSheet,)
+//#ui_sheet_create([ 1_:  assign_: sheet,
+//#	          2_:  fixed_: sheet_type,
+//#	          3_:  fixed_: aoc_sheet_title,
+//#	          4_:  fixed_: layout
+//#	          ])
+			  
+//#label(aoc_def_sameSheet)
+
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: result
+	]}
+])
+
+//#eraseEl(1_:fixed_: result)
+return()
+end

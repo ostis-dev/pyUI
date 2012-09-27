@@ -1,0 +1,166 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: find_value.m4scp
+// Description: File contains operation to find
+//			requested variable value
+//			if it exists
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 11.01.11
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "meta_info.scsy"
+#include "lib_search.scsy"
+#include "lib_answer.scsy"
+
+program(init_op,
+[[	
+	//#q_var_value;
+	q_initiated;
+	catch_output_arc;
+	make_answer;
+//#	here=/"\n\nHandler setted!\n\n"/;
+]],
+[{
+	nodeVar
+}],
+{[
+]}
+)
+
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: find_value,
+	3_: fixed_: {1_: q_initiated},
+	4_: assign_: nodeVar
+])
+
+return()
+end
+
+procedure(find_value,
+[[
+	rrel_answer_is_present;
+	rrel_answer_is_absent;
+	q_var_value;
+	q_initiated;
+	search_quantity_value;
+	here=/"\n\nI have entered FIND VALUE\n\n"/;
+	exited=/"\n\nI have exited FIND VALUE\n\n"/;
+]],
+[{	
+	inputarc,arc,arc1,value,handler,element,seg,segments,temp,attr,v_v_arc,answer
+}],
+{[
+	1_: in_: handler,
+	2_: in_: element,
+	3_: in_: inputarc,
+	4_: in_: value
+]}
+)
+sys_get_location([1_: value,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+searchElStr3([
+	1_: fixed_:  q_var_value,
+	2_: assign_: const_: pos_: v_v_arc,
+	3_: fixed_: value
+],,exit)
+searchElStr3([
+	1_: assign_: const_: pos_: attr,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: v_v_arc
+],exit)
+
+printNl([1_: here])
+
+eraseEl([1_: fixed_: inputarc])
+
+searchElStr3([
+	1_: fixed_: value,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: attr
+])
+
+callReturn([
+	1_: fixed_: search_quantity_value,
+	2_: fixed_: {[
+		1_: fixed_: attr,
+		2_: assign_: temp
+	]}
+])
+ifVarAssign([1_: temp],,nogen)
+ifFormCont([1_: temp],gen,nogen)
+
+label(gen)
+genElStr3([
+	1_: assign_: node_: const_: answer,
+	2_: assign_: pos_: const_: arc,
+	3_: fixed_: temp
+])
+
+/////////////////////////////////////////////////////
+// Call of the answer making procedure
+callReturn([
+	1_:	fixed_: answer_make,
+	2_:	fixed_: {[
+			1_: value,
+			2_: answer
+		]}
+	]
+)
+
+printNl([1_: /"REQUESTED VALUE IS:\n"/])
+printNl([1_: temp])
+
+genElStr3([
+	1_: fixed_: rrel_answer_is_present,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: v_v_arc
+],next,next)
+
+label(nogen)
+
+genElStr3([
+	1_: fixed_: rrel_answer_is_absent,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: v_v_arc
+],next,next)
+
+label(next)
+
+genElStr3([
+	1_: fixed_: q_initiated,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: value
+])
+
+label(exit)
+//#//#printEl([1_: req])
+printNl([1_: exited])
+return()
+end

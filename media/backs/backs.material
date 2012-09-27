@@ -1,0 +1,78 @@
+material Back/Base
+{
+	technique low_2d
+	{
+		pass 0
+		{
+			depth_write off
+		
+			ambient 1.0 1.0 1.0
+			diffuse 1.0 1.0 1.0
+		}
+	}
+}
+
+
+material Back/Lime
+{
+	technique
+	{
+		pass
+		{
+			depth_write off
+			
+			texture_unit
+			{
+				//texture	lime_back.png
+			}
+		}
+	}
+}
+
+material Back/Spaces
+{
+	technique
+	{
+		pass
+		{
+			depth_write off
+			
+			texture_unit
+			{
+				texture	spaces_background.jpg
+			}
+		}
+	}
+}
+
+material Back/SimpleLights
+{
+	technique
+	{
+		pass
+		{
+			depth_write off
+			
+			texture_unit
+			{
+				texture simple-lights-twitter-background.jpg
+			}
+		}
+	}
+}
+
+material Back/SCg
+{
+	technique
+	{
+		pass
+		{
+			depth_write off
+			
+			texture_unit
+			{
+				texture Abstract.jpg
+			}
+		}
+	}
+}

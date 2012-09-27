@@ -1,0 +1,194 @@
+// 
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "lib_search.scsy"
+
+program(init_op,
+[[	
+	//#req="/seb/planimetry/запрос поиска в глубину";
+	q_initiated;
+	catch_output_arc;	
+	//#here=/"\n\nHandler setted!\n\n"/;
+]],
+[{
+	nodeVar
+}],
+{[
+]}
+)
+
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: postorder_tree_search_manager,
+	3_: fixed_: {1_: q_initiated},
+	4_: assign_: nodeVar
+])
+
+return()
+end
+
+procedure(postorder_tree_search_manager,
+[[
+	rrel_answer_is_present;
+	rrel_answer_is_absent;
+	rrel_formula_is_absent;
+	q_var_value;
+	q_postorder_tree_search;
+	nrel_value;
+	question;
+	q_initiated;
+	group_looked_throught;
+	catch_input_arc;
+	search_bin_pair_begin_except_rel;
+	search_bin_pair_end_except_rel;
+	here=/"\n\nI have entered POSTORDER TREE SEARCH MANAGER\n\n"/;
+	exited=/"\n\nI have exited POSTORDER TREE SEARCH MANAGER\n\n"/;
+]],
+[{	
+	inputarc,arc,arc1,value,handler,element,seg,segments,temp,attr,rel,obj,waitarc,input_value,v_v_arc
+}],
+{[
+	1_: in_: handler,
+	2_: in_: element,
+	3_: in_: inputarc,
+	4_: in_: input_value
+]}
+)
+sys_get_location([1_: input_value,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+//#//#printEl([1_: seg])
+
+searchElStr3([
+	1_: fixed_: q_var_value,
+	2_: assign_: const_: pos_: v_v_arc,
+	3_: fixed_: input_value
+],,exit)
+searchElStr5([
+	1_: fixed_: q_var_value,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: input_value,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_formula_is_absent
+],,exit)
+searchElStr5([
+	1_: fixed_: q_var_value,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: input_value,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_absent
+],,exit)
+
+printNl([1_: here])
+
+searchElStr3([
+	1_: fixed_: input_value,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: const_: node_: value
+])
+//#eraseEl([1_: fixed_: input_value])
+genElStr3([
+	1_: fixed_: group_looked_throught,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: value
+])
+//#printEl([1_: value])
+callReturn([
+	1_: fixed_: search_bin_pair_end_except_rel,
+	2_: fixed_:
+		{[
+			1_: fixed_: value,
+			2_: fixed_: nrel_value,
+			3_: assign_: obj,
+			4_: assign_: rel
+		]}
+])
+ifVarAssign([1_: obj],obj_is_good)
+//#//#printEl([1_: obj])
+callReturn([
+	1_: fixed_: search_bin_pair_begin_except_rel,
+	2_: fixed_:
+		{[
+			1_: fixed_: value,
+			2_: fixed_: nrel_value,
+			3_: assign_: obj,
+			4_: assign_: rel
+		]}
+])
+ifVarAssign([1_: obj],,gen_bad_answer)
+label(obj_is_good)
+genElStr3([
+	1_: fixed_: q_postorder_tree_search,
+	2_: assign_: const_: pos_: waitarc,
+	3_: assign_: node_: const_: temp
+])
+//#//#printEl([1_: input_value])
+genElStr3([
+	1_: fixed_: temp,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: obj
+])
+genElStr3([
+	1_: fixed_: question,
+	2_: assign_: const_: pos_:arc,
+	3_: fixed_: temp
+])
+genElStr3([
+	1_: fixed_: q_initiated,
+	2_: assign_: const_: pos_:arc,
+	3_: fixed_: temp
+])
+//#//#printEl([1_: q_postorder_tree_search])
+//#//#printEl([1_: obj])
+
+label(wait)
+sys_wait([
+	1_: fixed_: catch_input_arc,
+	2_: fixed_: {1_: waitarc}
+])
+searchElStr5([
+	1_: fixed_: q_postorder_tree_search,
+	2_: fixed_: waitarc,
+	3_: fixed_: temp,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_present
+],gen_good_answer)
+searchElStr5([
+	1_: fixed_: q_postorder_tree_search,
+	2_: fixed_: waitarc,
+	3_: fixed_: temp,
+	4_: assign_: const_: pos_: arc1,
+	5_: fixed_: rrel_answer_is_absent
+],gen_bad_answer,wait)
+
+label(gen_good_answer)
+//#printNl([1_: /"GGA"/])
+eraseEl([1_: fixed_: inputarc])
+eraseSetStr3([
+	1_: assign_: const_: node_: temp,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: fixed_: v_v_arc
+])
+genElStr3([
+	1_: fixed_: q_initiated,
+	2_: assign_: const_: pos_:arc,
+	3_: fixed_: input_value
+])
+eraseSetStr3([
+	1_: fixed_: group_looked_throught,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: assign_: node_: const_: value
+],exit,exit)
+
+label(gen_bad_answer)
+eraseSetStr3([
+	1_: fixed_: group_looked_throught,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: assign_: node_: const_: value
+],exit,exit)
+label(exit)
+
+printNl([1_: exited])
+return()
+end

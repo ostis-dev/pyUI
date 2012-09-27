@@ -1,0 +1,200 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: base_rel_search.m4scp
+// Description: 
+/////////////////////////////////////////////////////
+// 		Author: Sergei Zalivako
+//        Date: 22.12.10
+
+
+#include "_keynodes.scsy"
+#include "scp_keynodes.scsy"
+
+/*!
+	Procedure to find construction showed on schema with specified relation.
+	
+		relation
+			|
+			|
+			v
+		A <======== B
+
+	@result	Result contains whole construction
+*/
+procedure(base_rel_search,
+[[	
+]],
+[{
+	// input params
+	element, relation, result,
+	// other variables
+	segment, t_seg, n1, n2, n3, a1, a2, a3, a4, a5, a6, tmp_res
+}],
+{[
+	1_: in_: element,	// element to search relation
+	2_: in_: relation,	// relation node
+	3_: in_: result		// all founded elements will be append into this set (set must be existing)
+]}
+)
+
+// trying to get segment, where element locate
+sys_get_location([1_: fixed_: element, 2_: assign_: segment])
+sys_spin_segment([1_: fixed_: segment, 2_: assign_: t_seg])
+
+/* need to set segment that contains result node as default to generate answer in it */
+sys_get_location([1_: fixed_: result, 2_: assign_: segment])	
+sys_open_segment([1_: fixed_: segment])
+sys_set_default_segment([1_: fixed_: segment])
+
+//# trying to find authors sheaf
+searchSetStr5([
+	1_: assign_: node_: const_: n1,
+	2_: assign_: arc_: pos_: const_: a1,
+	3_: fixed_: element,
+	4_: assign_: arc_: pos_: const_: a2,
+	5_: fixed_: 1_,
+	set1_: assign_: tmp_res
+	], , lb_finish, lb_error)
+
+//# iterate founded nodes and get just node that included into authors relation set
+label(search_relation)
+searchElStr3([
+	1_: fixed_: tmp_res,
+	2_: assign_: arc_: pos_: const_: a1,
+	3_: assign_: node_: const_: n1
+	], , lb_finish, lb_error)
+	
+eraseEl([1_: fixed_: a1])
+
+//# check including into authors relation set
+searchElStr3([
+	1_: fixed_: relation,
+	2_: assign_: arc_: pos_: const_: a3,
+	3_: fixed_: n1
+	], , search_relation, lb_error)
+	
+//# trying to find end element
+searchElStr5([
+	1_: fixed_: n1,
+	2_: assign_: arc_: const_: pos_: a1,
+	3_: assign_: n2,
+	4_: assign_: arc_: const_: pos_: a2,
+	5_: fixed_: 1_
+	], , search_relation, lb_error)
+
+//# getting begin element (need, because we can't store arc with attribute 1_)
+searchElStr5([
+	1_: fixed_: n1,
+	2_: assign_: arc_: const_: pos_: a5,
+	3_: assign_: n3,
+	4_: assign_: arc_: const_: pos_: a6,
+	5_: fixed_: 2_
+	], , lb_error, lb_error)
+	
+//# make result starting with end element
+
+//# include: 2_ --->
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a4,
+	3_: fixed_: a6])
+	
+//# include: e1 <------ O
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a4,
+	3_: fixed_: a5])
+
+//# include: relation
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a4,
+	3_: fixed_: relation])
+	
+//# include: 1_
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a4,
+	3_: fixed_: 1_])
+	
+//# include: 2_
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a4,
+	3_: fixed_: 2_])
+	
+//# include: A
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a4,
+	3_: fixed_: n2])
+
+//# include: O ---> e2
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a4,
+	3_: fixed_: a1])
+
+//# include: 1_ ----> 	
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a4,
+	3_: fixed_: a2])
+	
+//# include: O 	
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a4,
+	3_: fixed_: n1])
+
+//# include: B
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a4,
+	3_: fixed_: n3])
+	
+//# include: relation ----> O
+genElStr3([
+	1_: fixed_: result,
+	2_: assign_: arc_: const_: pos_: a4,
+	3_: fixed_: a3])
+	
+//! FIXME: close segment and erase t_seg
+
+label(lb_error)
+
+label(lb_finish)
+
+//# check if tmp_res exist and erase it
+ifVarAssign([
+	1_: fixed_: tmp_res
+	], , lb_exit, lb_exit)
+	
+eraseEl([1_: fixed_: tmp_res])
+	
+label(lb_exit)
+
+return()
+end()

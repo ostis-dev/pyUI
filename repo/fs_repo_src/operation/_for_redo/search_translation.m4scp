@@ -1,0 +1,185 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+
+#include "scp_keynodes.scsy"
+#include "ui_keynodes.scsy"
+
+procedure(search_translation_ui,
+[[
+	f_search = "/operation/search_translation/search_translation";
+	ui_Output;		// процедура вывода конструкций пользователю
+]],
+[{
+	wnd, selected_el, sheet, shift, 
+	arc, target, result_set, e, answer_reciever
+}],
+{[
+	1_: in_: selected_el,
+	2_: in_: sheet,
+	3_: in_: answer_reciever
+]}
+)
+//# ѕолучение целевого объекта
+searchElStr3([
+	1_: fixed_: selected_el,
+	2_: assign_: arc_: pos_: const_: arc,
+	3_: assign_: node_: target
+	])
+	
+genEl([
+	1_: assign_: node_: const_: result_set
+	])
+
+callReturn([
+	1_: fixed_: f_search,
+	2_: fixed_: {[
+		1_: fixed_: target,
+		2_: fixed_: result_set
+		]}
+	], e)
+
+callReturn([ 
+	1_: fixed_: ui_Output,
+	2_: fixed_: {[
+		1_: answer_reciever,
+		2_: result_set
+	]}
+	])
+
+return()
+end
+
+
+procedure(search_translation,
+[[	
+	"трансл€ци€*" = "/seb/planimetry/трансл€ци€*";
+	"–усский €зык" = "/seb/planimetry/–усский €зык";
+]],
+[{
+	target, result_set,
+	e, 
+	node1, node2, node3,
+	arc1, arc2, arc3, arc4, arc5, arc6,
+	set1, set2	
+}],
+{[
+	1_: in_: target,
+	2_: in_: out_: result_set
+]}
+)
+
+searchSetStr5([
+	1_: assign_: node_: const_: node1,
+	2_: assign_: arc_: pos_: const_: arc1,
+	3_: fixed_: target,
+	4_: assign_: arc_: pos_: const_: arc2,
+	5_: fixed_: 2_,
+	set1_: assign_: set1
+	],,end_search_ident)
+	
+label(beg_search_ident)
+
+	searchElStr3([
+		1_: fixed_: set1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: assign_: node1
+		],,end_search_ident)
+		
+	eraseEl([1_: fixed_: arc1])
+	
+	searchElStr3([
+		1_: fixed_: "трансл€ци€*",
+		2_: assign_: arc_: pos_: const_: arc5,
+		3_: fixed_: node1
+		],,beg_search_ident)
+	
+	searchElStr5([
+		1_: fixed_: node1,
+		2_: assign_: arc_: pos_: const_: arc1,
+		3_: fixed_: target,
+		4_: assign_: arc_: pos_: const_: arc2,
+		5_: fixed_: 2_
+		])
+		
+	searchElStr5([
+		1_: fixed_: node1,
+		2_: assign_: arc_: pos_: const_: arc3,
+		3_: assign_: node_: const_: node2,
+		4_: assign_: arc_: pos_: const_: arc4,
+		5_: fixed_: 1_
+		],,beg_search_ident)
+		
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc6, 3_: fixed_: "трансл€ци€*"])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc6, 3_: fixed_: arc5])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc6, 3_: fixed_: node1])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc6, 3_: fixed_: arc1])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc6, 3_: fixed_: target])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc6, 3_: fixed_: arc2])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc6, 3_: fixed_: 2_])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc6, 3_: fixed_: arc3])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc6, 3_: fixed_: node2])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc6, 3_: fixed_: arc4])
+	genElStr3([1_: fixed_: result_set, 2_: assign_: arc_: pos_: const_: arc6, 3_: fixed_: 1_])
+	
+	searchSetStr3([
+		1_: fixed_: node2,
+		2_: assign_: arc_: pos_: const_: arc3,
+		3_: assign_: node_: const_: node3,
+		set3_: fixed_: result_set
+		])
+	
+	searchSetStr3([
+		1_: fixed_: node2,
+		2_: assign_: arc_: pos_: const_: arc3,
+		3_: assign_: node_: const_: node3,
+		set2_: fixed_: result_set
+		])
+
+label(end_search_ident)
+
+return()
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

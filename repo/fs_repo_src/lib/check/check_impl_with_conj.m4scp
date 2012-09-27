@@ -1,0 +1,172 @@
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: check_impl_with_conj.m4scp
+// Description:
+// Файл содержит процедуру проверки целесообразности применения продукции
+// для высказываний, содержащих конъюнкцию атомарных высказываний
+// 1-й аргумент - левая часть высказывания
+// 2-й аргумент - правая часть высказывания
+// 3-й аргумент - значений для подстановки
+// 4-й аргумент - сгенерированная правая часть высказывания
+/////////////////////////////////////////////////////
+// 		Author: Daniil Shunkevich
+//        Date: 11.01.11
+
+#include "scp_keynodes.scsy"
+#include "com_keynodes.scsy"
+#include "lib_set.scsy"
+#include "lib_search.scsy"
+
+procedure(check_impl_with_conj,
+[[
+	search_linked_nodes;
+	search_direct_mapping;
+	search_inverse_mapping;
+]],
+[{	
+	arc,arc1,link1,set1,left,right,linked,map,res_map,conj_set,new_right,temp,node,seg,segments,value
+}],
+{[
+	1_: in_: left,
+	2_: in_: right,
+	3_: in_: value,
+	4_: out_: new_right
+]}
+)
+sys_get_location([1_: left,2_: assign_: seg])
+sys_set_default_segment([1_: fixed_: seg])
+sys_spin_segment([1_: fixed_: seg,	2_: assign_: segments])
+
+genElStr3([
+	1_: assign_: node_: const_: set1,
+	2_: assign_: pos_: const_: arc,
+	3_: fixed_: value
+])
+
+searchElStr3([
+	1_: fixed_: nrel_conj,
+	2_: assign_: const_: pos_: arc,
+	3_: fixed_: right
+],,not_conj)
+
+genEl([1_: assign_: node_: const_: new_right])
+searchSetStr3([
+	1_: fixed_: right,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: const_: node_: temp,
+	set3_: assign_: conj_set
+],,exit)
+
+label(next_node)
+ifVarAssign([1_: node],,no_erase_node)
+eraseElStr3([
+	1_: fixed_: conj_set,
+	2_: assign_: const_: pos_: f_: arc,
+	3_: fixed_: node
+])
+label(no_erase_node)
+searchElStr3([
+	1_: fixed_: conj_set,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: node
+],,exit)
+/////////////////////////////////////////////////////
+//for every conjunction atom
+callReturn([1_: fixed_: search_linked_nodes,
+	    2_: fixed_:
+		{[
+			1_: fixed_: left,
+			2_: fixed_: node,
+			3_: assign_: linked 
+		]}
+])
+printNl([1_: /"LINKED"/])
+printEl([1_: linked])
+printEl([1_: set1])
+callReturn([1_: fixed_: search_direct_mapping,
+	    2_: fixed_:
+		{[
+			1_: fixed_: left,
+			2_: fixed_: set1,
+			3_: assign_: map
+		]}
+])
+callReturn([1_: fixed_: search_inverse_mapping,
+	    2_: fixed_:
+		{[
+			1_: fixed_: left,
+			2_: fixed_: linked,
+			3_: fixed_: map,
+			4_: assign_: res_map
+		]}
+])
+sys_search([
+	1_: fixed_: node,
+	3_: fixed_: res_map
+],erase_right)
+searchSetStr3([
+	1_: fixed_: node,
+	2_: assign_: const_: pos_: arc,
+	3_: assign_: temp,
+	set3_: fixed_: new_right
+],next_node,next_node)
+
+label(not_conj)
+callReturn([1_: fixed_: search_linked_nodes,
+	    2_: fixed_:
+		{[
+			1_: fixed_: left,
+			2_: fixed_: right,
+			3_: assign_: linked 
+		]}
+])
+callReturn([1_: fixed_: search_direct_mapping,
+	    2_: fixed_:
+		{[
+			1_: fixed_: left,
+			2_: fixed_: set1,
+			3_: assign_: map
+		]}
+])
+callReturn([1_: fixed_: search_inverse_mapping,
+	    2_: fixed_:
+		{[
+			1_: fixed_: left,
+			2_: fixed_: linked,
+			3_: fixed_: map,
+			4_: assign_: res_map
+		]}
+])
+sys_search([
+	1_: fixed_: right,
+	3_: fixed_: res_map
+],exit)
+varAssign([1_: new_right,2_: right],exit,exit)
+label(erase_right)
+eraseEl([1_: new_right])
+label(exit)
+eraseEl([1_: set1])
+return()
+end
