@@ -20,7 +20,6 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 """
 
-
 '''
 Created on 18.11.2009
 
@@ -154,7 +153,12 @@ class Object(ScObject):
         # view parameters
         self.position = None
         self.scale = None
-        
+        self.trueScale = None
+
+        # animation parameters
+        self.isAnimated = True
+        self.paintedPartPerTime = 1.0 / 20.0
+
         # selection flag
         self.__selected = False
 
@@ -296,8 +300,40 @@ class Object(ScObject):
         """Update object state
         """
         self.needUpdate = False
+
+        if self.isAnimated: self._animate(_timeSinceLastFrame)
+
         if self.needViewUpdate: self._updateView()
-        
+
+    def _animate(self, _timeSinceLastFrame):
+        if self.scale is not None and self.trueScale is not None:
+            self._animateScale()
+
+    def _animateScale(self):
+        # animate x coordinate
+        if self.scale[0] <= self.trueScale[0] - self.trueScale[0] * self.paintedPartPerTime:
+            paintedPart = int(round(self.scale[0] + (self.trueScale[0] * self.paintedPartPerTime)))
+            self.scale = (paintedPart, self.scale[1], 0)
+        else:
+            self.scale = (self.trueScale[0], self.scale[1], 0)
+
+        # animate y coordinate
+        if self.scale[1] <= self.trueScale[1] - self.trueScale[1] * self.paintedPartPerTime:
+            paintedPart = int(round(self.scale[1] + (self.trueScale[1] * self.paintedPartPerTime)))
+            self.scale = (self.scale[0], paintedPart, 0)
+        else:
+            self.scale = (self.scale[0], self.trueScale[1], 0)
+
+        # animate z coordinate (if exist)
+        if isinstance(self.trueScale, ogre.Vector3) \
+        and self.scale[1] <= self.trueScale[2] - self.trueScale[2] * self.paintedPartPerTime:
+            paintedPart = int(round(self.scale[2] + (self.trueScale[2] * self.paintedPartPerTime)))
+            self.scale = ogre.Vector3(self.scale[0], self.scale[1], paintedPart)
+        elif isinstance(self.trueScale, ogre.Vector3):
+            self.scale = ogre.Vector3(self.scale[0], self.scale[1], self.trueScale[2])
+
+        self.setTmpScale(self.scale)
+
     def _updateView(self):
         """Updates view object representation
         """
@@ -371,22 +407,47 @@ class Object(ScObject):
         """ Return object position 
         """
         return self.position
-    
+
+    def setIsAnimated(self, isAnimated):
+        """ Determine whether the object must paint with the animation
+        @param isAnimated: boolean value,
+        True - if object should be painted with animation, False in the other case
+        """
+        self.isAnimated = isAnimated
+
+    def setPaintedPartPerTime(self, partPerTime):
+        """ Set part of the object that should be painted per time if the object painted with animation
+        @param partPerTime: float value of part of the object (example: 1.0 / 10.0)
+        """
+        self.paintedPartPerTime = partPerTime
+
     def setScale(self, sz):
         """Sets object size
         @param size: Ogre::Vector3 value of size  
         """
+        if self.isAnimated:
+            if isinstance(sz, ogre.Vector3):
+                self.setTmpScale(ogre.Vector3(self.scale[0], self.scale[1], self.scale[2]))
+            else:
+                self.setTmpScale((self.scale[0], self.scale[1]))
+
+            self.trueScale = sz
+        else:
+            self.setTmpScale(sz)
+            self.trueScale = sz
+
+    def setTmpScale(self, sz):
         self.needUpdate = True
         self._needLinkedUpdate()
-        
+
         self.needViewUpdate = True
         self.needScaleUpdate = True
         self.scale = sz
-            
+
     def getScale(self):
         """Returns object size
         """
-        return self.scale
+        return self.trueScale
     
     def setState(self, _state):
         """Sets object state
@@ -1888,7 +1949,7 @@ class ObjectSheet(ObjectDepth, ois.KeyListener, ois.MouseListener):
         self.__childObjects.append(child)
         # remove old parent
         if child.parent is not None:
-            childparent.removeChild(child)
+            child.parent.removeChild(child)
         child.parent = self 
         self.sceneNodeChilds.addChild(child.sceneNode)
         # notify listener

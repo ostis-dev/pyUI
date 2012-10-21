@@ -196,7 +196,9 @@ class Menu(objects.ObjectOverlay):
 
     def _updateView(self):
         """Updates view representation of object
-        """       
+        """
+        objects.ObjectOverlay._updateView(self)
+
         """if self.needPositionUpdate:
             if self.button is not None:
                 if self._auto_move:
@@ -205,7 +207,7 @@ class Menu(objects.ObjectOverlay):
                     self._auto_move_pos = (old_pos.left, old_pos.top)
                 else:
                     self.button.setPosition(self.position[0], self.position[1])
-            self.needPositionUpdate = False"""           
+            self.needPositionUpdate = False"""
         if self.needScaleUpdate:
             if self.button is not None:
                 self.button.setSize(self.scale[0], self.scale[1])
@@ -215,9 +217,7 @@ class Menu(objects.ObjectOverlay):
                 self.needScaleUpdate = False
             
                 menu_layout_group._layout(True)
-                       
-        objects.ObjectOverlay._updateView(self)
-        
+
     def _update(self, _timeSinceLastFrame):
         """Updates object
         """
