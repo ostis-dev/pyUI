@@ -197,7 +197,6 @@ class Menu(objects.ObjectOverlay):
     def _updateView(self):
         """Updates view representation of object
         """
-        objects.ObjectOverlay._updateView(self)
 
         """if self.needPositionUpdate:
             if self.button is not None:
@@ -217,6 +216,9 @@ class Menu(objects.ObjectOverlay):
                 self.needScaleUpdate = False
             
                 menu_layout_group._layout(True)
+
+        objects.ObjectOverlay._updateView(self)
+
 
     def _update(self, _timeSinceLastFrame):
         """Updates object
