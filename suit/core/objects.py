@@ -153,8 +153,13 @@ class Object(ScObject):
         
         # view parameters
         self.position = None
+        self.finalPosition = None
         self.scale = None
-        
+
+        self.needMovementAnimation = True
+        # part of the full path that object must pass per time
+        self.shift = 0.05
+
         # selection flag
         self.__selected = False
 
@@ -291,13 +296,42 @@ class Object(ScObject):
             raise AssertionError('Haven\'t object')
         else:
             self.linkedObjects[semantic].remove(object)
-    
+
     def _update(self, _timeSinceLastFrame):
         """Update object state
         """
         self.needUpdate = False
+
+        if self.isMovementAnimated: self._animateMovement(_timeSinceLastFrame)
+
         if self.needViewUpdate: self._updateView()
-        
+
+    def _animateMovement(self, _timeSinceLastFrame):
+        if self.position is not None and self.finalPosition is not None:
+            # animate x coordinate
+            if self.position[0] <= self.finalPosition[0] - self.finalPosition[0] * self.shift:
+                displacement = int(round(self.position[0] + (self.finalPosition[0] * self.shift)))
+                self.position = (displacement, self.position[1], 0)
+            else:
+                self.position = (self.finalPosition[0], self.position[1], 0)
+
+            # animate y coordinate
+            if self.position[1] <= self.finalPosition[1] - self.finalPosition[1] * self.shift:
+                displacement = int(round(self.position[1] + (self.finalPosition[1] * self.shift)))
+                self.position = (self.position[0], displacement, 0)
+            else:
+                self.position = (self.position[0], self.finalPosition[1], 0)
+
+            # animate z coordinate (if exist)
+            if isinstance(self.finalPosition, ogre.Vector3)\
+            and self.position[1] <= self.finalPosition[2] - self.finalPosition[2] * self.shift:
+                displacement = int(round(self.position[2] + (self.finalPosition[2] * self.shift)))
+                self.position = ogre.Vector3(self.position[0], self.position[1], displacement)
+            elif isinstance(self.finalPosition, ogre.Vector3):
+                self.position = ogre.Vector3(self.position[0], self.position[1], self.finalPosition[2])
+
+            self.setTmpPosition(self.position)
+
     def _updateView(self):
         """Updates view object representation
         """
@@ -354,24 +388,50 @@ class Object(ScObject):
         self.needScaleUpdate = True
         self.needPositionUpdate = True
         self.needUpdate = True
-    
+
+
+    def isMovementAnimated(self, needMovementAnimation):
+        """ Determines whether the object should be moved with animation
+        @param isMovementAnimated: boolean value,
+        True - if object should be moved with animation, False in the other case
+        """
+        self.needMovementAnimation = needMovementAnimation
+
+    def setShift(self, shift):
+        """ Sets the displacement of the object per time if the object painted with animation
+        @param shift: float value - part of the full path that object must pass per time
+        """
+        self.shift = shift
+
     def setPosition(self, pos):
         """Sets object position
         @param pos:Ogre::Vector3 value of position 
         """
+        if self.isMovementAnimated:
+            if isinstance(pos, ogre.Vector3):
+                self.setTmpPosition(ogre.Vector3(self.position[0], self.position[1], self.position[2]))
+            else:
+                self.setTmpPosition((self.position[0], self.position[1]))
+
+            self.finalPosition = pos
+        else:
+            self.setTmpPosition(pos)
+            self.finalPosition = pos
+
+    def getPosition(self):
+        """ Returns object position
+        """
+        return self.finalPosition
+
+    def setTmpPosition(self, pos):
         self.needUpdate = True
         self._needLinkedUpdate()
-        
+
         self.needViewUpdate = True
         self.needPositionUpdate = True
         assert pos
         self.position = pos
-            
-    def getPosition(self):
-        """ Return object position 
-        """
-        return self.position
-    
+
     def setScale(self, sz):
         """Sets object size
         @param size: Ogre::Vector3 value of size  
@@ -382,7 +442,7 @@ class Object(ScObject):
         self.needViewUpdate = True
         self.needScaleUpdate = True
         self.scale = sz
-            
+
     def getScale(self):
         """Returns object size
         """
@@ -1888,7 +1948,7 @@ class ObjectSheet(ObjectDepth, ois.KeyListener, ois.MouseListener):
         self.__childObjects.append(child)
         # remove old parent
         if child.parent is not None:
-            childparent.removeChild(child)
+            child.parent.removeChild(child)
         child.parent = self 
         self.sceneNodeChilds.addChild(child.sceneNode)
         # notify listener
