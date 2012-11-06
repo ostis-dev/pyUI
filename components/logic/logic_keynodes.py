@@ -1,4 +1,4 @@
-﻿"""
+"""
 -----------------------------------------------------------------------------
 This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
 For the latest info, see http://www.ostis.net
@@ -19,45 +19,20 @@ You should have received a copy of the GNU Lesser General Public License
 along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 """
-__all__ = ['scg',
-			'common',
-			'geometry',
-			'text',
-			'audio',
-			'chemistry',
-			'flash',
-			'graph',
-			'image',
-			'map',
-			'space',
-			'video',
-			'panels',
-			'questions',
-			'LUI',
-			'math',
-			'LUI_voice_output',
-            'logic'
-            ]
-			
-modules = [
-			'common.menu',
-			'panels.mainpanel',
-#			'panels.windowpanel',
-			#'panels.taskpanel',
-			'scg.base.scg_init',
-			'text.text_init',
-#			'audio.audio_init',
-#			'chemistry.chem_init',
-			#'flash.flash_init',
-			'graph.graph_init',
-			'image.image_init',
-#			'map.map_init',
-			#'space.space_init',
-			'video.video_init',
-			'geometry.base.geom_init',
-#			'LUI.lui_init',
-#			'LUI_voice_output.vo_init',
-            'questions.questions_init',
-#			'math.math_init'
-            'logic.logic_init'
-]
+
+from suit.core.keynodes import *
+
+
+class Objects:
+    true       =   session.find_keynode_full_uri(u"/seb/logic/истина")
+    false =   session.find_keynode_full_uri(u"/seb/logic/ложь")
+
+class Relation:
+    nrel_negation   =   session.find_keynode_full_uri(u"/seb/logic/отрицание*")
+    nrel_conjunction   =   session.find_keynode_full_uri(u"/seb/logic/конъюнкция*")
+    nrel_equivalence   =   session.find_keynode_full_uri(u"/seb/logic/эквиваленция*")
+    nrel_implication   =   session.find_keynode_full_uri(u"/seb/logic/импликация*")
+    nrel_disjunction   =   session.find_keynode_full_uri(u"/seb/logic/дизъюнкция*")
+
+    rrel_if            =   session.find_keynode_full_uri(u"/seb/logic/если_")
+    rrel_then            =   session.find_keynode_full_uri(u"/seb/logic/то_")

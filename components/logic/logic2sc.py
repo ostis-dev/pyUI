@@ -1,4 +1,4 @@
-﻿"""
+"""
 -----------------------------------------------------------------------------
 This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
 For the latest info, see http://www.ostis.net
@@ -19,45 +19,21 @@ You should have received a copy of the GNU Lesser General Public License
 along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 """
-__all__ = ['scg',
-			'common',
-			'geometry',
-			'text',
-			'audio',
-			'chemistry',
-			'flash',
-			'graph',
-			'image',
-			'map',
-			'space',
-			'video',
-			'panels',
-			'questions',
-			'LUI',
-			'math',
-			'LUI_voice_output',
-            'logic'
-            ]
-			
-modules = [
-			'common.menu',
-			'panels.mainpanel',
-#			'panels.windowpanel',
-			#'panels.taskpanel',
-			'scg.base.scg_init',
-			'text.text_init',
-#			'audio.audio_init',
-#			'chemistry.chem_init',
-			#'flash.flash_init',
-			'graph.graph_init',
-			'image.image_init',
-#			'map.map_init',
-			#'space.space_init',
-			'video.video_init',
-			'geometry.base.geom_init',
-#			'LUI.lui_init',
-#			'LUI_voice_output.vo_init',
-            'questions.questions_init',
-#			'math.math_init'
-            'logic.logic_init'
-]
+
+from suit.core.objects import Translator
+import suit.core.objects as objects
+import suit.core.kernel as core
+import sc_core.pm as sc
+
+class TranslatorLoogic2Sc(Translator):
+
+    def __init__(self):
+        Translator.__init__(self)
+
+    def __del__(self):
+        Translator.__del__(self)
+
+    def translate_impl(self, _input, _output):
+        errors = []
+
+        return errors
