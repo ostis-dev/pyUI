@@ -22,6 +22,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 from components.logic import logic_viewer, logic_editor
 import logic2sc
+import suit.core.sc_utils as sc_utils
+import sc_core.pm as sc
 
 def initialize():
 
@@ -30,6 +32,8 @@ def initialize():
     from suit.core.objects import Factory
 
     global logic2sc_factory
+    global edit_factory
+    global view_factory
 
     kernel = core.Kernel.getSingleton()
 
@@ -44,20 +48,29 @@ def initialize():
     kernel.registerEditorFactory(edit_factory, [keyn.ui.format_logic])
 
 #    translator=logic2sc_creator()
+#    session = kernel.session()
+#    segment = kernel.segment()
+#    def_node = session.create_el_idtf(segment,sc.SC_CONST, "root_logic_node")
 #
-#    translator.translate("ololo",)
+#    translator.translate_impl(u"(!(a<->b)  &(a^!LL))->c",def_node[1])
 
 
 
 def shutdown():
     import suit.core.kernel as core
     kernel = core.Kernel.getSingleton()
+
     global logic2sc_factory
+    global edit_factory
+    global view_factory
+
     # unregister components
     kernel.unregisterTranslatorFactory(logic2sc_factory)
+    kernel.unregisterTranslatorFactory(view_factory)
+    kernel.unregisterTranslatorFactory(edit_factory)
 
 def logic2sc_creator():
-    return logic2sc.TranslatorLoogic2Sc()
+    return logic2sc.TranslatorLogic2Sc()
 
 def viewer_creator():
     return logic_viewer.TextViewer()
