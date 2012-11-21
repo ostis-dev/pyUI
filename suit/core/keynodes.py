@@ -174,6 +174,8 @@ class ui:
     format_graph            =   session.find_keynode_full_uri(u"/ui/core/GRAPH")
     
     format_space            =   session.find_keynode_full_uri(u"/ui/core/SPACEx")
+
+    format_logic            =   session.find_keynode_full_uri(u"/ui/core/LOGICx")
     
     # command keynodes
     atom_command            =   session.find_keynode_full_uri(u"/ui/core/атомарная команда")
