@@ -35,6 +35,7 @@ import sc_core.pm
 import keynodes
 import sc_utils
 import thread
+from suit.core.utils import AnimationUtils
 
 # store global kernal object
 kernel = core.Kernel.getSingleton()
@@ -153,11 +154,15 @@ class Object(ScObject):
         # view parameters
         self.position = None
         self.scale = None
-        self.trueScale = None
+        self.newScale = (0, 0, 0)
+        self.oldScale = (0, 0, 0)
 
         # animation parameters
         self.isAnimated = True
-        self.paintedPartPerTime = 1.0 / 20.0
+        self.animationScaleProgress = (0, 0, 0)
+        self.animationTime = 1
+        self.animationType = AnimationUtils.BACK
+        self.easeAnimationType = AnimationUtils.EASE_IN_OUT
 
         # selection flag
         self.__selected = False
@@ -306,33 +311,45 @@ class Object(ScObject):
         if self.needViewUpdate: self._updateView()
 
     def _animate(self, _timeSinceLastFrame):
-        if self.scale is not None and self.trueScale is not None:
-            self._animateScale()
+        if self.scale is not None:
+            self._animateScale(_timeSinceLastFrame)
 
-    def _animateScale(self):
+    def _animateScale(self, _timeSinceLastFrame):
+        if self.scale == self.newScale:
+            return
+
+        self.animationScaleProgress = (
+            self._increaseAnimationProgress(self.animationScaleProgress[0], _timeSinceLastFrame),
+            self._increaseAnimationProgress(self.animationScaleProgress[1], _timeSinceLastFrame),
+            self._increaseAnimationProgress(self.animationScaleProgress[2], _timeSinceLastFrame)
+        )
+
         # animate x coordinate
-        if self.scale[0] <= self.trueScale[0] - self.trueScale[0] * self.paintedPartPerTime:
-            paintedPart = int(round(self.scale[0] + (self.trueScale[0] * self.paintedPartPerTime)))
-            self.scale = (paintedPart, self.scale[1], 0)
-        else:
-            self.scale = (self.trueScale[0], self.scale[1], 0)
+        progressX = float(self.animationScaleProgress[0]) / float(self.animationTime)
+        animatedX = AnimationUtils().animateValue(
+            self.newScale[0] - self.oldScale[0], progressX, self.animationType, self.easeAnimationType)
+        self.scale = (self.oldScale[0] + animatedX, self.scale[1], 0)
 
         # animate y coordinate
-        if self.scale[1] <= self.trueScale[1] - self.trueScale[1] * self.paintedPartPerTime:
-            paintedPart = int(round(self.scale[1] + (self.trueScale[1] * self.paintedPartPerTime)))
-            self.scale = (self.scale[0], paintedPart, 0)
-        else:
-            self.scale = (self.scale[0], self.trueScale[1], 0)
+        progressY = float(self.animationScaleProgress[1]) / float(self.animationTime)
+        animatedY = AnimationUtils().animateValue(
+            self.newScale[1] - self.oldScale[1], progressY, self.animationType, self.easeAnimationType)
+        self.scale = (self.scale[0], self.oldScale[1] + animatedY, 0)
 
         # animate z coordinate (if exist)
-        if isinstance(self.trueScale, ogre.Vector3) \
-        and self.scale[1] <= self.trueScale[2] - self.trueScale[2] * self.paintedPartPerTime:
-            paintedPart = int(round(self.scale[2] + (self.trueScale[2] * self.paintedPartPerTime)))
-            self.scale = ogre.Vector3(self.scale[0], self.scale[1], paintedPart)
-        elif isinstance(self.trueScale, ogre.Vector3):
-            self.scale = ogre.Vector3(self.scale[0], self.scale[1], self.trueScale[2])
+        if isinstance(self.oldScale, ogre.Vector3):
+            progressZ = float(self.animationScaleProgress[2]) / float(self.animationTime)
+            animatedZ = AnimationUtils().animateValue(
+                self.newScale[2] - self.oldScale[2], progressZ, self.animationType, self.easeAnimationType)
+            self.scale = ogre.Vector3(self.scale[0], self.scale[1], self.oldScale[2] + animatedZ)
 
-        self.setTmpScale(self.scale)
+        self.setCurrentScale(self.scale)
+
+    def _increaseAnimationProgress(self, animationProgress, _timeSinceLastFrame):
+        if animationProgress < self.animationTime:
+            return animationProgress + _timeSinceLastFrame
+        else:
+            return self.animationTime
 
     def _updateView(self):
         """Updates view object representation
@@ -425,18 +442,22 @@ class Object(ScObject):
         """Sets object size
         @param size: Ogre::Vector3 value of size  
         """
+
         if self.isAnimated:
-            if isinstance(sz, ogre.Vector3):
-                self.setTmpScale(ogre.Vector3(self.scale[0], self.scale[1], self.scale[2]))
-            else:
-                self.setTmpScale((self.scale[0], self.scale[1]))
-
-            self.trueScale = sz
+            self._refreshScaleAnimationProperties(self.newScale, sz)
         else:
-            self.setTmpScale(sz)
-            self.trueScale = sz
+            self.setCurrentScale(sz)
 
-    def setTmpScale(self, sz):
+    def _refreshScaleAnimationProperties(self, oldScale, newScale):
+        if oldScale is None or newScale is None or oldScale == newScale:
+            return
+
+        self.oldScale = self.newScale
+        self.newScale = newScale
+        self.animationScaleProgress = (0.0, 0.0, 0.0)
+
+
+    def setCurrentScale(self, sz):
         self.needUpdate = True
         self._needLinkedUpdate()
 
@@ -447,7 +468,7 @@ class Object(ScObject):
     def getScale(self):
         """Returns object size
         """
-        return self.trueScale
+        return self.newScale
     
     def setState(self, _state):
         """Sets object state
