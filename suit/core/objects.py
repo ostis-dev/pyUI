@@ -160,9 +160,9 @@ class Object(ScObject):
         # animation parameters
         self.isAnimated = True
         self.animationScaleProgress = (0, 0, 0)
-        self.animationTime = 1
-        self.animationType = AnimationUtils.BACK
-        self.easeAnimationType = AnimationUtils.EASE_IN_OUT
+        self.animationTime = 0.2
+        self.animationType = AnimationUtils.POWER_OF_TWO
+        self.easeAnimationType = AnimationUtils.EASE_OUT
 
         # selection flag
         self.__selected = False
