@@ -20,7 +20,7 @@
 
 # core KB
 #scn:> "/seb/planimetry" "/etc/com_keynodes" "seb/planimetry_src" "http://ostisgeometry.sourceforge.net" "Служебная категория"
-#scg:> "seb/planimetry_src" -> "seb/planimetry"
+scg:> "seb/planimetry_src" -> "seb/planimetry"
 
 scs:> "seb/lingv_src" -> "seb/lingv"
 
