@@ -158,11 +158,11 @@ class Object(ScObject):
         self.oldScale = (0, 0, 0)
 
         # animation parameters
-        self.isAnimated = True
+        self.isAnimated = False
         self.animationScaleProgress = (0, 0, 0)
         self.animationTime = 0.2
-        self.animationType = AnimationUtils.POWER_OF_TWO
-        self.easeAnimationType = AnimationUtils.EASE_OUT
+        self.animationType = AnimationUtils.BACK
+        self.easeAnimationType = AnimationUtils.EASE_IN_OUT
 
         # selection flag
         self.__selected = False
@@ -464,6 +464,8 @@ class Object(ScObject):
         self.needViewUpdate = True
         self.needScaleUpdate = True
         self.scale = sz
+        if not self.isAnimated:
+            self.newScale = sz
 
     def getScale(self):
         """Returns object size

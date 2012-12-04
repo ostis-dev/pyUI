@@ -139,6 +139,7 @@ class Menu(objects.ObjectOverlay):
         self.scale = (10, 14)
         
         self.textUpdateImpl = self._textUpdateImpl
+        self.isAnimated = True
        
     def __del__(self):
         '''
