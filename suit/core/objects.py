@@ -20,6 +20,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 """
 
+
 '''
 Created on 18.11.2009
 
@@ -35,7 +36,6 @@ import sc_core.pm
 import keynodes
 import sc_utils
 import thread
-from suit.core.utils import AnimationUtils
 
 # store global kernal object
 kernel = core.Kernel.getSingleton()
@@ -154,16 +154,7 @@ class Object(ScObject):
         # view parameters
         self.position = None
         self.scale = None
-        self.newScale = (0, 0, 0)
-        self.oldScale = (0, 0, 0)
-
-        # animation parameters
-        self.isAnimated = False
-        self.animationScaleProgress = (0, 0, 0)
-        self.animationTime = 0.2
-        self.animationType = AnimationUtils.BACK
-        self.easeAnimationType = AnimationUtils.EASE_IN_OUT
-
+        
         # selection flag
         self.__selected = False
 
@@ -305,52 +296,8 @@ class Object(ScObject):
         """Update object state
         """
         self.needUpdate = False
-
-        if self.isAnimated: self._animate(_timeSinceLastFrame)
-
         if self.needViewUpdate: self._updateView()
-
-    def _animate(self, _timeSinceLastFrame):
-        if self.scale is not None:
-            self._animateScale(_timeSinceLastFrame)
-
-    def _animateScale(self, _timeSinceLastFrame):
-        if self.scale == self.newScale:
-            return
-
-        self.animationScaleProgress = (
-            self._increaseAnimationProgress(self.animationScaleProgress[0], _timeSinceLastFrame),
-            self._increaseAnimationProgress(self.animationScaleProgress[1], _timeSinceLastFrame),
-            self._increaseAnimationProgress(self.animationScaleProgress[2], _timeSinceLastFrame)
-        )
-
-        # animate x coordinate
-        progressX = float(self.animationScaleProgress[0]) / float(self.animationTime)
-        animatedX = AnimationUtils().animateValue(
-            self.newScale[0] - self.oldScale[0], progressX, self.animationType, self.easeAnimationType)
-        self.scale = (self.oldScale[0] + animatedX, self.scale[1], 0)
-
-        # animate y coordinate
-        progressY = float(self.animationScaleProgress[1]) / float(self.animationTime)
-        animatedY = AnimationUtils().animateValue(
-            self.newScale[1] - self.oldScale[1], progressY, self.animationType, self.easeAnimationType)
-        self.scale = (self.scale[0], self.oldScale[1] + animatedY, 0)
-
-        # animate z coordinate (if exist)
-        if isinstance(self.oldScale, ogre.Vector3):
-            progressZ = float(self.animationScaleProgress[2]) / float(self.animationTime)
-            animatedZ = AnimationUtils().animateValue(
-                self.newScale[2] - self.oldScale[2], progressZ, self.animationType, self.easeAnimationType)
-            self.scale = ogre.Vector3(self.scale[0], self.scale[1], self.oldScale[2] + animatedZ)
-
-        self.setCurrentScale(self.scale)
-
-    def _increaseAnimationProgress(self, animationProgress, _timeSinceLastFrame):
-        if animationProgress < self.animationTime:
-            return animationProgress + _timeSinceLastFrame
-        else:
-            return self.animationTime
-
+        
     def _updateView(self):
         """Updates view object representation
         """
@@ -424,53 +371,22 @@ class Object(ScObject):
         """ Return object position 
         """
         return self.position
-
-    def setIsAnimated(self, isAnimated):
-        """ Determine whether the object must paint with the animation
-        @param isAnimated: boolean value,
-        True - if object should be painted with animation, False in the other case
-        """
-        self.isAnimated = isAnimated
-
-    def setPaintedPartPerTime(self, partPerTime):
-        """ Set part of the object that should be painted per time if the object painted with animation
-        @param partPerTime: float value of part of the object (example: 1.0 / 10.0)
-        """
-        self.paintedPartPerTime = partPerTime
-
+    
     def setScale(self, sz):
         """Sets object size
         @param size: Ogre::Vector3 value of size  
         """
-
-        if self.isAnimated:
-            self._refreshScaleAnimationProperties(self.newScale, sz)
-        else:
-            self.setCurrentScale(sz)
-
-    def _refreshScaleAnimationProperties(self, oldScale, newScale):
-        if oldScale is None or newScale is None or oldScale == newScale:
-            return
-
-        self.oldScale = self.newScale
-        self.newScale = newScale
-        self.animationScaleProgress = (0.0, 0.0, 0.0)
-
-
-    def setCurrentScale(self, sz):
         self.needUpdate = True
         self._needLinkedUpdate()
-
+        
         self.needViewUpdate = True
         self.needScaleUpdate = True
         self.scale = sz
-        if not self.isAnimated:
-            self.newScale = sz
-
+            
     def getScale(self):
         """Returns object size
         """
-        return self.newScale
+        return self.scale
     
     def setState(self, _state):
         """Sets object state
@@ -1972,7 +1888,7 @@ class ObjectSheet(ObjectDepth, ois.KeyListener, ois.MouseListener):
         self.__childObjects.append(child)
         # remove old parent
         if child.parent is not None:
-            child.parent.removeChild(child)
+            childparent.removeChild(child)
         child.parent = self 
         self.sceneNodeChilds.addChild(child.sceneNode)
         # notify listener

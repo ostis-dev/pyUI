@@ -53,7 +53,7 @@ kernel = core.Kernel.getSingleton()
 
 session = kernel.session()
 session.open_segment(u"/ui/menu")
-main_menu				=	session.find_keynode_full_uri(u"/ui/menu/main menu")
+main_menu                =    session.find_keynode_full_uri(u"/ui/menu/main menu")
 
 menu_root = None
 menu_layout_group = None
@@ -139,7 +139,6 @@ class Menu(objects.ObjectOverlay):
         self.scale = (10, 14)
         
         self.textUpdateImpl = self._textUpdateImpl
-        self.isAnimated = True
        
     def __del__(self):
         '''
@@ -197,8 +196,7 @@ class Menu(objects.ObjectOverlay):
 
     def _updateView(self):
         """Updates view representation of object
-        """
-
+        """       
         """if self.needPositionUpdate:
             if self.button is not None:
                 if self._auto_move:
@@ -207,7 +205,7 @@ class Menu(objects.ObjectOverlay):
                     self._auto_move_pos = (old_pos.left, old_pos.top)
                 else:
                     self.button.setPosition(self.position[0], self.position[1])
-            self.needPositionUpdate = False"""
+            self.needPositionUpdate = False"""           
         if self.needScaleUpdate:
             if self.button is not None:
                 self.button.setSize(self.scale[0], self.scale[1])
@@ -217,10 +215,9 @@ class Menu(objects.ObjectOverlay):
                 self.needScaleUpdate = False
             
                 menu_layout_group._layout(True)
-
+                       
         objects.ObjectOverlay._updateView(self)
-
-
+        
     def _update(self, _timeSinceLastFrame):
         """Updates object
         """
