@@ -382,7 +382,7 @@
   
   <Skin name = "IdtfPanel" size = "42 42" texture = "#{MyGUI_Theme_Texture}">
 	<Property key="NeedKey" value = "false" />
-	<Property key="NeedMouse" value = "false" />
+	<Property key="NeedMouse" value = "true" />
 	
 	<BasisSkin type="SubSkin" offset = "0 0 10 10" align = "Left Top">
       <State name="normal" offset = "232 46 10 10"/>
