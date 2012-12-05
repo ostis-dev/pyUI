@@ -154,8 +154,8 @@ class Object(ScObject):
         # view parameters
         self.position = None
         self.scale = None
-        self.newScale = (0, 0, 0)
-        self.oldScale = (0, 0, 0)
+        self.newScale = None
+        self.oldScale = None
 
         # animation parameters
         self.isAnimated = True
@@ -315,7 +315,7 @@ class Object(ScObject):
             self._animateScale(_timeSinceLastFrame)
 
     def _animateScale(self, _timeSinceLastFrame):
-        if self.scale == self.newScale:
+        if self.oldScale is None or self.newScale is None or self.scale == self.newScale:
             return
 
         self.animationScaleProgress = (
@@ -448,12 +448,16 @@ class Object(ScObject):
         else:
             self.setCurrentScale(sz)
 
+        self.newScale = sz
+
     def _refreshScaleAnimationProperties(self, oldScale, newScale):
+        if oldScale is None:
+            self.setCurrentScale(newScale)
+
         if oldScale is None or newScale is None or oldScale == newScale:
             return
 
         self.oldScale = self.newScale
-        self.newScale = newScale
         self.animationScaleProgress = (0.0, 0.0, 0.0)
 
 
@@ -468,7 +472,7 @@ class Object(ScObject):
     def getScale(self):
         """Returns object size
         """
-        return self.newScale
+        return self.newScale if self.newScale is not None else self.scale
     
     def setState(self, _state):
         """Sets object state
