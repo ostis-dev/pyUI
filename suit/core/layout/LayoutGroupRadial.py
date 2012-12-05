@@ -37,7 +37,7 @@ class LayoutGroupRadialSimple(LayoutGroupDepth):
     """ 
     
     def __init__(self,
-                 _distance = 2.0):
+                 _distance = 4.0):
         """Constructor
         """
         LayoutGroupDepth.__init__(self)
