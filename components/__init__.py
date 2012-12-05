@@ -42,7 +42,7 @@ modules = [
 			'common.menu',
 			'panels.mainpanel',
 #			'panels.windowpanel',
-			#'panels.taskpanel',
+			'panels.taskpanel',
 			'scg.base.scg_init',
 			'text.text_init',
 #			'audio.audio_init',
