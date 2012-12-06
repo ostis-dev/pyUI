@@ -98,7 +98,7 @@ class TextInput:
             self.panel.setPosition(pos[0], pos[1])
             # set old text to edit
 #            text_value = self.object.getText()
-            if self.default_value is not None: self.idtf_edit.setCaption(self.default_value)
+            if self.default_value is not None: self.idtf_edit.setCaption(str(self.default_value))
             mygui.InputManager.getInstance().setKeyFocusWidget(self.idtf_edit)
         else:
             self.destroyWidgets()
