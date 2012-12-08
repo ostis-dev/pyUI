@@ -30,11 +30,30 @@ Created on 21.04.2011
 _version_   =   "0.1.0"
 _name_      =   "Math-interface"
 
+import suit.core.kernel as core
+import math2sc
+import os
+
+
 def initialize():
-    pass
+    kernel = core.Kernel.getSingleton()
+    import suit.core.keynodes as keyn
+    from suit.core.objects import Factory
+
+    global transmath2sc_factory
+
+    transmath2sc_factory = Factory(mathToSCCreator)
+    kernel.registerTranslatorFactory(transmath2sc_factory, [keyn.ui.format_mathML], [keyn.ui.format_sc])
+    test = math2sc.TranslatorMath2Sc()
+    test.translate_impl(123,123)
+
 
 def shutdown():
-    pass
+    global transmath2sc_factory
+    # unregister components
+    kernel = core.Kernel.getSingleton()
+    kernel.unregisterTranslatorFactory(transmath2sc_factory)
+
     
 def _resourceLocations():
     """Specified resources for a math module
@@ -42,3 +61,6 @@ def _resourceLocations():
     res = []
 
     return res
+
+def mathToSCCreator():
+    return math2sc.TranslatorMath2Sc

@@ -27,4 +27,4 @@ Created on 21.04.2011
 @author: Denis Koronchik
 '''
 
-__all__ = []
+__all__ = ["math2sc"]
