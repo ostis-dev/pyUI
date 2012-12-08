@@ -44,8 +44,6 @@ def initialize():
 
     transmath2sc_factory = Factory(mathToSCCreator)
     kernel.registerTranslatorFactory(transmath2sc_factory, [keyn.ui.format_mathML], [keyn.ui.format_sc])
-    test = math2sc.TranslatorMath2Sc()
-    test.translate_impl(123,123)
 
 
 def shutdown():
