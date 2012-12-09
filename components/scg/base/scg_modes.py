@@ -802,6 +802,9 @@ class SCgEditMode(BaseEditMode):
         elif key == ois.KC_3:
             import suit.core.layout.LayoutGroupiGraph as layout
             self._logic._getSheet().setLayoutGroup(layout.LayoutGroupIGraph(layout.LayoutGroupIGraph.LT_GFR))
+        elif key == ois.KC_4:
+            import suit.core.layout.LayoutGroupRadial as layout
+            self._logic._getSheet().setLayoutGroup(layout.LayoutGroupRadialSimple())
             
 #        elif key == ois.KC_K:
 #            self._logic._createContour([ogre.Vector3(-3, -2, 0),

@@ -35,14 +35,15 @@ __all__ = ['scg',
 			'questions',
 			'LUI',
 			'math',
-			'LUI_voice_output'
+			'LUI_voice_output',
+            'logic'
             ]
 			
 modules = [
 			'common.menu',
 			'panels.mainpanel',
 #			'panels.windowpanel',
-			#'panels.taskpanel',
+			'panels.taskpanel',
 			'scg.base.scg_init',
 			'text.text_init',
 #			'audio.audio_init',
@@ -56,6 +57,7 @@ modules = [
 			'geometry.base.geom_init',
 #			'LUI.lui_init',
 #			'LUI_voice_output.vo_init',
-			'questions.questions_init',
+            'questions.questions_init',
 #			'math.math_init'
+            'logic.logic_init'
 ]
