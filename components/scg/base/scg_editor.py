@@ -125,6 +125,7 @@ class SCgEditor(BaseModeLogic):
         if _isRoot:
             render_engine.SceneManager.setBackMaterial("Back/Lime")
         else:
+            self.__viewer.makeNewScreenshot()
             render_engine.SceneManager.setDefaultBackMaterial()  
             
     def _createNode(self, _pos, _type = "node/const/elem"):
