@@ -47,6 +47,9 @@ def initialize():
     kernel.registerOperation(ScEventHandlerSetMember(u"операция эмуляции нажатия(отпускания) кнопки мыши",
                                                      keynodes.ui.init_base_user_cmd,
                                                      mouse_button, []))
+    kernel.registerOperation(ScEventHandlerSetMember(u"операция эмуляции нажатия(отпускания) кнопки клавиатуры",
+                                                    keynodes.ui.init_base_user_cmd,
+                                                    keyboard_button, []))
 
 def shutdown():
     pass
@@ -173,4 +176,50 @@ def mouse_button(_params, _segment):
     cmd.eventFinished = finish_callback
     cmds[cmd] = command
     cmd.start()
-    
+
+def keyboard_button(_params, _segment):
+
+    session = Kernel.session()
+
+    # getting command node
+    command = session.search_one_shot(session.sc_constraint_new(sc_core.constants.CONSTR_5_f_a_a_a_f,
+                                                                keynodes.ui.init_base_user_cmd,
+                                                                sc_core.pm.SC_A_CONST,
+                                                                sc_core.pm.SC_N_CONST,
+                                                                sc_core.pm.SC_A_CONST,
+                                                                _params), True, 5)
+
+    if not command:
+        return
+    command = command[2]
+
+    pressed = False
+    # check if it's a mouse move button press command
+    if sc_utils.checkIncToSets(session, command, [keynodes.ui.cmd_keyboard_button_press], sc_core.pm.SC_CONST):
+        pressed = True
+    elif not sc_utils.checkIncToSets(session, command, [keynodes.ui.cmd_keyboard_button_release], sc_core.pm.SC_CONST):
+        return
+
+    # need to get button id
+    button = session.search_one_shot(session.sc_constraint_new(sc_core.constants.CONSTR_3_f_a_a,
+                                                            command,
+                                                            sc_core.pm.SC_A_CONST,
+                                                            sc_core.pm.SC_N_CONST), True, 3)
+
+    if button is None:
+        raise RuntimeError("There are no button id for keyboard button command %s" % str(command));
+    button = button[2]
+
+    button_id = -1
+
+    for i in keynodes.ui.keyboard.dictionary:
+        if button.this == i.this:
+            button_id = keynodes.ui.keyboard.dictionary[i]
+
+    if button_id == -1:
+        raise RuntimeError("Unknown keyboard button id for command %s" % str(command))
+
+    cmd = commands.KeyboardButton(button_id, 0.1, pressed)
+    cmd.eventFinished = finish_callback
+    cmds[cmd] = command
+    cmd.start()
