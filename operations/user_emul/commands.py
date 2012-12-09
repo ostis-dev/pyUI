@@ -191,5 +191,45 @@ class MouseButton(BaseCommand):
             self.paused = True
             
         self.press_time -= timeSinceLastFrame
-        
-        
+
+class KeyboardButton(BaseCommand):
+
+    def __init__(self, _button_id, _time, _pressed):
+        """Constructor
+
+        @param _button_id:    pressed button id
+        @type _button_id:    ois.KeyCode
+
+        @param _time: press button time
+        @type _time: int
+
+        @param _pressed: button pressed flag. If it's True, then need to emulate button press, else - button release.
+        @type _pressed: bool
+        """
+        BaseCommand.__init__(self)
+
+        self.button_id = _button_id
+        self.press_time = _time
+        self.pressed = _pressed
+        self.paused = False
+        self.pause = 0.5
+
+    def _update(self, timeSinceLastFrame):
+        BaseCommand._update(self, timeSinceLastFrame)
+
+        if self.paused:
+            if self.pause <= 0:
+                self.finish()
+            else:
+                self.pause -= timeSinceLastFrame
+
+
+        if self.press_time <= 0 and not self.paused:
+            if self.pressed :
+                render_engine._inputListener.keyPressed(ois.KeyEvent(render_engine._oisKeyboard, self.button_id, True))
+            elif not self.pressed :
+                render_engine._inputListener.keyReleased(ois.KeyEvent(render_engine._oisKeyboard, self.button_id, True))
+
+            self.paused = True
+
+        self.press_time -= timeSinceLastFrame
