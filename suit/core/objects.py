@@ -431,12 +431,6 @@ class Object(ScObject):
         """
         self.isAnimated = isAnimated
 
-    def setPaintedPartPerTime(self, partPerTime):
-        """ Set part of the object that should be painted per time if the object painted with animation
-        @param partPerTime: float value of part of the object (example: 1.0 / 10.0)
-        """
-        self.paintedPartPerTime = partPerTime
-
     def setScale(self, sz):
         """Sets object size
         @param size: Ogre::Vector3 value of size  
