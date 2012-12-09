@@ -3,12 +3,12 @@
 #include "meta_info.scsy"
 #include "ui_keynodes.scsy"
 lui\keynodes.gwf
-lui\patterns\1.gwf
-lui\patterns\2.gwf
-lui\patterns\3.gwf
-lui\patterns\4.gwf
-lui\patterns\5.gwf
-lui\patterns\6.gwf
-lui\patterns\7.gwf
-lui\patterns\8.gwf
+lui\patterns\������(�������������).gwf
+lui\patterns\������(�����������).gwf
+lui\patterns\������(���.���.���.�������.).gwf
+lui\patterns\������(���.���.���.���.�����.).gwf
+lui\patterns\������(���������).gwf
+lui\patterns\������(���������).gwf
+lui\patterns\������(���.���.����).gwf
+lui\patterns\������(�����������).gwf
 
