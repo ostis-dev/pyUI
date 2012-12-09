@@ -20,7 +20,6 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 """
 
-
 '''
 Created on 18.11.2009
 
@@ -36,6 +35,7 @@ import sc_core.pm
 import keynodes
 import sc_utils
 import thread
+from suit.core.utils import AnimationUtils
 
 # store global kernal object
 kernel = core.Kernel.getSingleton()
@@ -154,7 +154,16 @@ class Object(ScObject):
         # view parameters
         self.position = None
         self.scale = None
-        
+        self.newScale = None
+        self.oldScale = None
+
+        # animation parameters
+        self.isAnimated = True
+        self.animationScaleProgress = (0, 0, 0)
+        self.animationTime = 1
+        self.animationType = AnimationUtils.BACK
+        self.easeAnimationType = AnimationUtils.EASE_IN_OUT
+
         # selection flag
         self.__selected = False
 
@@ -296,8 +305,52 @@ class Object(ScObject):
         """Update object state
         """
         self.needUpdate = False
+
+        if self.isAnimated: self._animate(_timeSinceLastFrame)
+
         if self.needViewUpdate: self._updateView()
-        
+
+    def _animate(self, _timeSinceLastFrame):
+        if self.scale is not None:
+            self._animateScale(_timeSinceLastFrame)
+
+    def _animateScale(self, _timeSinceLastFrame):
+        if self.oldScale is None or self.newScale is None or self.scale == self.newScale:
+            return
+
+        self.animationScaleProgress = (
+            self._increaseAnimationProgress(self.animationScaleProgress[0], _timeSinceLastFrame),
+            self._increaseAnimationProgress(self.animationScaleProgress[1], _timeSinceLastFrame),
+            self._increaseAnimationProgress(self.animationScaleProgress[2], _timeSinceLastFrame)
+        )
+
+        # animate x coordinate
+        progressX = float(self.animationScaleProgress[0]) / float(self.animationTime)
+        animatedX = AnimationUtils().animateValue(
+            self.newScale[0] - self.oldScale[0], progressX, self.animationType, self.easeAnimationType)
+        self.scale = (self.oldScale[0] + animatedX, self.scale[1], 0)
+
+        # animate y coordinate
+        progressY = float(self.animationScaleProgress[1]) / float(self.animationTime)
+        animatedY = AnimationUtils().animateValue(
+            self.newScale[1] - self.oldScale[1], progressY, self.animationType, self.easeAnimationType)
+        self.scale = (self.scale[0], self.oldScale[1] + animatedY, 0)
+
+        # animate z coordinate (if exist)
+        if isinstance(self.oldScale, ogre.Vector3):
+            progressZ = float(self.animationScaleProgress[2]) / float(self.animationTime)
+            animatedZ = AnimationUtils().animateValue(
+                self.newScale[2] - self.oldScale[2], progressZ, self.animationType, self.easeAnimationType)
+            self.scale = ogre.Vector3(self.scale[0], self.scale[1], self.oldScale[2] + animatedZ)
+
+        self.setCurrentScale(self.scale)
+
+    def _increaseAnimationProgress(self, animationProgress, _timeSinceLastFrame):
+        if animationProgress < self.animationTime:
+            return animationProgress + _timeSinceLastFrame
+        else:
+            return self.animationTime
+
     def _updateView(self):
         """Updates view object representation
         """
@@ -371,22 +424,55 @@ class Object(ScObject):
         """ Return object position 
         """
         return self.position
-    
+
+    def setIsAnimated(self, isAnimated):
+        """ Determine whether the object must paint with the animation
+        @param isAnimated: boolean value,
+        True - if object should be painted with animation, False in the other case
+        """
+        self.isAnimated = isAnimated
+
+    def setPaintedPartPerTime(self, partPerTime):
+        """ Set part of the object that should be painted per time if the object painted with animation
+        @param partPerTime: float value of part of the object (example: 1.0 / 10.0)
+        """
+        self.paintedPartPerTime = partPerTime
+
     def setScale(self, sz):
         """Sets object size
         @param size: Ogre::Vector3 value of size  
         """
+
+        if self.isAnimated:
+            self._refreshScaleAnimationProperties(self.newScale, sz)
+        else:
+            self.setCurrentScale(sz)
+
+        self.newScale = sz
+
+    def _refreshScaleAnimationProperties(self, oldScale, newScale):
+        if oldScale is None:
+            self.setCurrentScale(newScale)
+
+        if oldScale is None or newScale is None or oldScale == newScale:
+            return
+
+        self.oldScale = self.newScale
+        self.animationScaleProgress = (0.0, 0.0, 0.0)
+
+
+    def setCurrentScale(self, sz):
         self.needUpdate = True
         self._needLinkedUpdate()
-        
+
         self.needViewUpdate = True
         self.needScaleUpdate = True
         self.scale = sz
-            
+
     def getScale(self):
         """Returns object size
         """
-        return self.scale
+        return self.newScale if self.newScale is not None else self.scale
     
     def setState(self, _state):
         """Sets object state
@@ -749,9 +835,6 @@ class ObjectDepth(Object, ogre.Node.Listener):
         self.needTextUpdate = False
         self.needTextPositionUpdate = False
         
-        # object's level in graph radial layout
-        self.level = -1
-        
     def __del__(self):
         """Destructor
         """
@@ -847,8 +930,7 @@ class ObjectDepth(Object, ogre.Node.Listener):
             self.needTextUpdate = False
             
         if self.needTextPositionUpdate:
-            if self.text_obj:
-                self.text_obj.update_position() 
+            if self.text_obj:   self.text_obj.setPosition(self.position + self.scale * ogre.Vector3(0.5, -0.5, 0.5) * 0.5) 
             self.needTextPositionUpdate = False
                         
     def nodeUpdated(self, node):
@@ -1892,7 +1974,7 @@ class ObjectSheet(ObjectDepth, ois.KeyListener, ois.MouseListener):
         self.__childObjects.append(child)
         # remove old parent
         if child.parent is not None:
-            childparent.removeChild(child)
+            child.parent.removeChild(child)
         child.parent = self 
         self.sceneNodeChilds.addChild(child.sceneNode)
         # notify listener
@@ -2138,21 +2220,6 @@ class ObjectText(Object):
         # default font height
         self.fontHeightDefault = 0
         
-        #default distance to owner
-        self.distToOwner = 5
-        
-        #possible relative positions for identifier
-        self.idtfPositions = {}
-        
-        #current relative position of identifier
-        self.currentPos = "BottomRight"
-        
-        #tooltip for identifier
-        self.tooltip = None
-        
-        #visible length of identifier  
-        self.idtfVisibleLen = 10
-        
         # widgets
         self.__panel = None
         self.__text = None
@@ -2191,45 +2258,6 @@ class ObjectText(Object):
         alpha = max([0.0, min([1.0, alpha])])
         self.__panel.setAlpha(alpha)
         
-    def _eventToolTip(self, _widget, _info):
-        """Event on tooltip state change
-        """ 
-        if self.textValue is None:
-            return
-          
-        if _info.type == mygui.ToolTipInfo.Show:
-            if self.tooltip is not None: return
-            self.tooltip = render_engine.Gui.createWidgetT("Window",
-                                                           "ToolTipPanel",
-                                                           mygui.IntCoord(0, 0, 10, 10),
-                                                           mygui.Align(),
-                                                           "ToolTip")           
-            
-            text = self.tooltip.createWidgetT("StaticText",
-                                              "ToolTipText",
-                                              mygui.IntCoord(12, 12, 0, 0),
-                                              mygui.Align())
-            
-            text.setCaption(self.textValue)
-            tsize = text.getTextSize()
-            self.tooltip.setSize(tsize.width + 24, tsize.height + 24)
-            text.setSize(tsize)
-            
-            x = _info.point.left + 20
-            y = _info.point.top + 20
-            
-            x = min([x, render_engine.Window.width - tsize.width - 30])
-            y = min([y, render_engine.Window.height - tsize.height - 30])
-            
-            self.tooltip.setPosition(x, y)       
-            self.tooltip.setVisible(True)
-            self.tooltip.setAlpha(1.0)
-        
-        elif _info.type == mygui.ToolTipInfo.Hide and self.tooltip is not None:
-            render_engine.Gui.destroyWidget(self.tooltip)
-            self.tooltip = None
-            self.tooltip_widget_name = None
-            
     def _update(self, timeSinceLastFrame):
         """Update text object
         """
@@ -2262,7 +2290,6 @@ class ObjectText(Object):
         
         if self.needTextValueUpdate:
             self.update_text_value()
-            self.update_IdtfPositions()
             self.needTextValueUpdate = False
         
         if self.needPositionUpdate:
@@ -2284,11 +2311,10 @@ class ObjectText(Object):
         """
         if self.__text is None: return
         
-        pos = render_engine.pos3dTo2dWindow(self.owner.getPosition())
+        pos = render_engine.pos3dTo2dWindow(self.position)
         if pos is not None:
             x, y = pos
-            idtfPos = self.idtfPositions[self.currentPos]
-            self.__panel.setPosition(x + idtfPos[0], y + idtfPos[1])
+            self.__panel.setPosition(x, y)
             self.screen_pos = pos
             
     def update_text_value(self):
@@ -2297,26 +2323,11 @@ class ObjectText(Object):
         @attention: Function is thread safe just if it calls in main thread.
         """
         if self.__text is None: self._create_text()
-        visiblePart = self.textValue[:self.idtfVisibleLen]
-        if not visiblePart == self.textValue:
-            visiblePart += u"..."
-            
-        self.__text.setCaption(visiblePart)
+        self.__text.setCaption(self.textValue)
         self._updateWidgets()
 #        sz = self.__text.getTextSize()
 #        self.__text.setSize(sz.width, sz.height)
         
-        if self.__panel is not None:
-            if self.isNeedToolTip():
-                self.__panel.setNeedToolTip(True)
-            else:
-                self.__panel.setNeedToolTip(False)
-        
-    def isNeedToolTip(self):
-        if self.idtfVisibleLen < len(str(self.textValue)):
-            return True
-        return False   
-    
     def update_show(self):
         """Updates text visibility
         @warning: By default it calls from _updateView function. In this case it's thread safe.
@@ -2330,51 +2341,6 @@ class ObjectText(Object):
         if self.__panel is not None:
             self.__panel.setAlpha(self.alpha)
     
-    def _eventMouseButtonPressed(self, _sender, _left, _top, _id):
-        """Event on identifier pressed
-        """ 
-        if self.tooltip is not None:
-            render_engine.Gui.destroyWidget(self.tooltip)  
-            self.tooltip = None
-        self.__panel.setNeedToolTip(False)
-        
-    
-    def _eventMouseButtonReleased(self, _sender, _left, _top, _id):
-        """Event on identifier released
-        """ 
-        if self.isNeedToolTip():
-            self.__panel.setNeedToolTip(True)
-         
-    
-    def _eventMouseDrag(self, _sender, _left, _top):
-        """Event on identifier drag 
-        """ 
-        if _left <= self.screen_pos[0] and _top >= self.screen_pos[1]:
-            self.currentPos = "BottomLeft"
-        
-        elif _left <= self.screen_pos[0] and _top < self.screen_pos[1]:
-            self.currentPos = "TopLeft"
-       
-        elif _left > self.screen_pos[0] and _top < self.screen_pos[1]:
-            self.currentPos = "TopRight"
-            
-        elif _left > self.screen_pos[0] and _top >= self.screen_pos[1]:
-            self.currentPos = "BottomRight"
-        
-        self.update_position()
-       
-    def update_IdtfPositions(self):
-        """Updates possible identifier positions
-        @warning: By default it calls from _updateView function. In this case it's thread safe.
-        @attention: Function is thread safe just if it calls in main thread.
-        """
-        dx, dy = self.__panel.getWidth(), self.__panel.getHeight() 
-        self.idtfPositions = {"BottomLeft" : (-dx - self.distToOwner, self.distToOwner),
-                    "TopLeft" : (-dx - self.distToOwner, -dy - self.distToOwner),
-                    "TopRight" : (self.distToOwner, -dy -self.distToOwner),
-                    "BottomRight" : (self.distToOwner, self.distToOwner)}
-        self.needPositionUpdate = True
-    
     def _create_text(self):
         """Creates text widget
         """
@@ -2383,11 +2349,6 @@ class ObjectText(Object):
         self.__text = self.__panel.createWidgetT("StaticText", "Idtf", mygui.IntCoord(6, 3, 0, 0), mygui.Align())
         # disabling widget to disable gui event processing on it
         self.__text.setEnabled(False)
-        
-        self.__panel.subscribeEventToolTip(self, "_eventToolTip")
-        self.__panel.subscribeEventMouseButtonPressed(self, "_eventMouseButtonPressed")
-        self.__panel.subscribeEventMouseButtonReleased(self, "_eventMouseButtonReleased")
-        self.__panel.subscribeEventMouseDrag(self, "_eventMouseDrag")
         
         self.needPositionUpdate = True
         self.fontHeightDefault = self.__text.getFontHeight()
