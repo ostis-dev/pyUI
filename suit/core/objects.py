@@ -2294,9 +2294,10 @@ class ObjectText(Object):
         @attention: Function is thread safe just if it calls in main thread.
         """
         if self.__text is None: self._create_text()
-        visiblePart = str(self.textValue)[:self.idtfVisibleLen]
-        if not visiblePart == str(self.textValue):
-            visiblePart += "..."
+        visiblePart = self.textValue[:self.idtfVisibleLen]
+        if not visiblePart == self.textValue:
+            visiblePart += u"..."
+            
         self.__text.setCaption(visiblePart)
         self._updateWidgets()
 #        sz = self.__text.getTextSize()

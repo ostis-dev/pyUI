@@ -38,7 +38,7 @@ def utf8ToCp1251(text):
 def cp1251ToUtf8(text):
     """Converts cp1251 string to utf-8 string
     """
-    return text.decode('cp1251').encode('utf-8')
+    return unicode(text.decode('cp1251'))
 
 
 def createPairBinaryOrientFull(_session, _segment, _beg, _end, _const):
@@ -911,7 +911,9 @@ def getLocalizedIdentifier(_session, _el):
             _caption = unicode(caption)
             _system = True
         else:
-            _caption = ""
+            _caption = u""
+    else:
+        assert isinstance(_caption, unicode)
     return _caption, _system
 
 def getImageIdentifier(_session, _el):
