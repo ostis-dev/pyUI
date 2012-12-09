@@ -56,6 +56,7 @@ class BaseEditMode(BaseMode):
         #self.bindKeyPress(ois.KC_A, self._selectAll)
         self.bindKeyPress(ois.KC_I, self._setIdtf)
         self.bindKeyPress(ois.KC_DELETE, self._delete)
+        self.bindKeyPress(ois.KC_R, self._setRoot)
         
     def __del__(self):
         BaseMode.__del__(self)
@@ -187,4 +188,26 @@ class BaseEditMode(BaseMode):
                 if obj.parent is not None:
                     sheet._deleteObject(obj)
                     self._objectDeleted(obj)
+                    
+                    
+    ####################
+    #### Graph Root ####
+    ####################
+    def _setRoot(self):
+        """Bind function for graph root changing in radial graph layout
+        """
+        if self.state == BaseEditMode.ES_None:
+            sheet = self._logic._getSheet()
+            layout = sheet.getLayoutGroup()
+            
+            import suit.core.layout.LayoutGroupRadial as radialLayout
+            if not isinstance(layout, radialLayout.LayoutGroupRadialSimple): 
+                return
+           
+            objs = sheet.getSelected()
+            # get object for root changing 
+            if len(objs) == 1: 
+                layout.setRoot(objs[0])
+                
+    
                      

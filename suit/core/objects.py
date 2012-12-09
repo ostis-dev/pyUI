@@ -749,6 +749,9 @@ class ObjectDepth(Object, ogre.Node.Listener):
         self.needTextUpdate = False
         self.needTextPositionUpdate = False
         
+        # object's level in graph radial layout
+        self.level = -1
+        
     def __del__(self):
         """Destructor
         """
