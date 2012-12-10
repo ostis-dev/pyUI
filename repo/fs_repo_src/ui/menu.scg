@@ -17,10 +17,12 @@ menu\na_main_menu\na_edit_sc\a_el_content.gwf
 menu\na_main_menu\na_edit_sc\a_gen_sc.gwf
 menu\na_main_menu\na_help\na_ui.gwf
 menu\na_main_menu\na_help\na_ui\a_help_ui_cmd_example.gwf
+menu\na_main_menu\na_help\na_ui\na_interactive\a_help_ui_delete_node.gwf
 menu\na_main_menu\na_help\na_ui\na_interactive\a_help_ui_draw_triangle.gwf
 menu\na_main_menu\na_help\na_ui\na_interactive\a_help_ui_get_decomposition.gwf
 menu\na_main_menu\na_help\na_ui\na_interactive\a_help_ui_get_identifiers.gwf
 menu\na_main_menu\na_help\na_ui\na_interactive\a_help_ui_get_illustrations.gwf
+menu\na_main_menu\na_help\na_ui\na_interactive\a_help_ui_show_tooltips.gwf
 menu\na_main_menu\na_lui\a_change_tts.gwf
 menu\na_main_menu\na_lui\a_speak.gwf
 menu\na_main_menu\na_problems_solution\a_formula_calculation.gwf

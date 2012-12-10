@@ -1,0 +1,206 @@
+Start logging
+[Initialize]: kernel version: 0.4.0
+[Initialize]: Operations scheduler
+[Initialize]: Processor module
+[Initialize]: Multithreaded session
+[Info]: Creating temporary directory for user interface '/tmp/ui'
+[Initialize]: Layout manager
+	[Initialize]: Ogre renderer
+		[Initialize]: Scene manager
+		[Initialize]: Camera
+		[Initialize]: Viewport
+[Initialize]: Resources
+[Initialize]: Input system
+[Initialize]: MyGUI
+[Initialize]: extension modules
+	[Load]: extension module 'operations.user_emul.mouse_key'
+	[Info]: Unknown - Unknown
+	[Warning]: can't get resources declaration for module 'Unknown'
+	[Register]: operation 'операция эмуляции перемещения мыши на объект' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x055235C0> >)
+	[Register]: operation 'операция эмуляции нажатия(отпускания) кнопки мыши' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523710> >)
+	[Register]: operation 'операция эмуляции нажатия(отпускания) кнопки клавиатуры' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x055236F8> >)
+	[Info]: module 'Unknown' loaded
+	[Load]: extension module 'operations.user_emul.player'
+	[Info]: Unknown - Unknown
+	[Warning]: can't get resources declaration for module 'Unknown'
+	[Register]: operation 'операция перехода к следующей команде при выполнении протокола действий' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523740> >)
+	[Info]: module 'Unknown' loaded
+	[Load]: extension module 'operations.output'
+	[Info]: Unknown - Unknown
+	[Warning]: can't get resources declaration for module 'Unknown'
+	[Register]: operation 'операция вывода ответов пользователю' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523758> >)
+	[Info]: module 'Unknown' loaded
+	[Load]: extension module 'operations.localization'
+	[Info]: Unknown - Unknown
+	[Warning]: can't get resources declaration for module 'Unknown'
+	[Register]: operation 'operation that update UI after localization change' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523728> >)
+	[Info]: module 'Unknown' loaded
+	[Load]: extension module 'operations.play_user_cmds'
+	[Info]: Unknown - Unknown
+	[Warning]: can't get resources declaration for module 'Unknown'
+	[Register]: operation 'operation that run user command interpretation' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x055237B8> >)
+	[Info]: module 'Unknown' loaded
+	[Load]: extension module 'components.common.menu'
+	[Info]: Menu - 0.2.0
+	[Warning]: can't get resources declaration for module 'Menu'
+	[Info]: module 'Menu' loaded
+	[Load]: extension module 'components.panels.mainpanel'
+	[Info]: MainPanel - 0.1.0
+	[Warning]: can't get resources declaration for module 'MainPanel'
+	[Register]: operation 'операция отображения новых окон для вывода' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x055238D8> >)
+	[Info]: module 'MainPanel' loaded
+	[Load]: extension module 'components.panels.taskpanel'
+	[Info]: TaskPanel - 0.1.0
+	[Warning]: can't get resources declaration for module 'TaskPanel'
+	[Register]: operation 'операция вывода вопросов на панель задач' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523848> >)
+	[Register]: operation 'активный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523830> >)
+	[Register]: operation 'отработанный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x055238F0> >)
+	[Register]: operation 'инициированный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523818> >)
+	[Register]: operation 'успешный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523920> >)
+	[Info]: module 'TaskPanel' loaded
+	[Load]: extension module 'components.scg.base.scg_init'
+	[Info]: SCg-interface - 0.2.0
+added new scg element 'mnode' with description: ['scg_struct_struct.mesh']
+added new scg element 'mpair' with description: [0]
+added new scg element 'node/-/elem' with description: ['scg_struct_struct.mesh']
+added new scg element 'node/const/elem' with description: ['scg_node_const.mesh']
+added new scg element 'node/const/sheaf' with description: ['scg_node_const.mesh', 'scg_struct_linker.mesh']
+added new scg element 'node/const/abstract' with description: ['scg_node_const.mesh', 'scg_struct_abstract_const.mesh']
+added new scg element 'node/const/binary' with description: ['scg_node_const.mesh', 'scg_struct_binary.mesh']
+added new scg element 'node/const/real' with description: ['scg_node_const.mesh', 'scg_struct_real_const.mesh']
+added new scg element 'node/const/role' with description: ['scg_node_const.mesh', 'scg_struct_role.mesh']
+added new scg element 'node/const/struct' with description: ['scg_node_const.mesh', 'scg_struct_struct.mesh']
+added new scg element 'node/const/term' with description: ['scg_node_const.mesh', 'scg_struct_term.mesh']
+added new scg element 'node/var/elem' with description: ['scg_node_var.mesh']
+added new scg element 'node/var/sheaf' with description: ['scg_node_var.mesh', 'scg_struct_linker.mesh']
+added new scg element 'node/var/abstract' with description: ['scg_node_var.mesh', 'scg_struct_abstract_var.mesh']
+added new scg element 'node/var/binary' with description: ['scg_node_var.mesh', 'scg_struct_binary.mesh']
+added new scg element 'node/var/real' with description: ['scg_node_var.mesh', 'scg_struct_real_var.mesh']
+added new scg element 'node/var/role' with description: ['scg_node_var.mesh', 'scg_struct_role.mesh']
+added new scg element 'node/var/struct' with description: ['scg_node_var.mesh', 'scg_struct_struct.mesh']
+added new scg element 'node/var/term' with description: ['scg_node_var.mesh', 'scg_struct_term.mesh']
+added new scg element 'node/meta/elem' with description: ['scg_node_meta.mesh']
+added new scg element 'node/meta/sheaf' with description: ['scg_node_meta.mesh', 'scg_struct_linker.mesh']
+added new scg element 'node/meta/abstract' with description: ['scg_node_meta.mesh', 'scg_struct_abstract_meta.mesh']
+added new scg element 'node/meta/binary' with description: ['scg_node_meta.mesh', 'scg_struct_binary.mesh']
+added new scg element 'node/meta/real' with description: ['scg_node_meta.mesh', 'scg_struct_real_meta.mesh']
+added new scg element 'node/meta/role' with description: ['scg_node_meta.mesh', 'scg_struct_role.mesh']
+added new scg element 'node/meta/struct' with description: ['scg_node_meta.mesh', 'scg_struct_struct.mesh']
+added new scg element 'node/meta/term' with description: ['scg_node_meta.mesh', 'scg_struct_term.mesh']
+added new scg element 'pair/-/-/-/-' with description: [0]
+added new scg element 'pair/-/-/-/const' with description: [0]
+added new scg element 'pair/-/-/-/var' with description: [0]
+added new scg element 'pair/-/-/-/meta' with description: [0]
+added new scg element 'pair/-/-/orient/const' with description: [1]
+added new scg element 'pair/-/-/orient/var' with description: [1]
+added new scg element 'pair/-/-/orient/meta' with description: [1]
+added new scg element 'pair/fuz/-/orient/const' with description: [1]
+added new scg element 'pair/fuz/-/orient/var' with description: [1]
+added new scg element 'pair/fuz/-/orient/meta' with description: [1]
+added new scg element 'pair/fuz/time/orient/const' with description: [1]
+added new scg element 'pair/fuz/time/orient/var' with description: [1]
+added new scg element 'pair/fuz/time/orient/meta' with description: [1]
+added new scg element 'pair/neg/-/orient/const' with description: [1]
+added new scg element 'pair/neg/-/orient/var' with description: [1]
+added new scg element 'pair/neg/-/orient/meta' with description: [1]
+added new scg element 'pair/neg/time/orient/const' with description: [1]
+added new scg element 'pair/neg/time/orient/var' with description: [1]
+added new scg element 'pair/neg/time/orient/meta' with description: [1]
+added new scg element 'pair/pos/-/orient/const' with description: [1]
+added new scg element 'pair/pos/-/orient/var' with description: [1]
+added new scg element 'pair/pos/-/orient/meta' with description: [1]
+added new scg element 'pair/pos/time/orient/const' with description: [1]
+added new scg element 'pair/pos/time/orient/var' with description: [1]
+added new scg element 'pair/pos/time/orient/meta' with description: [1]
+[Register]: Viewer for format SCSx (factory: <suit.core.objects.Factory instance at 0x055058C8>)
+[Register]: Editor for format SCSx
+[Register]: translator
+	[Info]: input formats:
+		SCSx 
+	[Info]: output formats:
+		SC 
+[Register]: translator
+	[Info]: input formats:
+		SC 
+	[Info]: output formats:
+		SCSx 
+	[Info]: module 'SCg-interface' loaded
+	[Load]: extension module 'components.text.text_init'
+	[Info]: Unknown - Unknown
+	[Warning]: can't get resources declaration for module 'Unknown'
+[Register]: Viewer for format TERM (factory: <suit.core.objects.Factory instance at 0x0550A1E8>)
+[Register]: Viewer for format STRING (factory: <suit.core.objects.Factory instance at 0x0550A1E8>)
+[Register]: Viewer for format INT (factory: <suit.core.objects.Factory instance at 0x0550A1E8>)
+[Register]: Viewer for format REAL (factory: <suit.core.objects.Factory instance at 0x0550A1E8>)
+[Register]: Editor for format TERM
+[Register]: Editor for format STRING
+[Register]: Editor for format INT
+[Register]: Editor for format REAL
+	[Info]: module 'Unknown' loaded
+	[Load]: extension module 'components.graph.graph_init'
+	[Error]: load 'components.graph.graph_init' module
+	[Load]: extension module 'components.image.image_init'
+	[Info]: Unknown - Unknown
+[Register]: Viewer for format JPEG (factory: <suit.core.objects.Factory instance at 0x0550ABC0>)
+[Register]: Viewer for format JPG (factory: <suit.core.objects.Factory instance at 0x0550ABC0>)
+[Register]: Viewer for format BMP (factory: <suit.core.objects.Factory instance at 0x0550ABC0>)
+[Register]: Viewer for format PNG (factory: <suit.core.objects.Factory instance at 0x0550ABC0>)
+	[Info]: module 'Unknown' loaded
+	[Load]: extension module 'components.video.video_init'
+	[Info]: Unknown - Unknown
+[Register]: Viewer for format WMV (factory: <suit.core.objects.Factory instance at 0x055FF620>)
+[Register]: Viewer for format AVI (factory: <suit.core.objects.Factory instance at 0x055FF620>)
+[Register]: Viewer for format MP4 (factory: <suit.core.objects.Factory instance at 0x055FF620>)
+[Register]: Viewer for format FLV (factory: <suit.core.objects.Factory instance at 0x055FF620>)
+[Register]: Viewer for format MPG (factory: <suit.core.objects.Factory instance at 0x055FF620>)
+	[Info]: module 'Unknown' loaded
+	[Load]: extension module 'components.geometry.base.geom_init'
+	[Info]: Geometry-interface - 0.2.0
+	[Warning]: can't get resources declaration for module 'Geometry-interface'
+[Register]: Viewer for format GEOMx (factory: <suit.core.objects.Factory instance at 0x0561E5A8>)
+[Register]: Editor for format GEOMx
+[Register]: translator
+	[Info]: input formats:
+		GEOMx 
+	[Info]: output formats:
+		SC 
+	[Info]: module 'Geometry-interface' loaded
+	[Load]: extension module 'components.questions.questions_init'
+	[Info]: QuestionsPool - 0.2.0
+	[Warning]: can't get resources declaration for module 'QuestionsPool'
+	[Info]: module 'QuestionsPool' loaded
+	[Load]: extension module 'components.logic.logic_init'
+	[Error]: load 'components.logic.logic_init' module
+[Shutdown]: kernel
+	[Shutdown]: module 'components.video.video_init'
+[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x055FF620>'
+	[Shutdown]: module 'operations.user_emul.mouse_key'
+	[Shutdown]: module 'operations.play_user_cmds'
+	[Shutdown]: module 'components.questions.questions_init'
+	[Shutdown]: module 'operations.user_emul.player'
+	[Shutdown]: module 'components.common.menu'
+	[Shutdown]: module 'operations.localization'
+	[Shutdown]: module 'components.geometry.base.geom_init'
+[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x0561E5A8>'
+[Unregister]: factory for editor '<suit.core.objects.Factory instance at 0x0561E5D0>'
+[Unregister]: factory for translator <suit.core.objects.Factory instance at 0x0561E5F8>
+	[Shutdown]: module 'components.image.image_init'
+[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x0550ABC0>'
+	[Shutdown]: module 'components.panels.taskpanel'
+	[Shutdown]: module 'components.scg.base.scg_init'
+[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x055058C8>'
+[Unregister]: factory for editor '<suit.core.objects.Factory instance at 0x055058F0>'
+[Unregister]: factory for translator <suit.core.objects.Factory instance at 0x05505918>
+[Unregister]: factory for translator <suit.core.objects.Factory instance at 0x05505940>
+	[Shutdown]: module 'components.text.text_init'
+[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x0550A1E8>'
+[Unregister]: factory for editor '<suit.core.objects.Factory instance at 0x0550A210>'
+	[Shutdown]: module 'operations.output'
+	[Shutdown]: module 'components.panels.mainpanel'
+[Shutdown]: Layout manager...
+	Finished
+[Shutdown]: MyGUI
+	[Shutdown]: Ogre
+	[Shutdown]: Input manager
+[Shutdown]: Processor module...
+	Finished
