@@ -16,29 +16,29 @@ Start logging
 	[Load]: extension module 'operations.user_emul.mouse_key'
 	[Info]: Unknown - Unknown
 	[Warning]: can't get resources declaration for module 'Unknown'
-	[Register]: operation 'операция эмуляции перемещения мыши на объект' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x055235C0> >)
-	[Register]: operation 'операция эмуляции нажатия(отпускания) кнопки мыши' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523710> >)
-	[Register]: operation 'операция эмуляции нажатия(отпускания) кнопки клавиатуры' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x055236F8> >)
+	[Register]: operation 'операция эмуляции перемещения мыши на объект' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05217500> >)
+	[Register]: operation 'операция эмуляции нажатия(отпускания) кнопки мыши' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05217638> >)
+	[Register]: operation 'операция эмуляции нажатия(отпускания) кнопки клавиатуры' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05217668> >)
 	[Info]: module 'Unknown' loaded
 	[Load]: extension module 'operations.user_emul.player'
 	[Info]: Unknown - Unknown
 	[Warning]: can't get resources declaration for module 'Unknown'
-	[Register]: operation 'операция перехода к следующей команде при выполнении протокола действий' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523740> >)
+	[Register]: operation 'операция перехода к следующей команде при выполнении протокола действий' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05217680> >)
 	[Info]: module 'Unknown' loaded
 	[Load]: extension module 'operations.output'
 	[Info]: Unknown - Unknown
 	[Warning]: can't get resources declaration for module 'Unknown'
-	[Register]: operation 'операция вывода ответов пользователю' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523758> >)
+	[Register]: operation 'операция вывода ответов пользователю' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05217698> >)
 	[Info]: module 'Unknown' loaded
 	[Load]: extension module 'operations.localization'
 	[Info]: Unknown - Unknown
 	[Warning]: can't get resources declaration for module 'Unknown'
-	[Register]: operation 'operation that update UI after localization change' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523728> >)
+	[Register]: operation 'operation that update UI after localization change' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x052176B0> >)
 	[Info]: module 'Unknown' loaded
 	[Load]: extension module 'operations.play_user_cmds'
 	[Info]: Unknown - Unknown
 	[Warning]: can't get resources declaration for module 'Unknown'
-	[Register]: operation 'operation that run user command interpretation' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x055237B8> >)
+	[Register]: operation 'operation that run user command interpretation' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x052176C8> >)
 	[Info]: module 'Unknown' loaded
 	[Load]: extension module 'components.common.menu'
 	[Info]: Menu - 0.2.0
@@ -47,16 +47,16 @@ Start logging
 	[Load]: extension module 'components.panels.mainpanel'
 	[Info]: MainPanel - 0.1.0
 	[Warning]: can't get resources declaration for module 'MainPanel'
-	[Register]: operation 'операция отображения новых окон для вывода' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x055238D8> >)
+	[Register]: operation 'операция отображения новых окон для вывода' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05217818> >)
 	[Info]: module 'MainPanel' loaded
 	[Load]: extension module 'components.panels.taskpanel'
 	[Info]: TaskPanel - 0.1.0
 	[Warning]: can't get resources declaration for module 'TaskPanel'
-	[Register]: operation 'операция вывода вопросов на панель задач' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523848> >)
-	[Register]: operation 'активный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523830> >)
-	[Register]: operation 'отработанный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x055238F0> >)
-	[Register]: operation 'инициированный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523818> >)
-	[Register]: operation 'успешный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05523920> >)
+	[Register]: operation 'операция вывода вопросов на панель задач' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05217788> >)
+	[Register]: operation 'активный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05217758> >)
+	[Register]: operation 'отработанный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05217830> >)
+	[Register]: operation 'инициированный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05217848> >)
+	[Register]: operation 'успешный вопрос' (handler <suit.core.event_handler.ScEventHandlerSetMember; proxy of <Swig Object of type 'ScOperationActSetMember *' at 0x05217860> >)
 	[Info]: module 'TaskPanel' loaded
 	[Load]: extension module 'components.scg.base.scg_init'
 	[Info]: SCg-interface - 0.2.0
@@ -112,7 +112,7 @@ added new scg element 'pair/pos/-/orient/meta' with description: [1]
 added new scg element 'pair/pos/time/orient/const' with description: [1]
 added new scg element 'pair/pos/time/orient/var' with description: [1]
 added new scg element 'pair/pos/time/orient/meta' with description: [1]
-[Register]: Viewer for format SCSx (factory: <suit.core.objects.Factory instance at 0x055058C8>)
+[Register]: Viewer for format SCSx (factory: <suit.core.objects.Factory instance at 0x055FB738>)
 [Register]: Editor for format SCSx
 [Register]: translator
 	[Info]: input formats:
@@ -128,36 +128,40 @@ added new scg element 'pair/pos/time/orient/meta' with description: [1]
 	[Load]: extension module 'components.text.text_init'
 	[Info]: Unknown - Unknown
 	[Warning]: can't get resources declaration for module 'Unknown'
-[Register]: Viewer for format TERM (factory: <suit.core.objects.Factory instance at 0x0550A1E8>)
-[Register]: Viewer for format STRING (factory: <suit.core.objects.Factory instance at 0x0550A1E8>)
-[Register]: Viewer for format INT (factory: <suit.core.objects.Factory instance at 0x0550A1E8>)
-[Register]: Viewer for format REAL (factory: <suit.core.objects.Factory instance at 0x0550A1E8>)
+[Register]: Viewer for format TERM (factory: <suit.core.objects.Factory instance at 0x05601058>)
+[Register]: Viewer for format STRING (factory: <suit.core.objects.Factory instance at 0x05601058>)
+[Register]: Viewer for format INT (factory: <suit.core.objects.Factory instance at 0x05601058>)
+[Register]: Viewer for format REAL (factory: <suit.core.objects.Factory instance at 0x05601058>)
 [Register]: Editor for format TERM
 [Register]: Editor for format STRING
 [Register]: Editor for format INT
 [Register]: Editor for format REAL
 	[Info]: module 'Unknown' loaded
+	[Load]: extension module 'components.scs.scs_init'
+	[Info]: Unknown - Unknown
+	[Warning]: can't get resources declaration for module 'Unknown'
+	[Error]: load 'components.scs.scs_init' module
 	[Load]: extension module 'components.graph.graph_init'
 	[Error]: load 'components.graph.graph_init' module
 	[Load]: extension module 'components.image.image_init'
 	[Info]: Unknown - Unknown
-[Register]: Viewer for format JPEG (factory: <suit.core.objects.Factory instance at 0x0550ABC0>)
-[Register]: Viewer for format JPG (factory: <suit.core.objects.Factory instance at 0x0550ABC0>)
-[Register]: Viewer for format BMP (factory: <suit.core.objects.Factory instance at 0x0550ABC0>)
-[Register]: Viewer for format PNG (factory: <suit.core.objects.Factory instance at 0x0550ABC0>)
+[Register]: Viewer for format JPEG (factory: <suit.core.objects.Factory instance at 0x05628E90>)
+[Register]: Viewer for format JPG (factory: <suit.core.objects.Factory instance at 0x05628E90>)
+[Register]: Viewer for format BMP (factory: <suit.core.objects.Factory instance at 0x05628E90>)
+[Register]: Viewer for format PNG (factory: <suit.core.objects.Factory instance at 0x05628E90>)
 	[Info]: module 'Unknown' loaded
 	[Load]: extension module 'components.video.video_init'
 	[Info]: Unknown - Unknown
-[Register]: Viewer for format WMV (factory: <suit.core.objects.Factory instance at 0x055FF620>)
-[Register]: Viewer for format AVI (factory: <suit.core.objects.Factory instance at 0x055FF620>)
-[Register]: Viewer for format MP4 (factory: <suit.core.objects.Factory instance at 0x055FF620>)
-[Register]: Viewer for format FLV (factory: <suit.core.objects.Factory instance at 0x055FF620>)
-[Register]: Viewer for format MPG (factory: <suit.core.objects.Factory instance at 0x055FF620>)
+[Register]: Viewer for format WMV (factory: <suit.core.objects.Factory instance at 0x056376C0>)
+[Register]: Viewer for format AVI (factory: <suit.core.objects.Factory instance at 0x056376C0>)
+[Register]: Viewer for format MP4 (factory: <suit.core.objects.Factory instance at 0x056376C0>)
+[Register]: Viewer for format FLV (factory: <suit.core.objects.Factory instance at 0x056376C0>)
+[Register]: Viewer for format MPG (factory: <suit.core.objects.Factory instance at 0x056376C0>)
 	[Info]: module 'Unknown' loaded
 	[Load]: extension module 'components.geometry.base.geom_init'
 	[Info]: Geometry-interface - 0.2.0
 	[Warning]: can't get resources declaration for module 'Geometry-interface'
-[Register]: Viewer for format GEOMx (factory: <suit.core.objects.Factory instance at 0x0561E5A8>)
+[Register]: Viewer for format GEOMx (factory: <suit.core.objects.Factory instance at 0x0566A148>)
 [Register]: Editor for format GEOMx
 [Register]: translator
 	[Info]: input formats:
@@ -173,7 +177,7 @@ added new scg element 'pair/pos/time/orient/meta' with description: [1]
 	[Error]: load 'components.logic.logic_init' module
 [Shutdown]: kernel
 	[Shutdown]: module 'components.video.video_init'
-[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x055FF620>'
+[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x056376C0>'
 	[Shutdown]: module 'operations.user_emul.mouse_key'
 	[Shutdown]: module 'operations.play_user_cmds'
 	[Shutdown]: module 'components.questions.questions_init'
@@ -181,20 +185,20 @@ added new scg element 'pair/pos/time/orient/meta' with description: [1]
 	[Shutdown]: module 'components.common.menu'
 	[Shutdown]: module 'operations.localization'
 	[Shutdown]: module 'components.geometry.base.geom_init'
-[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x0561E5A8>'
-[Unregister]: factory for editor '<suit.core.objects.Factory instance at 0x0561E5D0>'
-[Unregister]: factory for translator <suit.core.objects.Factory instance at 0x0561E5F8>
+[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x0566A148>'
+[Unregister]: factory for editor '<suit.core.objects.Factory instance at 0x0566A170>'
+[Unregister]: factory for translator <suit.core.objects.Factory instance at 0x0566A198>
 	[Shutdown]: module 'components.image.image_init'
-[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x0550ABC0>'
+[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x05628E90>'
 	[Shutdown]: module 'components.panels.taskpanel'
 	[Shutdown]: module 'components.scg.base.scg_init'
-[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x055058C8>'
-[Unregister]: factory for editor '<suit.core.objects.Factory instance at 0x055058F0>'
-[Unregister]: factory for translator <suit.core.objects.Factory instance at 0x05505918>
-[Unregister]: factory for translator <suit.core.objects.Factory instance at 0x05505940>
+[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x055FB738>'
+[Unregister]: factory for editor '<suit.core.objects.Factory instance at 0x055FB760>'
+[Unregister]: factory for translator <suit.core.objects.Factory instance at 0x055FB788>
+[Unregister]: factory for translator <suit.core.objects.Factory instance at 0x055FB7B0>
 	[Shutdown]: module 'components.text.text_init'
-[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x0550A1E8>'
-[Unregister]: factory for editor '<suit.core.objects.Factory instance at 0x0550A210>'
+[Unregister]: factory for viewer '<suit.core.objects.Factory instance at 0x05601058>'
+[Unregister]: factory for editor '<suit.core.objects.Factory instance at 0x05601080>'
 	[Shutdown]: module 'operations.output'
 	[Shutdown]: module 'components.panels.mainpanel'
 [Shutdown]: Layout manager...

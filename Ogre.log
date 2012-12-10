@@ -1,294 +1,294 @@
-02:39:54: Creating resource group General
-02:39:54: Creating resource group Internal
-02:39:54: Creating resource group Autodetect
-02:39:54: SceneManagerFactory for type 'DefaultSceneManager' registered.
-02:39:54: Registering ResourceManager for type Material
-02:39:54: Registering ResourceManager for type Mesh
-02:39:54: Registering ResourceManager for type Skeleton
-02:39:54: MovableObjectFactory for type 'ParticleSystem' registered.
-02:39:54: OverlayElementFactory for type Panel registered.
-02:39:54: OverlayElementFactory for type BorderPanel registered.
-02:39:54: OverlayElementFactory for type TextArea registered.
-02:39:54: Registering ResourceManager for type Font
-02:39:54: ArchiveFactory for archive type FileSystem registered.
-02:39:54: ArchiveFactory for archive type Zip registered.
-02:39:54: FreeImage version: 3.10.0
-02:39:54: This program uses FreeImage, a free, open source image library supporting all common bitmap formats. See http://freeimage.sourceforge.net for details
-02:39:54: Supported formats: bmp,ico,jpg,jif,jpeg,jpe,jng,koa,iff,lbm,mng,pbm,pbm,pcd,pcx,pgm,pgm,png,ppm,ppm,ras,tga,targa,tif,tiff,wap,wbmp,wbm,psd,cut,xbm,xpm,gif,hdr,g3,sgi,exr,j2k,j2c,jp2
-02:39:54: DDS codec registering
-02:39:54: Registering ResourceManager for type HighLevelGpuProgram
-02:39:54: Registering ResourceManager for type Compositor
-02:39:54: MovableObjectFactory for type 'Entity' registered.
-02:39:55: MovableObjectFactory for type 'Light' registered.
-02:39:55: MovableObjectFactory for type 'BillboardSet' registered.
-02:39:55: MovableObjectFactory for type 'ManualObject' registered.
-02:39:55: MovableObjectFactory for type 'BillboardChain' registered.
-02:39:55: MovableObjectFactory for type 'RibbonTrail' registered.
-02:39:55: Loading library ./plugins\RenderSystem_GL.dll
-02:39:55: Installing plugin: GL RenderSystem
-02:39:55: OpenGL Rendering Subsystem created.
-02:39:55: Plugin successfully installed
-02:39:55: Loading library ./plugins\RenderSystem_Direct3D9.dll
-02:39:55: Installing plugin: D3D9 RenderSystem
-02:39:55: D3D9 : Direct3D9 Rendering Subsystem created.
-02:39:55: D3D9: Driver Detection Starts
-02:39:55: D3D9: Driver Detection Ends
-02:39:55: Plugin successfully installed
-02:39:55: Loading library ./plugins\Plugin_ParticleFX.dll
-02:39:55: Installing plugin: ParticleFX
-02:39:55: Particle Emitter Type 'Point' registered
-02:39:55: Particle Emitter Type 'Box' registered
-02:39:55: Particle Emitter Type 'Ellipsoid' registered
-02:39:55: Particle Emitter Type 'Cylinder' registered
-02:39:55: Particle Emitter Type 'Ring' registered
-02:39:55: Particle Emitter Type 'HollowEllipsoid' registered
-02:39:55: Particle Affector Type 'LinearForce' registered
-02:39:55: Particle Affector Type 'ColourFader' registered
-02:39:55: Particle Affector Type 'ColourFader2' registered
-02:39:55: Particle Affector Type 'ColourImage' registered
-02:39:55: Particle Affector Type 'ColourInterpolator' registered
-02:39:55: Particle Affector Type 'Scaler' registered
-02:39:55: Particle Affector Type 'Rotator' registered
-02:39:55: Particle Affector Type 'DirectionRandomiser' registered
-02:39:55: Particle Affector Type 'DeflectorPlane' registered
-02:39:55: Plugin successfully installed
-02:39:55: *-*-* OGRE Initialising
-02:39:55: *-*-* Version 1.6.1 (Shoggoth)
-02:39:55: D3D9 : RenderSystem Option: Allow NVPerfHUD = No
-02:39:55: D3D9 : RenderSystem Option: Anti aliasing = None
-02:39:55: D3D9 : RenderSystem Option: Floating-point mode = Fastest
-02:39:55: D3D9 : RenderSystem Option: Full Screen = No
-02:39:55: D3D9 : RenderSystem Option: Rendering Device = ATI Mobility Radeon HD 5650
-02:39:55: D3D9 : RenderSystem Option: VSync = No
-02:39:55: D3D9 : RenderSystem Option: Video Mode = 800 x 600 @ 32-bit colour
-02:39:55: D3D9 : RenderSystem Option: sRGB Gamma Conversion = No
-02:39:56: CPU Identifier & Features
-02:39:56: -------------------------
-02:39:56:  *   CPU ID: AuthenticAMD: AMD Athlon(tm) II P320 Dual-Core Processor
-02:39:56:  *      SSE: yes
-02:39:56:  *     SSE2: yes
-02:39:56:  *     SSE3: yes
-02:39:56:  *      MMX: yes
-02:39:56:  *   MMXEXT: yes
-02:39:56:  *    3DNOW: yes
-02:39:56:  * 3DNOWEXT: yes
-02:39:56:  *     CMOV: yes
-02:39:56:  *      TSC: yes
-02:39:56:  *      FPU: yes
-02:39:56:  *      PRO: yes
-02:39:56:  *       HT: no
-02:39:56: -------------------------
-02:39:56: D3D9 : Subsystem Initialising
-02:39:56: D3D9RenderSystem::_createRenderWindow "Semantic User Interface Toolkit. Kernel version: 0.4.0", 800x600 windowed  miscParams: FSAA=0 FSAAQuality=0 colourDepth=32 gamma=false useNVPerfHUD=false vsync=false 
-02:39:56: D3D9 : Created D3D9 Rendering Window 'Semantic User Interface Toolkit. Kernel version: 0.4.0' : 800x600, 32bpp
-02:39:56: D3D9 : WARNING - disabling VSync in windowed mode can cause timing issues at lower frame rates, turn VSync on if you observe this problem.
-02:39:57: Registering ResourceManager for type Texture
-02:39:57: Registering ResourceManager for type GpuProgram
-02:39:57: D3D9: Vertex texture format supported - PF_L8
-02:39:57: D3D9: Vertex texture format supported - PF_L16
-02:39:57: D3D9: Vertex texture format supported - PF_A8
-02:39:57: D3D9: Vertex texture format supported - PF_A4L4
-02:39:57: D3D9: Vertex texture format supported - PF_BYTE_LA
-02:39:57: D3D9: Vertex texture format supported - PF_R5G6B5
-02:39:57: D3D9: Vertex texture format supported - PF_B5G6R5
-02:39:57: D3D9: Vertex texture format supported - PF_A4R4G4B4
-02:39:57: D3D9: Vertex texture format supported - PF_A1R5G5B5
-02:39:57: D3D9: Vertex texture format supported - PF_A8R8G8B8
-02:39:57: D3D9: Vertex texture format supported - PF_B8G8R8A8
-02:39:57: D3D9: Vertex texture format supported - PF_A2R10G10B10
-02:39:57: D3D9: Vertex texture format supported - PF_A2B10G10R10
-02:39:57: D3D9: Vertex texture format supported - PF_DXT1
-02:39:57: D3D9: Vertex texture format supported - PF_DXT2
-02:39:57: D3D9: Vertex texture format supported - PF_DXT3
-02:39:57: D3D9: Vertex texture format supported - PF_DXT4
-02:39:57: D3D9: Vertex texture format supported - PF_DXT5
-02:39:57: D3D9: Vertex texture format supported - PF_FLOAT16_RGB
-02:39:57: D3D9: Vertex texture format supported - PF_FLOAT16_RGBA
-02:39:57: D3D9: Vertex texture format supported - PF_FLOAT32_RGB
-02:39:57: D3D9: Vertex texture format supported - PF_FLOAT32_RGBA
-02:39:57: D3D9: Vertex texture format supported - PF_X8R8G8B8
-02:39:57: D3D9: Vertex texture format supported - PF_X8B8G8R8
-02:39:57: D3D9: Vertex texture format supported - PF_R8G8B8A8
-02:39:57: D3D9: Vertex texture format supported - PF_DEPTH
-02:39:57: D3D9: Vertex texture format supported - PF_SHORT_RGBA
-02:39:57: D3D9: Vertex texture format supported - PF_FLOAT16_R
-02:39:57: D3D9: Vertex texture format supported - PF_FLOAT32_R
-02:39:57: D3D9: Vertex texture format supported - PF_SHORT_GR
-02:39:57: D3D9: Vertex texture format supported - PF_FLOAT16_GR
-02:39:57: D3D9: Vertex texture format supported - PF_FLOAT32_GR
-02:39:57: D3D9: Vertex texture format supported - PF_SHORT_RGB
-02:39:57: RenderSystem capabilities
-02:39:57: -------------------------
-02:39:57: RenderSystem Name: Direct3D9 Rendering Subsystem
-02:39:57: GPU Vendor: ati
-02:39:57: Device Name: ATI Mobility Radeon HD 5650
-02:39:57: Driver Version: 8.14.1.6099
-02:39:57:  * Fixed function pipeline: yes
-02:39:57:  * Hardware generation of mipmaps: yes
-02:39:57:  * Texture blending: yes
-02:39:57:  * Anisotropic texture filtering: yes
-02:39:57:  * Dot product texture operation: yes
-02:39:57:  * Cube mapping: yes
-02:39:57:  * Hardware stencil buffer: yes
-02:39:57:    - Stencil depth: 8
-02:39:57:    - Two sided stencil support: yes
-02:39:57:    - Wrap stencil values: yes
-02:39:57:  * Hardware vertex / index buffers: yes
-02:39:57:  * Vertex programs: yes
-02:39:57:  * Fragment programs: yes
-02:39:57:  * Geometry programs: no
-02:39:57:  * Supported Shader Profiles: hlsl ps_1_1 ps_1_2 ps_1_3 ps_1_4 ps_2_0 ps_2_a ps_2_b ps_2_x ps_3_0 vs_1_1 vs_2_0 vs_2_a vs_2_x vs_3_0
-02:39:57:  * Texture Compression: yes
-02:39:57:    - DXT: yes
-02:39:57:    - VTC: no
-02:39:57:  * Scissor Rectangle: yes
-02:39:57:  * Hardware Occlusion Query: yes
-02:39:57:  * User clip planes: yes
-02:39:57:  * VET_UBYTE4 vertex element type: yes
-02:39:57:  * Infinite far plane projection: yes
-02:39:57:  * Hardware render-to-texture: yes
-02:39:57:  * Floating point textures: yes
-02:39:57:  * Non-power-of-two textures: yes
-02:39:57:  * Volume textures: yes
-02:39:57:  * Multiple Render Targets: 4
-02:39:57:    - With different bit depths: yes
-02:39:57:  * Point Sprites: yes
-02:39:57:  * Extended point parameters: yes
-02:39:57:  * Max Point Size: 256
-02:39:57:  * Vertex texture fetch: yes
-02:39:57:    - Max vertex textures: 4
-02:39:57:    - Vertex textures shared: no
-02:39:57:  * Render to Vertex Buffer : no
-02:39:57:  * DirectX per stage constants: yes
-02:39:57: ***************************************
-02:39:57: *** D3D9 : Subsystem Initialised OK ***
-02:39:57: ***************************************
-02:39:57: ResourceBackgroundQueue - threading disabled
-02:39:57: Particle Renderer Type 'billboard' registered
-02:39:57: Added resource location './media/mygui' of type 'FileSystem' to resource group 'General'
-02:39:57: Added resource location './media/backs' of type 'FileSystem' to resource group 'General'
-02:39:57: Creating resource group chemistry
-02:39:57: Added resource location './media/chemistry/meshes' of type 'FileSystem' to resource group 'chemistry'
-02:39:57: Added resource location './media/chemistry/materials/programs' of type 'FileSystem' to resource group 'chemistry'
-02:39:57: Added resource location './media/chemistry/materials/scripts' of type 'FileSystem' to resource group 'chemistry'
-02:39:57: Added resource location './media/chemistry/materials/textures' of type 'FileSystem' to resource group 'chemistry'
-02:39:57: Creating resource group geometry
-02:39:57: Added resource location './media/geometry/base_media.zip' of type 'Zip' to resource group 'geometry'
-02:39:57: Creating resource group graph
-02:39:57: Added resource location './media/graph/meshes' of type 'FileSystem' to resource group 'graph'
-02:39:57: Added resource location './media/graph/materials/scripts' of type 'FileSystem' to resource group 'graph'
-02:39:57: Creating resource group scg
-02:39:57: Added resource location './media/scg/base_media.zip' of type 'Zip' to resource group 'scg'
-02:39:57: Creating resource group space
-02:39:57: Added resource location './media/space/meshes' of type 'FileSystem' to resource group 'space'
-02:39:57: Added resource location './media/space/materials/scripts' of type 'FileSystem' to resource group 'space'
-02:39:57: Added resource location './media/space/materials/textures' of type 'FileSystem' to resource group 'space'
-02:39:57: Initialising resource group General
-02:39:57: Parsing scripts for resource group General
-02:39:57: Parsing script backs.material
-02:39:57: Finished parsing scripts for resource group General
-02:39:58: Texture: scifi_skin.png: Loading 1 faces(PF_A8R8G8B8,512x512x1) with 0 generated mipmaps from Image. Internal format is PF_A8R8G8B8,512x512x1.
-02:39:58: Texture: core_pointer.png: Loading 1 faces(PF_A8R8G8B8,256x128x1) with 0 generated mipmaps from Image. Internal format is PF_A8R8G8B8,256x128x1.
-02:39:58: Texture: Default_Texture: Loading 1 faces(PF_BYTE_LA,1024x128x1) with 0 generated mipmaps from Image. Internal format is PF_BYTE_LA,1024x128x1.
-02:39:58: Texture: image__983c7f04_p_sc_global_addr: Loading 1 faces(PF_A8R8G8B8,128x128x1) with  hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,128x128x1.
-02:39:58: Added resource location 'C:\Users\dred\Documents\GitHub\pyUI\components\scg\base\media\code' of type 'FileSystem' to resource group 'scg'
-02:39:58: Added resource location 'C:\Users\dred\Documents\GitHub\pyUI\components\scg\base\media\textures' of type 'FileSystem' to resource group 'scg'
-02:39:58: Added resource location 'C:\Users\dred\Documents\GitHub\pyUI\components\scg\base\media\materials' of type 'FileSystem' to resource group 'scg'
-02:39:58: Added resource location 'C:\Users\dred\Documents\GitHub\pyUI\components\scg\base\media\vis_menu' of type 'FileSystem' to resource group 'General'
-02:39:59: Creating resource group image
-02:39:59: Added resource location 'C:\Users\dred\Documents\GitHub\pyUI\components\image\media\tmp' of type 'FileSystem' to resource group 'image'
-02:39:59: Creating resource group video
-02:39:59: Added resource location '_cache\video' of type 'FileSystem' to resource group 'video'
-02:39:59: Parsing scripts for resource group Autodetect
-02:39:59: Finished parsing scripts for resource group Autodetect
-02:39:59: Parsing scripts for resource group Internal
-02:39:59: Finished parsing scripts for resource group Internal
-02:39:59: Parsing scripts for resource group chemistry
-02:39:59: Parsing script chem_atoms.material
-02:39:59: Parsing script chem_base.material
-02:39:59: Parsing script chem_link.material
-02:39:59: Finished parsing scripts for resource group chemistry
-02:39:59: Parsing scripts for resource group geometry
-02:39:59: Parsing script geom_background.material
-02:39:59: Parsing script geom_base.material
-02:39:59: Parsing script geom_lsec.material
-02:39:59: Parsing script geom_points.material
-02:39:59: Parsing script geom_triangle.material
-02:39:59: Finished parsing scripts for resource group geometry
-02:39:59: Parsing scripts for resource group graph
-02:40:00: Parsing script graph_objects.material
-02:40:00: Finished parsing scripts for resource group graph
-02:40:00: Parsing scripts for resource group image
-02:40:00: Finished parsing scripts for resource group image
-02:40:00: Parsing scripts for resource group scg
-02:40:00: Parsing script scg_arrows.material
-02:40:00: Parsing script scg_base.material
-02:40:00: Parsing script scg_content.material
-02:40:00: Parsing script scg_mpair.material
-02:40:00: Parsing script scg_nodes.material
-02:40:00: Parsing script scg_pair.material
-02:40:00: Parsing script scg_pair_const.material
-02:40:00: Parsing script scg_pair_const_orient.material
-02:40:00: Parsing script scg_pair_fuz_const.material
-02:40:00: Parsing script scg_pair_fuz_meta.material
-02:40:00: Parsing script scg_pair_fuz_time_const.material
-02:40:00: Parsing script scg_pair_fuz_time_meta.material
-02:40:00: Parsing script scg_pair_fuz_time_var.material
-02:40:00: Parsing script scg_pair_fuz_var.material
-02:40:00: Parsing script scg_pair_meta.material
-02:40:00: Parsing script scg_pair_meta_orient.material
-02:40:00: Parsing script scg_pair_neg_const.material
-02:40:00: Parsing script scg_pair_neg_meta.material
-02:40:00: Parsing script scg_pair_neg_time_const.material
-02:40:00: Parsing script scg_pair_neg_time_meta.material
-02:40:00: Parsing script scg_pair_neg_time_var.material
-02:40:00: Parsing script scg_pair_neg_var.material
-02:40:00: Parsing script scg_pair_pos_const.material
-02:40:00: Parsing script scg_pair_pos_meta.material
-02:40:00: Parsing script scg_pair_pos_time_const.material
-02:40:00: Parsing script scg_pair_pos_time_meta.material
-02:40:00: Parsing script scg_pair_pos_time_var.material
-02:40:00: Parsing script scg_pair_pos_var.material
-02:40:00: Parsing script scg_pair_var.material
-02:40:00: Parsing script scg_pair_var_orient.material
-02:40:00: Finished parsing scripts for resource group scg
-02:40:00: Parsing scripts for resource group space
-02:40:00: Parsing script backs.material
-02:40:00: Parsing script demo.material
-02:40:00: Parsing script space_base.material
-02:40:00: Parsing script stars.material
-02:40:00: Parsing script stars.particle
-02:40:00: Finished parsing scripts for resource group space
-02:40:00: Parsing scripts for resource group video
-02:40:00: Finished parsing scripts for resource group video
-02:40:00: Mesh: Loading scg_node_const.mesh.
-02:40:00: Mesh: Loading scg_struct_abstract_const.mesh.
-02:40:00: Mesh: Loading scg_cont_cube.mesh.
-02:40:00: Mesh: Loading scg_cont_unknown.mesh.
-02:40:00: Can't assign material Material to SubEntity of <suit.core.objects.ObjectSheet object at 0x051B6E70>_quest because this Material does not exist. Have you forgotten to define it in a .material script?
-02:40:00: Mesh: Loading scg_struct_struct.mesh.
-02:40:00: Mesh: Loading scg_line_seg.mesh.
-02:40:00: Texture: icon__b0427f04_p_sc_global_addr: Loading 1 faces(PF_A8R8G8B8,128x128x1) with  hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,128x128x1.
-02:40:04: Can't assign material Material to SubEntity of <suit.core.objects.ObjectSheet object at 0x056AC780>_quest because this Material does not exist. Have you forgotten to define it in a .material script?
-02:40:11: *-*-* OGRE Shutdown
-02:40:11: *-*-* OGRE Shutdown
-02:40:11: Unregistering ResourceManager for type Compositor
-02:40:11: Unregistering ResourceManager for type Font
-02:40:11: Unregistering ResourceManager for type Skeleton
-02:40:11: Unregistering ResourceManager for type Mesh
-02:40:11: Unregistering ResourceManager for type HighLevelGpuProgram
-02:40:11: Uninstalling plugin: ParticleFX
-02:40:11: Plugin successfully uninstalled
-02:40:11: Unloading library ./plugins\Plugin_ParticleFX.dll
-02:40:11: Uninstalling plugin: D3D9 RenderSystem
-02:40:11: D3D9 : Shutting down cleanly.
-02:40:11: Unregistering ResourceManager for type Texture
-02:40:11: Unregistering ResourceManager for type GpuProgram
-02:40:11: D3D9 : Direct3D9 Rendering Subsystem destroyed.
-02:40:11: Plugin successfully uninstalled
-02:40:11: Unloading library ./plugins\RenderSystem_Direct3D9.dll
-02:40:11: Uninstalling plugin: GL RenderSystem
-02:40:11: *** Stopping Win32GL Subsystem ***
-02:40:11: Plugin successfully uninstalled
-02:40:11: Unloading library ./plugins\RenderSystem_GL.dll
-02:40:11: Unregistering ResourceManager for type Material
+17:26:43: Creating resource group General
+17:26:43: Creating resource group Internal
+17:26:43: Creating resource group Autodetect
+17:26:43: SceneManagerFactory for type 'DefaultSceneManager' registered.
+17:26:43: Registering ResourceManager for type Material
+17:26:43: Registering ResourceManager for type Mesh
+17:26:43: Registering ResourceManager for type Skeleton
+17:26:43: MovableObjectFactory for type 'ParticleSystem' registered.
+17:26:43: OverlayElementFactory for type Panel registered.
+17:26:43: OverlayElementFactory for type BorderPanel registered.
+17:26:43: OverlayElementFactory for type TextArea registered.
+17:26:43: Registering ResourceManager for type Font
+17:26:43: ArchiveFactory for archive type FileSystem registered.
+17:26:43: ArchiveFactory for archive type Zip registered.
+17:26:43: FreeImage version: 3.10.0
+17:26:43: This program uses FreeImage, a free, open source image library supporting all common bitmap formats. See http://freeimage.sourceforge.net for details
+17:26:44: Supported formats: bmp,ico,jpg,jif,jpeg,jpe,jng,koa,iff,lbm,mng,pbm,pbm,pcd,pcx,pgm,pgm,png,ppm,ppm,ras,tga,targa,tif,tiff,wap,wbmp,wbm,psd,cut,xbm,xpm,gif,hdr,g3,sgi,exr,j2k,j2c,jp2
+17:26:44: DDS codec registering
+17:26:44: Registering ResourceManager for type HighLevelGpuProgram
+17:26:44: Registering ResourceManager for type Compositor
+17:26:44: MovableObjectFactory for type 'Entity' registered.
+17:26:44: MovableObjectFactory for type 'Light' registered.
+17:26:44: MovableObjectFactory for type 'BillboardSet' registered.
+17:26:44: MovableObjectFactory for type 'ManualObject' registered.
+17:26:44: MovableObjectFactory for type 'BillboardChain' registered.
+17:26:44: MovableObjectFactory for type 'RibbonTrail' registered.
+17:26:44: Loading library ./plugins\RenderSystem_GL.dll
+17:26:44: Installing plugin: GL RenderSystem
+17:26:44: OpenGL Rendering Subsystem created.
+17:26:44: Plugin successfully installed
+17:26:44: Loading library ./plugins\RenderSystem_Direct3D9.dll
+17:26:44: Installing plugin: D3D9 RenderSystem
+17:26:44: D3D9 : Direct3D9 Rendering Subsystem created.
+17:26:44: D3D9: Driver Detection Starts
+17:26:44: D3D9: Driver Detection Ends
+17:26:44: Plugin successfully installed
+17:26:44: Loading library ./plugins\Plugin_ParticleFX.dll
+17:26:44: Installing plugin: ParticleFX
+17:26:44: Particle Emitter Type 'Point' registered
+17:26:44: Particle Emitter Type 'Box' registered
+17:26:44: Particle Emitter Type 'Ellipsoid' registered
+17:26:44: Particle Emitter Type 'Cylinder' registered
+17:26:44: Particle Emitter Type 'Ring' registered
+17:26:44: Particle Emitter Type 'HollowEllipsoid' registered
+17:26:44: Particle Affector Type 'LinearForce' registered
+17:26:44: Particle Affector Type 'ColourFader' registered
+17:26:44: Particle Affector Type 'ColourFader2' registered
+17:26:44: Particle Affector Type 'ColourImage' registered
+17:26:44: Particle Affector Type 'ColourInterpolator' registered
+17:26:44: Particle Affector Type 'Scaler' registered
+17:26:44: Particle Affector Type 'Rotator' registered
+17:26:44: Particle Affector Type 'DirectionRandomiser' registered
+17:26:44: Particle Affector Type 'DeflectorPlane' registered
+17:26:44: Plugin successfully installed
+17:26:44: *-*-* OGRE Initialising
+17:26:44: *-*-* Version 1.6.1 (Shoggoth)
+17:26:44: D3D9 : RenderSystem Option: Allow NVPerfHUD = No
+17:26:44: D3D9 : RenderSystem Option: Anti aliasing = None
+17:26:44: D3D9 : RenderSystem Option: Floating-point mode = Fastest
+17:26:44: D3D9 : RenderSystem Option: Full Screen = No
+17:26:44: D3D9 : RenderSystem Option: Rendering Device = ATI Mobility Radeon HD 5650
+17:26:44: D3D9 : RenderSystem Option: VSync = No
+17:26:44: D3D9 : RenderSystem Option: Video Mode = 800 x 600 @ 32-bit colour
+17:26:44: D3D9 : RenderSystem Option: sRGB Gamma Conversion = No
+17:26:45: CPU Identifier & Features
+17:26:45: -------------------------
+17:26:45:  *   CPU ID: AuthenticAMD: AMD Athlon(tm) II P320 Dual-Core Processor
+17:26:45:  *      SSE: yes
+17:26:45:  *     SSE2: yes
+17:26:45:  *     SSE3: yes
+17:26:45:  *      MMX: yes
+17:26:45:  *   MMXEXT: yes
+17:26:45:  *    3DNOW: yes
+17:26:45:  * 3DNOWEXT: yes
+17:26:45:  *     CMOV: yes
+17:26:45:  *      TSC: yes
+17:26:45:  *      FPU: yes
+17:26:45:  *      PRO: yes
+17:26:45:  *       HT: no
+17:26:45: -------------------------
+17:26:45: D3D9 : Subsystem Initialising
+17:26:45: D3D9RenderSystem::_createRenderWindow "Semantic User Interface Toolkit. Kernel version: 0.4.0", 800x600 windowed  miscParams: FSAA=0 FSAAQuality=0 colourDepth=32 gamma=false useNVPerfHUD=false vsync=false 
+17:26:45: D3D9 : Created D3D9 Rendering Window 'Semantic User Interface Toolkit. Kernel version: 0.4.0' : 800x600, 32bpp
+17:26:45: D3D9 : WARNING - disabling VSync in windowed mode can cause timing issues at lower frame rates, turn VSync on if you observe this problem.
+17:26:45: Registering ResourceManager for type Texture
+17:26:45: Registering ResourceManager for type GpuProgram
+17:26:45: D3D9: Vertex texture format supported - PF_L8
+17:26:45: D3D9: Vertex texture format supported - PF_L16
+17:26:45: D3D9: Vertex texture format supported - PF_A8
+17:26:45: D3D9: Vertex texture format supported - PF_A4L4
+17:26:45: D3D9: Vertex texture format supported - PF_BYTE_LA
+17:26:45: D3D9: Vertex texture format supported - PF_R5G6B5
+17:26:46: D3D9: Vertex texture format supported - PF_B5G6R5
+17:26:46: D3D9: Vertex texture format supported - PF_A4R4G4B4
+17:26:46: D3D9: Vertex texture format supported - PF_A1R5G5B5
+17:26:46: D3D9: Vertex texture format supported - PF_A8R8G8B8
+17:26:46: D3D9: Vertex texture format supported - PF_B8G8R8A8
+17:26:46: D3D9: Vertex texture format supported - PF_A2R10G10B10
+17:26:46: D3D9: Vertex texture format supported - PF_A2B10G10R10
+17:26:46: D3D9: Vertex texture format supported - PF_DXT1
+17:26:46: D3D9: Vertex texture format supported - PF_DXT2
+17:26:46: D3D9: Vertex texture format supported - PF_DXT3
+17:26:46: D3D9: Vertex texture format supported - PF_DXT4
+17:26:46: D3D9: Vertex texture format supported - PF_DXT5
+17:26:46: D3D9: Vertex texture format supported - PF_FLOAT16_RGB
+17:26:46: D3D9: Vertex texture format supported - PF_FLOAT16_RGBA
+17:26:46: D3D9: Vertex texture format supported - PF_FLOAT32_RGB
+17:26:46: D3D9: Vertex texture format supported - PF_FLOAT32_RGBA
+17:26:46: D3D9: Vertex texture format supported - PF_X8R8G8B8
+17:26:46: D3D9: Vertex texture format supported - PF_X8B8G8R8
+17:26:46: D3D9: Vertex texture format supported - PF_R8G8B8A8
+17:26:46: D3D9: Vertex texture format supported - PF_DEPTH
+17:26:46: D3D9: Vertex texture format supported - PF_SHORT_RGBA
+17:26:46: D3D9: Vertex texture format supported - PF_FLOAT16_R
+17:26:46: D3D9: Vertex texture format supported - PF_FLOAT32_R
+17:26:46: D3D9: Vertex texture format supported - PF_SHORT_GR
+17:26:46: D3D9: Vertex texture format supported - PF_FLOAT16_GR
+17:26:46: D3D9: Vertex texture format supported - PF_FLOAT32_GR
+17:26:46: D3D9: Vertex texture format supported - PF_SHORT_RGB
+17:26:46: RenderSystem capabilities
+17:26:46: -------------------------
+17:26:46: RenderSystem Name: Direct3D9 Rendering Subsystem
+17:26:46: GPU Vendor: ati
+17:26:46: Device Name: ATI Mobility Radeon HD 5650
+17:26:46: Driver Version: 8.14.1.6099
+17:26:46:  * Fixed function pipeline: yes
+17:26:46:  * Hardware generation of mipmaps: yes
+17:26:46:  * Texture blending: yes
+17:26:46:  * Anisotropic texture filtering: yes
+17:26:46:  * Dot product texture operation: yes
+17:26:46:  * Cube mapping: yes
+17:26:46:  * Hardware stencil buffer: yes
+17:26:46:    - Stencil depth: 8
+17:26:46:    - Two sided stencil support: yes
+17:26:46:    - Wrap stencil values: yes
+17:26:46:  * Hardware vertex / index buffers: yes
+17:26:46:  * Vertex programs: yes
+17:26:46:  * Fragment programs: yes
+17:26:46:  * Geometry programs: no
+17:26:46:  * Supported Shader Profiles: hlsl ps_1_1 ps_1_2 ps_1_3 ps_1_4 ps_2_0 ps_2_a ps_2_b ps_2_x ps_3_0 vs_1_1 vs_2_0 vs_2_a vs_2_x vs_3_0
+17:26:46:  * Texture Compression: yes
+17:26:46:    - DXT: yes
+17:26:46:    - VTC: no
+17:26:46:  * Scissor Rectangle: yes
+17:26:46:  * Hardware Occlusion Query: yes
+17:26:46:  * User clip planes: yes
+17:26:46:  * VET_UBYTE4 vertex element type: yes
+17:26:46:  * Infinite far plane projection: yes
+17:26:46:  * Hardware render-to-texture: yes
+17:26:46:  * Floating point textures: yes
+17:26:46:  * Non-power-of-two textures: yes
+17:26:46:  * Volume textures: yes
+17:26:46:  * Multiple Render Targets: 4
+17:26:46:    - With different bit depths: yes
+17:26:46:  * Point Sprites: yes
+17:26:46:  * Extended point parameters: yes
+17:26:46:  * Max Point Size: 256
+17:26:46:  * Vertex texture fetch: yes
+17:26:46:    - Max vertex textures: 4
+17:26:46:    - Vertex textures shared: no
+17:26:46:  * Render to Vertex Buffer : no
+17:26:46:  * DirectX per stage constants: yes
+17:26:46: ***************************************
+17:26:46: *** D3D9 : Subsystem Initialised OK ***
+17:26:46: ***************************************
+17:26:46: ResourceBackgroundQueue - threading disabled
+17:26:46: Particle Renderer Type 'billboard' registered
+17:26:46: Added resource location './media/mygui' of type 'FileSystem' to resource group 'General'
+17:26:46: Added resource location './media/backs' of type 'FileSystem' to resource group 'General'
+17:26:46: Creating resource group chemistry
+17:26:46: Added resource location './media/chemistry/meshes' of type 'FileSystem' to resource group 'chemistry'
+17:26:46: Added resource location './media/chemistry/materials/programs' of type 'FileSystem' to resource group 'chemistry'
+17:26:46: Added resource location './media/chemistry/materials/scripts' of type 'FileSystem' to resource group 'chemistry'
+17:26:46: Added resource location './media/chemistry/materials/textures' of type 'FileSystem' to resource group 'chemistry'
+17:26:46: Creating resource group geometry
+17:26:46: Added resource location './media/geometry/base_media.zip' of type 'Zip' to resource group 'geometry'
+17:26:46: Creating resource group graph
+17:26:46: Added resource location './media/graph/meshes' of type 'FileSystem' to resource group 'graph'
+17:26:46: Added resource location './media/graph/materials/scripts' of type 'FileSystem' to resource group 'graph'
+17:26:46: Creating resource group scg
+17:26:46: Added resource location './media/scg/base_media.zip' of type 'Zip' to resource group 'scg'
+17:26:46: Creating resource group space
+17:26:46: Added resource location './media/space/meshes' of type 'FileSystem' to resource group 'space'
+17:26:46: Added resource location './media/space/materials/scripts' of type 'FileSystem' to resource group 'space'
+17:26:46: Added resource location './media/space/materials/textures' of type 'FileSystem' to resource group 'space'
+17:26:46: Initialising resource group General
+17:26:46: Parsing scripts for resource group General
+17:26:46: Parsing script backs.material
+17:26:46: Finished parsing scripts for resource group General
+17:26:47: Texture: scifi_skin.png: Loading 1 faces(PF_A8R8G8B8,512x512x1) with 0 generated mipmaps from Image. Internal format is PF_A8R8G8B8,512x512x1.
+17:26:47: Texture: core_pointer.png: Loading 1 faces(PF_A8R8G8B8,256x128x1) with 0 generated mipmaps from Image. Internal format is PF_A8R8G8B8,256x128x1.
+17:26:47: Texture: Default_Texture: Loading 1 faces(PF_BYTE_LA,1024x128x1) with 0 generated mipmaps from Image. Internal format is PF_BYTE_LA,1024x128x1.
+17:26:47: Texture: image__d8b48d04_p_sc_global_addr: Loading 1 faces(PF_A8R8G8B8,128x128x1) with  hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,128x128x1.
+17:26:47: Added resource location 'C:\Users\dred\Documents\GitHub\pyUI\components\scg\base\media\code' of type 'FileSystem' to resource group 'scg'
+17:26:47: Added resource location 'C:\Users\dred\Documents\GitHub\pyUI\components\scg\base\media\textures' of type 'FileSystem' to resource group 'scg'
+17:26:47: Added resource location 'C:\Users\dred\Documents\GitHub\pyUI\components\scg\base\media\materials' of type 'FileSystem' to resource group 'scg'
+17:26:47: Added resource location 'C:\Users\dred\Documents\GitHub\pyUI\components\scg\base\media\vis_menu' of type 'FileSystem' to resource group 'General'
+17:26:49: Creating resource group image
+17:26:49: Added resource location 'C:\Users\dred\Documents\GitHub\pyUI\components\image\media\tmp' of type 'FileSystem' to resource group 'image'
+17:26:49: Creating resource group video
+17:26:49: Added resource location '_cache\video' of type 'FileSystem' to resource group 'video'
+17:26:50: Parsing scripts for resource group Autodetect
+17:26:50: Finished parsing scripts for resource group Autodetect
+17:26:50: Parsing scripts for resource group Internal
+17:26:50: Finished parsing scripts for resource group Internal
+17:26:50: Parsing scripts for resource group chemistry
+17:26:50: Parsing script chem_atoms.material
+17:26:50: Parsing script chem_base.material
+17:26:50: Parsing script chem_link.material
+17:26:50: Finished parsing scripts for resource group chemistry
+17:26:50: Parsing scripts for resource group geometry
+17:26:50: Parsing script geom_background.material
+17:26:50: Parsing script geom_base.material
+17:26:50: Parsing script geom_lsec.material
+17:26:50: Parsing script geom_points.material
+17:26:50: Parsing script geom_triangle.material
+17:26:50: Finished parsing scripts for resource group geometry
+17:26:50: Parsing scripts for resource group graph
+17:26:50: Parsing script graph_objects.material
+17:26:50: Finished parsing scripts for resource group graph
+17:26:50: Parsing scripts for resource group image
+17:26:50: Finished parsing scripts for resource group image
+17:26:50: Parsing scripts for resource group scg
+17:26:50: Parsing script scg_arrows.material
+17:26:50: Parsing script scg_base.material
+17:26:50: Parsing script scg_content.material
+17:26:50: Parsing script scg_mpair.material
+17:26:50: Parsing script scg_nodes.material
+17:26:50: Parsing script scg_pair.material
+17:26:50: Parsing script scg_pair_const.material
+17:26:50: Parsing script scg_pair_const_orient.material
+17:26:50: Parsing script scg_pair_fuz_const.material
+17:26:50: Parsing script scg_pair_fuz_meta.material
+17:26:50: Parsing script scg_pair_fuz_time_const.material
+17:26:50: Parsing script scg_pair_fuz_time_meta.material
+17:26:50: Parsing script scg_pair_fuz_time_var.material
+17:26:50: Parsing script scg_pair_fuz_var.material
+17:26:50: Parsing script scg_pair_meta.material
+17:26:50: Parsing script scg_pair_meta_orient.material
+17:26:50: Parsing script scg_pair_neg_const.material
+17:26:50: Parsing script scg_pair_neg_meta.material
+17:26:50: Parsing script scg_pair_neg_time_const.material
+17:26:50: Parsing script scg_pair_neg_time_meta.material
+17:26:50: Parsing script scg_pair_neg_time_var.material
+17:26:50: Parsing script scg_pair_neg_var.material
+17:26:51: Parsing script scg_pair_pos_const.material
+17:26:51: Parsing script scg_pair_pos_meta.material
+17:26:51: Parsing script scg_pair_pos_time_const.material
+17:26:51: Parsing script scg_pair_pos_time_meta.material
+17:26:51: Parsing script scg_pair_pos_time_var.material
+17:26:51: Parsing script scg_pair_pos_var.material
+17:26:51: Parsing script scg_pair_var.material
+17:26:51: Parsing script scg_pair_var_orient.material
+17:26:51: Finished parsing scripts for resource group scg
+17:26:51: Parsing scripts for resource group space
+17:26:51: Parsing script backs.material
+17:26:51: Parsing script demo.material
+17:26:51: Parsing script space_base.material
+17:26:51: Parsing script stars.material
+17:26:51: Parsing script stars.particle
+17:26:51: Finished parsing scripts for resource group space
+17:26:51: Parsing scripts for resource group video
+17:26:51: Finished parsing scripts for resource group video
+17:26:51: Mesh: Loading scg_node_const.mesh.
+17:26:51: Mesh: Loading scg_struct_abstract_const.mesh.
+17:26:51: Mesh: Loading scg_cont_cube.mesh.
+17:26:51: Mesh: Loading scg_cont_unknown.mesh.
+17:26:51: Can't assign material Material to SubEntity of <suit.core.objects.ObjectSheet object at 0x0520BCF0>_quest because this Material does not exist. Have you forgotten to define it in a .material script?
+17:26:51: Mesh: Loading scg_struct_struct.mesh.
+17:26:51: Mesh: Loading scg_line_seg.mesh.
+17:26:51: Texture: icon__30438004_p_sc_global_addr: Loading 1 faces(PF_A8R8G8B8,128x128x1) with  hardware generated mipmaps from Image. Internal format is PF_A8R8G8B8,128x128x1.
+17:27:00: Texture: Identifier_Texture: Loading 1 faces(PF_BYTE_LA,1024x128x1) with 0 generated mipmaps from Image. Internal format is PF_BYTE_LA,1024x128x1.
+17:27:02: *-*-* OGRE Shutdown
+17:27:02: *-*-* OGRE Shutdown
+17:27:02: Unregistering ResourceManager for type Compositor
+17:27:02: Unregistering ResourceManager for type Font
+17:27:02: Unregistering ResourceManager for type Skeleton
+17:27:02: Unregistering ResourceManager for type Mesh
+17:27:02: Unregistering ResourceManager for type HighLevelGpuProgram
+17:27:02: Uninstalling plugin: ParticleFX
+17:27:02: Plugin successfully uninstalled
+17:27:02: Unloading library ./plugins\Plugin_ParticleFX.dll
+17:27:02: Uninstalling plugin: D3D9 RenderSystem
+17:27:02: D3D9 : Shutting down cleanly.
+17:27:02: Unregistering ResourceManager for type Texture
+17:27:02: Unregistering ResourceManager for type GpuProgram
+17:27:02: D3D9 : Direct3D9 Rendering Subsystem destroyed.
+17:27:02: Plugin successfully uninstalled
+17:27:02: Unloading library ./plugins\RenderSystem_Direct3D9.dll
+17:27:02: Uninstalling plugin: GL RenderSystem
+17:27:02: *** Stopping Win32GL Subsystem ***
+17:27:02: Plugin successfully uninstalled
+17:27:02: Unloading library ./plugins\RenderSystem_GL.dll
+17:27:02: Unregistering ResourceManager for type Material

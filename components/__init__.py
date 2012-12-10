@@ -46,6 +46,7 @@ modules = [
 			'panels.taskpanel',
 			'scg.base.scg_init',
 			'text.text_init',
+			'scs.scs_init',
 #			'audio.audio_init',
 #			'chemistry.chem_init',
 			#'flash.flash_init',
