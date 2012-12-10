@@ -61,6 +61,7 @@ ui_format					=	"/ui/core/формат";
 ui_format_sc				=	"/ui/core/SC";
 ui_format_scgx			=	"/ui/core/SCGx";
 ui_format_geomx		=	"/ui/core/GEOMx";
+ui_format_scsx   =   "/ui/core/SCSx";
 
 ui_format_jpg				=	"/ui/core/JPG";
 ui_format_jpeg			=	"/ui/core/JPEG";
