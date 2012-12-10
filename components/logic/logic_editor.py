@@ -83,6 +83,7 @@ class TextEditor(BaseLogic):
                                                           mygui.IntCoord(0, 0, 91, 91),
                                                           mygui.Align(mygui.ALIGN_VSTRETCH),
                                                           "Main")
+        #self.widget.setFontName("Arial")
         self.__viewer.widget.setVisible(False)
         self.__viewer.widget.setTextColour(mygui.Colour(0.0, 0.0, 0.0, 1.0))
         self.__viewer.widget.setEditMultiLine(True)
