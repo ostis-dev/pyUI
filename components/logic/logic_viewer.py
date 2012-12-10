@@ -176,7 +176,7 @@ class TextViewer(BaseLogic):
                 return ""
             
             return value            
-        ob=table.table("information")
+        ob = table.table("information")
 
         return ob.makeTextTable() #"Text\nAnd Text"
     
