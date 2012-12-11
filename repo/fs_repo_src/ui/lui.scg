@@ -3,12 +3,12 @@
 #include "meta_info.scsy"
 #include "ui_keynodes.scsy"
 lui\keynodes.gwf
-lui\patterns\шаблон(идентификация).gwf
-lui\patterns\шаблон(определение).gwf
-lui\patterns\шаблон(отн.обл.опр.пересек.).gwf
-lui\patterns\шаблон(отн.обл.опр.явл.надмн.).gwf
-lui\patterns\шаблон(пояснение).gwf
-lui\patterns\шаблон(разбиение).gwf
-lui\patterns\шаблон(утв.опр.типа).gwf
-lui\patterns\шаблон(утверждения).gwf
+lui\patterns\°рсыюэ(Ёрчсшхэшх).gwf
+lui\patterns\°рсыюэ(єЄт.юяЁ.Єшяр).gwf
+lui\patterns\°рсыюэ(єЄтхЁцфхэш ).gwf
+lui\patterns\°рсыюэ(шфхэЄшЇшърЎш ).gwf
+lui\patterns\°рсыюэ(юЄэ.юсы.юяЁ. ты.эрфьэ.).gwf
+lui\patterns\°рсыюэ(юЄэ.юсы.юяЁ.яхЁхёхъ.).gwf
+lui\patterns\°рсыюэ(юяЁхфхыхэшх).gwf
+lui\patterns\°рсыюэ(яю ёэхэшх).gwf
 

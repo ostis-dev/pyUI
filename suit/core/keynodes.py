@@ -247,6 +247,7 @@ class ui:
     format                  =   session.find_keynode_full_uri(u"/ui/core/формат")
     format_sc               =   session.find_keynode_full_uri(u"/ui/core/SC")
     format_scgx             =   session.find_keynode_full_uri(u"/ui/core/SCGx")
+    format_scgx             =   session.find_keynode_full_uri(u"/ui/core/SCSx")
     format_geomx            =   session.find_keynode_full_uri(u"/ui/core/GEOMx")
     
     format_jpg              =   session.find_keynode_full_uri(u"/ui/core/JPG")
