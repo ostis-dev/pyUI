@@ -58,6 +58,6 @@ modules = [
 #			'LUI.lui_init',
 #			'LUI_voice_output.vo_init',
             'questions.questions_init',
-#			'math.math_init'
+			'math.math_init'
             'logic.logic_init'
 ]
