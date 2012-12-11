@@ -161,7 +161,7 @@ class Object(ScObject):
         # animation parameters
         self.isAnimated = True
         self.animationScaleProgress = (0, 0, 0)
-        self.animationTime = 1
+        self.animationTime = 0.3
         self.animationType = AnimationUtils.BACK
         self.easeAnimationType = AnimationUtils.EASE_IN_OUT
 
