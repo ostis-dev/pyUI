@@ -44,7 +44,6 @@ from geom_objects import GeometryAbstractObject
 import suit.cf.utils as comutils
 import suit.core.render.engine as render_engine
 import geom_controls
-import math
 
 class GeometryEditMode(BaseEditMode):
     
@@ -358,37 +357,6 @@ class GeometryEditMode(BaseEditMode):
                 if isinstance(obj, (GeometryTriangle, GeometryQuadrangle)):
                     self.state = GeometryEditMode.ES_PerimeterChange
                     self.perimetr_changer = TextInput(obj, self._perimeter_change_callback, obj.getPropertyValue(GeometryAbstractObject.PropPerimeter))
-                
-        if key == ois.KC_O:
-            selected = self._logic._getSheet().getSelected()
-            for obj in selected:
-                if isinstance(obj, (GeometryTriangle)):
-                    circumcirclePoints = obj._calculateCircumcirclePoints()
-                    
-                    # create center point of circle
-                    centerPointCoord = circumcirclePoints[0]
-                    center =  self._logic.createPoint(centerPointCoord)
-                    sheet = self._logic._getSheet()
-                    sheet.addChild(center)
-                    center._updateView()
-                    
-                    #set point of circle as vertex of triangle
-                    vertexPointCoord = circumcirclePoints[1]
-                    vertex = self._logic.createPoint(vertexPointCoord)
-                    sheet = self._logic._getSheet()
-                    
-                    _selected = center, vertex
-                    
-                    obj._setCircumcirclePoints(_selected)
-                    
-                    #draw circumcircle
-                    self.active_object = self._logic.createCircle()
-                    if self.active_object.makeBasedOnObjects(_selected):
-                        self._logic._getSheet().addChild(self.active_object)
-                        obj._setIsCircumcircleDrawed(True)
-                    else:
-                        self.active_object.delete()
-                    self.active_object = None
         
         return False
     
