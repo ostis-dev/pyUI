@@ -919,6 +919,8 @@ class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         self.__manualObject = None  # manual object to store and render geometry
         self.pts = []        # triangle vertex points
         self.sides = []         # triangle sides
+        self.isCircumcircleDrawed = False      #flag showing is circumcircle shown on objects sheet
+        self.circumcirclePoints = []           #turple for circumcircle points
             
     def __del__(self):
         suit.core.objects.ObjectDepth.__del__(self)
@@ -984,6 +986,15 @@ class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         self.__manualObject.triangle(2, 1, 0)
         
         self.__manualObject.end()
+        
+        # update circumcircle points position
+        if self.isCircumcircleDrawed:
+            circumcirclePointsCoordinates = self._calculateCircumcirclePoints()
+            circumcircle = self.circumcirclePoints[0]
+            vertex = self.circumcirclePoints[1]
+            circumcircle.setPosition(render_engine.pos2dTo3dIsoPos(circumcirclePointsCoordinates[0]))
+            vertex.setPosition(render_engine.pos2dTo3dIsoPos(circumcirclePointsCoordinates[1]))
+        
         
         suit.core.objects.ObjectDepth._update(self, _timeSinceLastFrame)
         
@@ -1119,6 +1130,55 @@ class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         else:
             return None 
         
+    def _calculateCircumcirclePoints(self):
+        """Calculate points for circumcircle and draw it on objects sheet 
+        """
+        # calculate triangle vertex coordinates
+        pointA_x = render_engine.pos3dTo2dWindow(self.pts[0].getPosition())[0]
+        pointA_y = render_engine.pos3dTo2dWindow(self.pts[0].getPosition())[1]
+        pointB_x = render_engine.pos3dTo2dWindow(self.pts[1].getPosition())[0]
+        pointB_y = render_engine.pos3dTo2dWindow(self.pts[1].getPosition())[1]
+        pointC_x = render_engine.pos3dTo2dWindow(self.pts[2].getPosition())[0]
+        pointC_y = render_engine.pos3dTo2dWindow(self.pts[2].getPosition())[1]
+        
+        # calculate center coordinates
+        coefficient_A1 = 2*(pointB_x-pointA_x)
+        coefficient_A2 = 2*(pointC_x-pointB_x)
+        coefficient_B1 = 2*(pointB_y-pointA_y)
+        coefficient_B2 = 2*(pointC_y-pointB_y)
+        coefficient_C1 = math.pow(pointB_x, 2)-math.pow(pointA_x,2)+math.pow(pointB_y, 2)-math.pow(pointA_y,2)
+        coefficient_C2 = math.pow(pointC_x, 2)-math.pow(pointB_x,2)+math.pow(pointC_y, 2)-math.pow(pointB_y,2)
+        
+        center_y = (coefficient_C2*coefficient_A1-coefficient_A2*coefficient_C1)/(coefficient_B2*coefficient_A1-coefficient_A2*coefficient_B1)
+        center_x = (coefficient_C1-coefficient_B1*center_y)/coefficient_A1
+        
+        # create center point
+        centerPointCoord = center_x, center_y
+        
+        # create vertex point
+        vertexPointCoord = pointA_x, pointA_y
+        
+        return [centerPointCoord, vertexPointCoord]
+    
+    def _setCircumcirclePoints(self, circumcirclePoints):
+        """set list of circumcircle points
+        """
+        self.circumcirclePoints = circumcirclePoints
+        
+    def _getCircumcirclePoints(self):
+        """get list of circumcircle points
+        """
+        return self.circumcirclePoints
+    
+    def _setIsCircumcircleDrawed(self, isCircumcircleDrawed):
+        """set flag circumcircle drawed
+        """
+        self.isCircumcircleDrawed = isCircumcircleDrawed
+        
+    def _getIsCircumcircleDrawed(self):
+        """get flag circumcircle drawed
+        """
+        return self.isCircumcircleDrawed
   
 class GeometryQuadrangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
     
