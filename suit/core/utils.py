@@ -22,6 +22,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 # singleton base class
+from ogre.renderer.OGRE._ogre_ import Math
+
 class Singleton:
     """Ensure that a class has at most one instance.
     
@@ -163,3 +165,82 @@ def logMessage_init(message, tab = 1):
 
 def logMessage_shutdown(message, tab = 1):
     LogManager.getSingleton().logShutdown(message, tab)
+
+
+class AnimationUtils:
+
+    LINEAR = 1
+    CIRCLE = 2
+    ELASTIC = 3
+    POWER_OF_TWO = 4
+    POWER_OF_FIVE = 5
+    SINE = 6
+    BACK = 7
+
+    EASE_IN = 1
+    EASE_OUT = 2
+    EASE_IN_OUT = 3
+
+    def __init__(self):
+        return
+
+    def animateValue(self, toValue, progress, animationType, easeAnimationType):
+        delta = 1
+
+        if easeAnimationType == self.EASE_IN:
+            delta = self.deltaAnimation(progress, animationType)
+
+        elif easeAnimationType == self.EASE_OUT:
+            delta = 1 - self.deltaAnimation(1 - progress, animationType)
+
+        elif easeAnimationType == self.EASE_IN_OUT:
+            if progress < 0.5:
+                delta =  self.deltaAnimation(2 * progress, animationType) / 2
+            else:
+                delta = (2 - self.deltaAnimation(2 * (1 - progress), animationType)) / 2
+
+        return int(toValue * delta)
+
+    def deltaAnimation(self, progress, animationType):
+        delta = 1
+
+        if animationType == self.LINEAR:
+            delta = self.deltaLinearAnimation(progress)
+
+        elif animationType == self.CIRCLE:
+            delta = self.deltaCircleAnimation(progress)
+
+        elif animationType == self.ELASTIC:
+            delta = self.deltaElasticAnimation(progress, 1.5)
+
+        elif animationType == self.POWER_OF_TWO:
+            delta = self.deltaPowerOfNAnimation(progress, 2)
+
+        elif animationType == self.POWER_OF_FIVE:
+            delta = self.deltaPowerOfNAnimation(progress, 5)
+
+        elif animationType == self.SINE:
+            delta = self.deltaSineAnimation(progress)
+
+        elif animationType == self.BACK:
+            delta = self.deltaBackAnimation(progress, 2.5)
+
+        return delta
+
+    def deltaLinearAnimation(self, progress):
+        return progress
+
+    def deltaCircleAnimation(self, progress):
+        return 1 - Math.Sin(Math.ACos(progress))
+
+    def deltaElasticAnimation(self, progress, x):
+        return Math.Pow(2, 10 * (progress - 1)) * Math.Cos(20 * Math.PI * x / 3 * progress)
+
+    def deltaPowerOfNAnimation(self, progress, power):
+        return  Math.Pow(progress, power)
+
+    def deltaSineAnimation(self, progress):
+        return 1 - Math.Sin((1 - progress) * Math.PI / 2)
+
+    def deltaBackAnimation(self, progress, x):
+        return Math.Pow(progress, 2) * ((x + 1) * progress - x)

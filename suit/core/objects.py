@@ -36,6 +36,7 @@ import sc_core.pm
 import keynodes
 import sc_utils
 import thread
+from suit.core.utils import AnimationUtils
 
 # store global kernal object
 kernel = core.Kernel.getSingleton()
@@ -139,22 +140,31 @@ class Object(ScObject):
         self.needUpdate = True
         self.needViewUpdate = True
         self.parent = None
-        
+
         self.textValue = None
         self.textColor = None
-        
+
         # delete event function(<object>)
         self.eventDelete = None
-        
+
         # state
         self.__state = Object.OS_Normal
         self.__merged = False
         self.__wasInMemory = False
-        
+
         # view parameters
         self.position = None
         self.scale = None
-        
+        self.newScale = None
+        self.oldScale = None
+
+        # animation parameters
+        self.isAnimated = True
+        self.animationScaleProgress = (0, 0, 0)
+        self.animationTime = 1
+        self.animationType = AnimationUtils.BACK
+        self.easeAnimationType = AnimationUtils.EASE_IN_OUT
+
         # selection flag
         self.__selected = False
 
@@ -164,13 +174,13 @@ class Object(ScObject):
         self.needModeUpdate = True
         self.needLocalizationUpdate = False
         self.needTextUpdate = False
-        
+
         # events
         self.eventSCAddrChanged = None
-        
+
         # additional sc-addrs
         self.additionalScAddrs = []
-        
+
     def __del__(self):
         """Destructor
         """
@@ -296,6 +306,9 @@ class Object(ScObject):
         """Update object state
         """
         self.needUpdate = False
+
+        if self.isAnimated: self._animate(_timeSinceLastFrame)
+
         if self.needViewUpdate: self._updateView()
         
     def _updateView(self):
@@ -328,7 +341,50 @@ class Object(ScObject):
             self.needLocalizationUpdate = False
             
         self.needViewUpdate = False
-        
+
+
+    def _animate(self, _timeSinceLastFrame):
+        if self.scale is not None:
+            self._animateScale(_timeSinceLastFrame)
+
+
+    def _animateScale(self, _timeSinceLastFrame):
+        if self.oldScale is None or self.newScale is None or self.scale == self.newScale:
+            return
+
+        self.animationScaleProgress = (
+            self._increaseAnimationProgress(self.animationScaleProgress[0], _timeSinceLastFrame),
+            self._increaseAnimationProgress(self.animationScaleProgress[1], _timeSinceLastFrame),
+            self._increaseAnimationProgress(self.animationScaleProgress[2], _timeSinceLastFrame)
+            )
+
+        # animate x coordinate
+        progressX = float(self.animationScaleProgress[0]) / float(self.animationTime)
+        animatedX = AnimationUtils().animateValue(
+            self.newScale[0] - self.oldScale[0], progressX, self.animationType, self.easeAnimationType)
+        self.scale = (self.oldScale[0] + animatedX, self.scale[1], 0)
+
+        # animate y coordinate
+        progressY = float(self.animationScaleProgress[1]) / float(self.animationTime)
+        animatedY = AnimationUtils().animateValue(
+            self.newScale[1] - self.oldScale[1], progressY, self.animationType, self.easeAnimationType)
+        self.scale = (self.scale[0], self.oldScale[1] + animatedY, 0)
+
+        # animate z coordinate (if exist)
+        if isinstance(self.oldScale, ogre.Vector3):
+            progressZ = float(self.animationScaleProgress[2]) / float(self.animationTime)
+            animatedZ = AnimationUtils().animateValue(
+                self.newScale[2] - self.oldScale[2], progressZ, self.animationType, self.easeAnimationType)
+            self.scale = ogre.Vector3(self.scale[0], self.scale[1], self.oldScale[2] + animatedZ)
+
+        self.setCurrentScale(self.scale)
+
+    def _increaseAnimationProgress(self, animationProgress, _timeSinceLastFrame):
+        if animationProgress < self.animationTime:
+            return animationProgress + _timeSinceLastFrame
+        else:
+            return self.animationTime
+
     def _needLinkedUpdate(self):
         """Reset flag to True in linked objects
         """
@@ -371,22 +427,43 @@ class Object(ScObject):
         """ Return object position 
         """
         return self.position
-    
+
     def setScale(self, sz):
         """Sets object size
         @param size: Ogre::Vector3 value of size  
         """
+
+        if self.isAnimated:
+            self._refreshScaleAnimationProperties(self.newScale, sz)
+        else:
+            self.setCurrentScale(sz)
+
+        self.newScale = sz
+
+
+    def _refreshScaleAnimationProperties(self, oldScale, newScale):
+        if oldScale is None:
+            self.setCurrentScale(newScale)
+
+        if oldScale is None or newScale is None or oldScale == newScale:
+            return
+
+        self.oldScale = self.newScale
+        self.animationScaleProgress = (0.0, 0.0, 0.0)
+
+
+    def setCurrentScale(self, sz):
         self.needUpdate = True
         self._needLinkedUpdate()
-        
+
         self.needViewUpdate = True
         self.needScaleUpdate = True
         self.scale = sz
-            
+
     def getScale(self):
         """Returns object size
         """
-        return self.scale
+        return self.newScale if self.newScale is not None else self.scale
     
     def setState(self, _state):
         """Sets object state
