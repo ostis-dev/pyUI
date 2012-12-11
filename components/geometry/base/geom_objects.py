@@ -48,7 +48,9 @@ class GeometryAbstractObject:
     PropSquare = u"Площадь"
     PropPerimeter = u"Периметр"
     PropLength = u"Длина"
-        
+    PropRadius = u"Радиус"
+    PropDiameter = u"Диаметр"
+
     def __init__(self):
         # list of child points (begin and end points are excluded)
         # that list contains tuples. Each tuple contains point and it position.
@@ -625,97 +627,97 @@ class GeometryLineSection(suit.core.objects.ObjectLine, GeometryAbstractObject):
         else:
             return None
      
+
 class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
-    
+
     def __init__(self):
         suit.core.objects.ObjectDepth.__init__(self)
         GeometryAbstractObject.__init__(self)
-        
+
         self.width = 0.2
         self.radius = 1.0
         self.sectors = 90
-        
+
         self.manualObject = None
         self.center_point = None
         self.radius_point = None
-        
+
         self.needMeshUpdate = False
         self.needCenterPointUpdate = False
         self.needRadiusPointUpdate = False
-        
+
     def __del__(self):
         suit.core.objects.ObjectDepth.__del__(self)
         GeometryAbstractObject.__del__(self)
-        
+
     def delete(self):
-            
+
         if self.center_point is not None:
             self.center_point.removeLinkedObject(suit.core.objects.Object.LS_BASEONTHIS, self)
             self.center_point = None
-        
+
         if self.manualObject is not None:
             render_engine.SceneManager.destroyManualObject(self.manualObject)
         suit.core.objects.ObjectDepth.delete(self)
         GeometryAbstractObject.delete(self)
-        
+
     def _getMaterialName(self):
         """Returns material name based on object state
         """
         return geom_env.material_state_pat % ("lsec_%s" % (state_post[self.getState()]))
-        
+
     def _update(self, _timeSinceLastFrame):
-        
+
         if not self.needUpdate:
             return
-               
+
         self.needTextPositionUpdate = True
-        
+
         # update circle position based on center point
         self.position = self.center_point.getPosition()
         self._updatePosition()
-        
+
         # calculate radius
         if self.radius_point is not None:
             c = self.center_point.getPosition()
             r = self.radius_point.getPosition()
-            
+
             # calculate radius length
             self.setRadius(math.sqrt((c[0] - r[0]) ** 2 + (c[1] - r[1]) ** 2))
-        
+
         self._updateAllPoints()
-        
+
         if self.needMeshUpdate:
             self._updateMesh()
             self.needMeshUpdate = False
-            
+
         suit.core.objects.ObjectDepth._update(self, _timeSinceLastFrame)
-        
+
     def _updateView(self):
         """Update object view
         """
         # do not moves and scale for circle
         self.needPositionUpdate = False
         self.needScaleUpdate = False
-        
+
         if self.needCenterPointUpdate:
             self.needCenterPointUpdate = False
-            
+
         if self.needRadiusPointUpdate:
             self.needRadiusPointUpdate = False
-            
+
         if self.needStateUpdate:
             self.needStateUpdate = False
             self.manualObject.setMaterialName(0, self._getMaterialName())
-            
+
         suit.core.objects.ObjectDepth._updateView(self)
-        
-        
+
     def _updateMesh(self):
         """Updates circle mesh
         """
         # recreate geometry
         if self.manualObject is None:
-            #sceneMngr.destroyManualObject(self.__manualObject)
+            # sceneMngr.destroyManualObject(self.__manualObject)
             self.manualObject = render_engine._ogreSceneManager.createManualObject(str(self))
             self.manualObject.setDynamic(True)
             # attach to scene node
@@ -723,7 +725,7 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
             self.manualObject.begin(self._getMaterialName())
         else:
             self.manualObject.beginUpdate(0)
-            
+
         # recalculate mesh
         a_step = ogre.Degree(360 / self.sectors).valueRadians()
         angle = 0.0
@@ -732,20 +734,20 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         for sector in xrange(self.sectors):
             vx = math.cos(angle)
             vy = math.sin(angle)
-            
+
             self.manualObject.position(vx * r_in, vy * r_in, 0.0)
             self.manualObject.normal(0, 0, 1)
             self.manualObject.position(vx * r_out, vy * r_out, 0.0)
             self.manualObject.normal(0, 0, 1)
-            
+
             angle += a_step
-            
+
         for idx in xrange(self.sectors):
             idx1 = idx * 2
             self.manualObject.quad(idx1, idx1 + 1, idx1 + 3, idx1 + 2)
-        self.manualObject.quad(self.sectors*2 - 2, self.sectors*2 - 1, 1, 0)
+        self.manualObject.quad(self.sectors * 2 - 2, self.sectors * 2 - 1, 1, 0)
         self.manualObject.end()
-        
+
     def setRadius(self, _radius):
         """Set circle radius
         @param _radius: radius length
@@ -753,7 +755,7 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         """
         self.radius = _radius
         self.needMeshUpdate = True
-        
+
     def setCenterPoint(self, _point):
         """Sets center point object
         @param _point: center point object
@@ -761,57 +763,57 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         """
         if self.center_point is not None:
             self.center_point.removeLinkedObject(suit.core.objects.Object.LS_BASEONTHIS, self)
-        
+
         self.center_point = _point
         self.needCenterPointUpdate = True
         self.needViewUpdate = True
-        
+
         if self.center_point is not None:
             self.center_point.addLinkedObject(suit.core.objects.Object.LS_BASEONTHIS, self)
-            
+
     def setRadiusPoint(self, _point):
         """Sets radius point. Radius points - is a point, that lies on circle.
         @param _point: Radius point
-        @type _point: GeometryPoint  
+        @type _point: GeometryPoint
         """
         if self.radius_point is not None:
             self.radius_point.removeLinkedObject(suit.core.objects.Object.LS_BASEONTHIS, self)
-            
+
         self.radius_point = _point
         self.needRadiusPointUpdate = True
         self.needViewUpdate = True
-        
+
         if self.radius_point is not None:
             self.radius_point.addLinkedObject(suit.core.objects.Object.LS_BASEONTHIS, self)
-            
+
     def _checkRayIntersect(self, ray):
         """Check if ray intersects circle object.
-       
+
         @param ray:    ray for intersection checking
         @type ray:    ogre.Ray
         """
         res, pos = suit.core.objects.ObjectDepth._checkRayIntersect(self, ray)
         if not res:
-            return False, -1 
-        
+            return False, -1
+
         # works just for a isometric mode
-        m = ogre.Matrix4() 
+        m = ogre.Matrix4()
         self.getSceneNode().getWorldTransforms(m)
         p = ogre.Matrix4.getTrans(m)
-        
+
         pl = ogre.Plane(ray.getDirection(), p)
         pr = ray.intersects(pl)
         if not pr.first:
             return False, -1
-        
+
         d = ray.getPoint(pr.second)
-        
+
         dist = self.center_point.getPosition().distance(d)
         if math.fabs(dist - self.radius) <= self.width / 2.0:
             return True, 0
-        
+
         return False, -1
-    
+
     def get_idtf(self):
         """Returns object identifier.
         It parse structures like: Point(A), Point A, pA and return A
@@ -820,9 +822,9 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         idtf = self.getText()
         if idtf is None or len(idtf) == 0:
             return None
-            
+
         return idtf
-    
+
     def build_text_idtf(self):
         """Builds text identifier for an object
         """
@@ -832,34 +834,34 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
             rIdtf = self.radius_point.build_text_idtf()
             if cIdtf is None or rIdtf is None:
                 return None
-            
+
             return "%s(%s;%s)" % (u'Окр', cIdtf, rIdtf)
         else:
             return None
-    
+
     def _calculatePointPosition(self, _pos):
-        
-        assert (_pos <= 1.0) and (_pos >= 0.0)    
+
+        assert (_pos <= 1.0) and (_pos >= 0.0)
         a = 2 * math.pi * _pos
         return self.center_point.getPosition() + ogre.Vector3(math.cos(a), math.sin(a), 0.0) * self.radius
-    
+
     def _calculatePointRelPosition(self, _coords):
-        """@see:  GeomatryAbstractObject._calculatePointRelPosition
+        """@see:  GeometryAbstractObject._calculatePointRelPosition
         """
         v = _coords - self.center_point.getPosition()
         a = math.atan2(v.y, v.x)
         if a < 0:
             a += math.pi * 2.0
         return a / math.pi * 0.5
-    
+
     def makeBasedOnObjects(self, _objects):
         """Create circle based on specified objects
         @param _objects: List of objects
         @type _objects: list
-        
-        @return: Return true, if circle was created; otherwise return false  
+
+        @return: Return true, if circle was created; otherwise return false
         """
-        
+
         # create based on two points
         if len(_objects) == 2:
             # create by two points
@@ -867,9 +869,9 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
             if isinstance(_objects[0], GeometryPoint) and isinstance(_objects[1], GeometryPoint):
                 self.setCenterPoint(_objects[0])
                 self.setRadiusPoint(_objects[1])
-                
+
                 return True
-            
+
             # create by center point and radius
             elif (isinstance(_objects[0], GeometryPoint) and isinstance(_objects[1], GeometryLineSection)):
                 if _objects[1].getBegin() is _objects[0] or _objects[1].getEnd() is _objects[0]:
@@ -878,9 +880,9 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
                         self.setRadiusPoint(_objects[1].getEnd())
                     else:
                         self.setRadiusPoint(_objects[1].getBegin())
-                        
+
                     return True
-            
+
             elif (isinstance(_objects[0], GeometryLineSection) and isinstance(_objects[1], GeometryPoint)):
                 if _objects[0].getBeing() is _objects[1] or _objects[0].getEnd() is _objects[1]:
                     self.setCenterPoint(_objects[1])
@@ -888,11 +890,10 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
                         self.setRadiusPoint(_objects[0].getEnd())
                     else:
                         self.setRadiusPoint(_objects[0].getBegin())
-                        
+
                     return True
-                
         return False
-    
+
     def getRadiusObject(self):
         """Return radius line object
         """
@@ -900,14 +901,15 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         for line in out_lines:
             if line.getEnd() is self.radius_point:
                 return line
-            
+
         in_lines = self.center_point.getLinkedObjects(suit.core.objects.Object.LS_IN)
         for line in in_lines:
             if line.getBegin() is self.radius_point:
                 return line
-            
+
         return None
-    
+
+
 class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
     
     def __init__(self):
