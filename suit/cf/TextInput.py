@@ -106,7 +106,7 @@ class TextInput:
     def _textAccept(self, _widget):
         """Callback for identifier value accepted event
         """
-        self.finish(self.idtf_edit.getCaption())
+        self.finish(unicode(self.idtf_edit.getCaption()))
         
     def _textNoAccept(self, _widget):
         """Callback for identifier editing cancel 
