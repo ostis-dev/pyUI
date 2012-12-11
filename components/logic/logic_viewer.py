@@ -35,7 +35,7 @@ from suit.core.kernel import Kernel
 from suit.core.objects import BaseLogic
 import ogre.renderer.OGRE as ogre
 import ogre.io.OIS as ois
-
+import table
 
 def initialize():
     pass
@@ -123,7 +123,8 @@ class TextViewer(BaseLogic):
             pos = self.getPosition()
             self.widget.setPosition(pos[0], pos[1])
             self.widget.setSize(size[0], size[1])
-            render_engine.SceneManager.setBackMaterial("Back/SimpleLights")                                 
+            self.widget.setFontName("LogicFont")
+            render_engine.SceneManager.setBackMaterial("Back/SimpleLights")
         else:
 #            if self.rectAttached:
 #                self._getSheet().sceneNodeChilds.detachObject(self.rect)
@@ -175,8 +176,9 @@ class TextViewer(BaseLogic):
                 return ""
             
             return value            
-			
-        return ""
+        ob = table.table("information")
+
+        return ob.makeTextTable() #"Text\nAnd Text"
     
     def _createStaticText(self):
         self.widget = render_engine.Gui.createWidgetT("StaticText", "StaticTextBack",
@@ -185,8 +187,8 @@ class TextViewer(BaseLogic):
                                                           "Main")
         self.widget.setVisible(False)
         self.widget.setTextColour(mygui.Colour(0.0, 0.0, 0.0, 1.0))
-        #self.widget.setCaption(self.getContent())
-        self.widget.setNeedMouseFocus(False)        
+            #self.widget.setCaption(self.getContent())
+        self.widget.setNeedMouseFocus(False)
         
     def destroyPanel(self):        
         if self.widget:

@@ -2,6 +2,7 @@
 #include "meta_info.scsy"
 #include "ui_keynodes.scsy"
 core_src\geomx.gwf
+core_src\logicx.gwf
 core_src\scgx.gwf
 core_src\spacex.gwf
 core_src\string.gwf
