@@ -49,6 +49,7 @@ import map_environment as env
 # FIXME:   add support for many layers
 
 class MapViewer(BaseModeLogic):
+    global layerData
     
     def __init__(self):
         BaseModeLogic.__init__(self)
@@ -65,14 +66,47 @@ class MapViewer(BaseModeLogic):
         self.drawer = None
         
         self.mapSurface = None
-        self.layerData = []
-        
-        self.zoomRectCorners = [[0, 0], [0, 0]] 
-        
+        self.layerData = None
+
+        self.zoomRectCorners = [[0, 0], [0, 0]]
+
         self.tex_size = (1024, 1024)
-        
+
         self.appendMode(ois.KC_V, map_modes.MapViewMode(self))
         self.switchMode(ois.KC_V)
+
+    class QuadTree():
+
+        def __init__(self, depth=5):
+            """Creates a QuadTree.
+
+            @param depth:
+                Maximum depth of the tree.
+            """
+            #Create empty sub-quadrants.
+            self.nw = self.ne = self.se = self.sw = None
+
+            #If maximum depth is reached, insert all items into this
+            #quadrant.
+            depth -= 1
+            if depth == 0:
+                return
+
+            self.nw = QuadTree(depth)
+            self.ne = QuadTree(depth)
+            self.se = QuadTree(depth)
+            self.sw = QuadTree(depth)
+
+        #Get list of leaves
+        def getItems(self):
+            for subtree in [self.nw, self.ne, self.se, self.sw]:
+                if issubclass(subtree, QuadTree):
+                    self.layerData = []
+                    layerData(subtree.getItems())
+                else:
+                    layerData(subtree)
+                return layerData
+
     
     def __del__(self):
         BaseModeLogic.__del__(self)
