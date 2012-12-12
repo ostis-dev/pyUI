@@ -135,6 +135,7 @@ class ui:
     nrel_template_user_cmd  =   session.find_keynode_full_uri(u"/ui/core/обобщенная формулировка команды*")
     
     cmd_mouse_move_obj      =   session.find_keynode_full_uri(u"/ui/core/ui_cmd_mouse_move_obj")
+    cmd_mouse_move_to_empty_place = session.find_keynode_full_uri(u"/ui/core/ui_cmd_mouse_move_to_empty_place")
     cmd_mouse_button_press  =   session.find_keynode_full_uri(u"/ui/core/ui_cmd_mouse_button_press")
     cmd_mouse_button_release=   session.find_keynode_full_uri(u"/ui/core/ui_cmd_mouse_button_release")
 
