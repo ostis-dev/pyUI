@@ -59,6 +59,9 @@ class GeometryEditMode(BaseEditMode):
     ES_PerimeterChange, \
     ES_Count = range(BaseEditMode.ES_Count + 1, BaseEditMode.ES_Count + 10)
 
+    # label used for removing property if user inputs this value
+    label_to_clear_property = ""
+
     def __init__(self, _logic):
         BaseEditMode.__init__(self, _logic, "Geometry edit")
         
@@ -403,57 +406,68 @@ class GeometryEditMode(BaseEditMode):
         """Callback on line length changing
         """
         self.state = GeometryEditMode.ES_None
-        if _value is not None:
+
+        # if user inputs value equal to label, remove property
+        if str(_value) == self.label_to_clear_property:
+            _object.removeProperty(GeometryAbstractObject.PropLength)
+        elif _value is not None:
             v = None
             try:
                 v = float(str(_value))
-                
             except ValueError:
                 print "Non-numeric value found %s" % str(_value)
-                
+
             if v is not None:
                 _object.setPropertyValue(GeometryAbstractObject.PropLength, v)
-        
+
         del self.length_changer
-        
+
         if self.objectInfoPanel.getObject() is _object:
             self.objectInfoPanel.update()
-        
+
     def _square_change_callback(self, _object, _value):
         """Callback on square change
         """
         self.state = GeometryEditMode.ES_None
-        if _value is not None:
+
+        # if user inputs value equal to label, remove property
+        if str(_value) == self.label_to_clear_property:
+            _object.removeProperty(GeometryAbstractObject.PropSquare)
+        elif _value is not None:
             v = None
             try:
                 v = float(str(_value))
-            except:
+            except ValueError:
                 print "Non-numeric value found %s" % str(_value)
-            
+
             if v is not None:
                 _object.setPropertyValue(GeometryAbstractObject.PropSquare, v)
-                
+
         del self.square_changer
-        
+
         if self.objectInfoPanel.getObject() is _object:
             self.objectInfoPanel.update()
-        
+
     def _perimeter_change_callback(self, _object, _value):
         """Callback on perimeter change
         """
         self.state = GeometryEditMode.ES_None
-        if _value is not None:
+
+        # if user inputs value equal to label, remove property
+        if str(_value) == self.label_to_clear_property:
+            _object.removeProperty(GeometryAbstractObject.PropPerimeter)
+        elif _value is not None:
             v = None
             try:
                 v = float(str(_value))
-            except:
+            except ValueError:
                 print "Non-numeric value found %s" % str(_value)
-            
+
             if v is not None:
                 _object.setPropertyValue(GeometryAbstractObject.PropPerimeter, v)
-                
+
         del self.perimetr_changer
-        
+
         if self.objectInfoPanel.getObject() is _object:
             self.objectInfoPanel.update()
 
@@ -461,11 +475,14 @@ class GeometryEditMode(BaseEditMode):
         """Callback on radius change
         """
         self.state = GeometryEditMode.ES_None
-        if _value is not None:
+
+        # if user inputs value equal to label, remove property
+        if str(_value) == self.label_to_clear_property:
+            _object.removeProperty(GeometryAbstractObject.PropRadius)
+        elif _value is not None:
             v = None
             try:
                 v = float(str(_value))
-
             except ValueError:
                 print "Non-numeric value found %s" % str(_value)
 
@@ -481,11 +498,14 @@ class GeometryEditMode(BaseEditMode):
         """Callback on diameter change
         """
         self.state = GeometryEditMode.ES_None
-        if _value is not None:
+
+        # if user inputs value equal to label, remove property
+        if str(_value) == self.label_to_clear_property:
+            _object.removeProperty(GeometryAbstractObject.PropDiameter)
+        elif _value is not None:
             v = None
             try:
                 v = float(str(_value))
-
             except ValueError:
                 print "Non-numeric value found %s" % str(_value)
 

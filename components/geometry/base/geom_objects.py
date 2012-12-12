@@ -41,10 +41,11 @@ state_post = {suit.core.objects.Object.OS_Normal: 'Normal',
               suit.core.objects.Object.OS_NewInMemory: 'NewInMemory',
               suit.core.objects.Object.OS_Merged: 'Merged'}    
 
+
 class GeometryAbstractObject:
     
     groups = {}
-    
+
     PropSquare = u"Площадь"
     PropPerimeter = u"Периметр"
     PropLength = u"Длина"
@@ -246,10 +247,17 @@ class GeometryAbstractObject:
         """Return value of property with specified \p _name.
         If property doesn't exist, then return None
         """
-        if self.properties.has_key(_name):
+        if _name in self.properties):
             return self.properties[_name]
         return None
-    
+
+    def removeProperty(self, _name):
+        """Remove property from object
+        @param _name: property name
+        """
+        if _name in self.properties:
+            del self.properties[_name]
+
     def build_text_idtf(self):
         """Builds text identifier for an object
         """
@@ -818,6 +826,7 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         """Returns object identifier.
         It parse structures like: Point(A), Point A, pA and return A
         """
+        print 'get_idtf'
         #FIXME:    add parsing for Point(A), Point A and etc. structures
         idtf = self.getText()
         if idtf is None or len(idtf) == 0:
