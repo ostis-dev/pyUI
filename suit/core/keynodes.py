@@ -137,10 +137,111 @@ class ui:
     cmd_mouse_move_obj      =   session.find_keynode_full_uri(u"/ui/core/ui_cmd_mouse_move_obj")
     cmd_mouse_button_press  =   session.find_keynode_full_uri(u"/ui/core/ui_cmd_mouse_button_press")
     cmd_mouse_button_release=   session.find_keynode_full_uri(u"/ui/core/ui_cmd_mouse_button_release")
-    
+
+    cmd_keyboard_button_press   = session.find_keynode_full_uri(u"/ui/core/ui_cmd_keyboard_button_press")
+    cmd_keyboard_button_release = session.find_keynode_full_uri(u"/ui/core/ui_cmd_keyboard_button_release")
+
     mouse_button_left       =   session.find_keynode_full_uri(u"/ui/core/mouse_button_left")
     mouse_button_right      =   session.find_keynode_full_uri(u"/ui/core/mouse_button_right")
     mouse_button_middle     =   session.find_keynode_full_uri(u"/ui/core/mouse_button_middle")
+
+    class keyboard:
+
+        import ogre.io.OIS as ois
+
+        button_kc_1       =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_1")
+        button_kc_2       =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_2")
+        button_kc_3       =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_3")
+        button_kc_4       =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_4")
+        button_kc_5       =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_5")
+        button_kc_6       =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_6")
+        button_kc_7       =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_7")
+        button_kc_8       =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_8")
+        button_kc_9       =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_9")
+        button_kc_0       =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_0")
+
+        button_kc_f1      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f1")
+        button_kc_f2      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f2")
+        button_kc_f3      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f3")
+        button_kc_f4      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f4")
+        button_kc_f5      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f5")
+        button_kc_f6      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f6")
+        button_kc_f7      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f7")
+        button_kc_f8      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f8")
+        button_kc_f9      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f9")
+        button_kc_f10     =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f10")
+        button_kc_f11     =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f11")
+        button_kc_f12     =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f12")
+
+        button_kc_q      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_q")
+        button_kc_w      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_w")
+        button_kc_e      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_e")
+        button_kc_r      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_r")
+        button_kc_t      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_t")
+        button_kc_y      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_y")
+        button_kc_u      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_u")
+        button_kc_i      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_i")
+        button_kc_o      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_o")
+        button_kc_p      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_p")
+        button_kc_a      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_a")
+        button_kc_s      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_s")
+        button_kc_d      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_d")
+        button_kc_f      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_f")
+        button_kc_g      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_g")
+        button_kc_h      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_h")
+        button_kc_j      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_j")
+        button_kc_k      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_k")
+        button_kc_l      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_l")
+        button_kc_z      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_z")
+        button_kc_x      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_x")
+        button_kc_c      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_c")
+        button_kc_v      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_v")
+        button_kc_b      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_b")
+        button_kc_n      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_n")
+        button_kc_m      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_m")
+
+        button_kc_up        =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_up")
+        button_kc_down      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_down")
+        button_kc_right     =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_right")
+        button_kc_left      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_left")
+
+        button_kc_escape    =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_escape")
+        button_kc_delete    =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_delete")
+        button_kc_return    =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_return")
+        button_kc_space     =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_space")
+        button_kc_pgup      =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_pgup")
+        button_kc_pgdown    =   session.find_keynode_full_uri(u"/ui/core/keyboard_button_pgdown")
+
+        dictionary = {
+            button_kc_1     :ois.KC_1,              button_kc_q:ois.KC_Q,               button_kc_up        :ois.KC_UP,
+            button_kc_2     :ois.KC_2,              button_kc_w:ois.KC_W,               button_kc_down      :ois.KC_DOWN,
+            button_kc_3     :ois.KC_3,              button_kc_e:ois.KC_E,               button_kc_right     :ois.KC_RIGHT,
+            button_kc_4     :ois.KC_4,              button_kc_r:ois.KC_R,               button_kc_left      :ois.KC_LEFT,
+            button_kc_5     :ois.KC_5,              button_kc_t:ois.KC_T,
+            button_kc_6     :ois.KC_6,              button_kc_y:ois.KC_Y,               button_kc_escape    :ois.KC_ESCAPE,
+            button_kc_7     :ois.KC_7,              button_kc_i:ois.KC_I,               button_kc_delete    :ois.KC_DELETE,
+            button_kc_8     :ois.KC_8,              button_kc_o:ois.KC_O,               button_kc_return    :ois.KC_RETURN,
+            button_kc_9     :ois.KC_9,              button_kc_p:ois.KC_P,               button_kc_space     :ois.KC_SPACE,
+            button_kc_0     :ois.KC_0,              button_kc_a:ois.KC_A,               button_kc_pgup      :ois.KC_PGUP,
+            button_kc_f1    :ois.KC_F1,             button_kc_s:ois.KC_S,               button_kc_pgdown    :ois.KC_PGDOWN,
+            button_kc_f2    :ois.KC_F2,             button_kc_d:ois.KC_D,
+            button_kc_f3    :ois.KC_F3,             button_kc_f:ois.KC_D,
+            button_kc_f4    :ois.KC_F4,             button_kc_g:ois.KC_G,
+            button_kc_f5    :ois.KC_F5,             button_kc_h:ois.KC_H,
+            button_kc_f6    :ois.KC_F6,             button_kc_j:ois.KC_J,
+            button_kc_f7    :ois.KC_F7,             button_kc_k:ois.KC_K,
+            button_kc_f8    :ois.KC_F8,             button_kc_l:ois.KC_L,
+            button_kc_f9    :ois.KC_F9,             button_kc_z:ois.KC_Z,
+            button_kc_f10   :ois.KC_F10,            button_kc_x:ois.KC_X,
+            button_kc_f11   :ois.KC_F11,            button_kc_c:ois.KC_C,
+            button_kc_f12   :ois.KC_F12,            button_kc_v:ois.KC_V,
+                                                    button_kc_b:ois.KC_B,
+                                                    button_kc_n:ois.KC_N,
+                                                    button_kc_m:ois.KC_M,
+                                                    button_kc_u:ois.KC_U,
+        }
+
+
     
     # format
     format                  =   session.find_keynode_full_uri(u"/ui/core/формат")
