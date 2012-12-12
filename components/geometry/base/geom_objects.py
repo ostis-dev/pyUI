@@ -62,7 +62,7 @@ class GeometryAbstractObject:
         
         self.equalGroup = None
         
-        if not GeometryAbstractObject.groups.has_key(self.__class__):
+        if not self.__class__ in GeometryAbstractObject.groups:
             GeometryAbstractObject.groups[self.__class__] = {}
             
         self.properties = {}    # object properties
@@ -84,7 +84,7 @@ class GeometryAbstractObject:
         self.equalGroup = newGroup
         
         if self.equalGroup is not None:
-            if not GeometryAbstractObject.groups[self.__class__].has_key(self.equalGroup):
+            if not self.equalGroup in GeometryAbstractObject.groups[self.__class__]:
                 GeometryAbstractObject.groups[self.__class__][self.equalGroup] = [self]
             else:
                 GeometryAbstractObject.groups[self.__class__][self.equalGroup].append(self)
@@ -108,7 +108,22 @@ class GeometryAbstractObject:
             self.setEqualGroup(_object.getEqualGroup())
         else:
             return # do nothing
-        
+
+    def removeCongruency(self, _object):
+        """Remove current object equivalence from specified \p _object
+        """
+        selGroup = _object.getEqualGroup()
+        if not self.equalGroup or not selGroup or self.equalGroup != selGroup:
+            return
+
+        if len(GeometryAbstractObject.groups[self.__class__][self.equalGroup]) == 2:
+            GeometryAbstractObject.groups[self.__class__].pop(self.equalGroup)
+            self.equalGroup = None
+            _object.equalGroup = None
+        else:
+            GeometryAbstractObject.groups[self.__class__][self.equalGroup].remove(self)
+            GeometryAbstractObject.groups[self.__class__][self.equalGroup].remove(_object)
+
     def getPropertiesAsString(self):
         """Return all properties of object in a one string
         """
@@ -122,20 +137,24 @@ class GeometryAbstractObject:
                 res += "  " + self.points[idx][0].getIdtf()
             res += "\n"
         
-        if self.equalGroup is not None:
-            res += u"Конгруэнтность:\n"
-            
-            objs = GeometryAbstractObject.groups[self.__class__][self.equalGroup]
-            
-            added = 0
-            for idx in xrange(len(objs)):
+        if self.equalGroup:
+            if len(GeometryAbstractObject.groups[self.__class__][self.equalGroup]) >= 2:
+                res += u"Конгруэнтность:\n"
                 
-                if objs[idx] is self: continue
+                objs = GeometryAbstractObject.groups[self.__class__][self.equalGroup]
                 
-                if added != 0:
-                    res += ",\n"
-                res += "  " + objs[idx].getIdtf()
-                added += 1
+                added = 0
+                for idx in xrange(len(objs)):
+                    
+                    if objs[idx] is self: continue
+                    
+                    if added != 0:
+                        res += ",\n"
+                    res += "  " + objs[idx].getIdtf()
+                    added += 1
+            else:
+                GeometryAbstractObject.groups[self.__class__][self.equalGroup].remove(self)
+                self.equalGroup = None
         
         for prop, value in self.properties.items():
             res += "%s = %s\n" % (str(prop), str(value))
@@ -145,7 +164,7 @@ class GeometryAbstractObject:
     def getAvailableEqualGroup(objectClass):
         
         idx = 1
-        while (GeometryAbstractObject.groups[objectClass].has_key(idx)):
+        while idx in GeometryAbstractObject.groups[objectClass]:
             idx += 1
         
         return idx
@@ -247,7 +266,7 @@ class GeometryAbstractObject:
         """Return value of property with specified \p _name.
         If property doesn't exist, then return None
         """
-        if _name in self.properties):
+        if _name in self.properties:
             return self.properties[_name]
         return None
 
@@ -826,7 +845,6 @@ class GeometryCircle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         """Returns object identifier.
         It parse structures like: Point(A), Point A, pA and return A
         """
-        print 'get_idtf'
         #FIXME:    add parsing for Point(A), Point A and etc. structures
         idtf = self.getText()
         if idtf is None or len(idtf) == 0:

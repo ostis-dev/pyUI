@@ -346,8 +346,17 @@ class GeometryEditMode(BaseEditMode):
                 if isinstance(selected[0], selected[1].__class__):
                     selected[0].setEqualTo(selected[1])
                     if self.objectInfoPanel.getObject() is selected[0] or self.objectInfoPanel.getObject() is selected[1]:
-                        self.objectInfoPanel.update()              
-        
+                        self.objectInfoPanel.update()
+
+        #remove figure's congruence property
+        if key == ois.KC_W:
+            selected = self._logic._getSheet().getSelected()
+            if len(selected) == 2:
+                if isinstance(selected[0], selected[1].__class__):
+                    selected[0].removeCongruency(selected[1])
+                    if self.objectInfoPanel.getObject() is selected[0] or self.objectInfoPanel.getObject() is selected[1]:
+                        self.objectInfoPanel.update()
+
         if key == ois.KC_S:
             selected = self._logic._getSheet().getSelected()
             if len(selected) == 1:
