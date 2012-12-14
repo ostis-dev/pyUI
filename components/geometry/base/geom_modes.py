@@ -44,6 +44,7 @@ from geom_objects import GeometryAbstractObject
 import suit.cf.utils as comutils
 import suit.core.render.engine as render_engine
 import geom_controls
+import math
 
 class GeometryEditMode(BaseEditMode):
     
@@ -357,7 +358,47 @@ class GeometryEditMode(BaseEditMode):
                 if isinstance(obj, (GeometryTriangle, GeometryQuadrangle)):
                     self.state = GeometryEditMode.ES_PerimeterChange
                     self.perimetr_changer = TextInput(obj, self._perimeter_change_callback, obj.getPropertyValue(GeometryAbstractObject.PropPerimeter))
-        
+
+        if key == ois.KC_V:
+            selected = self._logic._getSheet().getSelected()
+            for obj in selected:
+                if isinstance(obj, (GeometryTriangle)):
+
+                    incirclePoints = obj._calculateIncirclePoints()
+
+                    # create center point
+                    incenterPointCoord = incirclePoints[0]
+                    incenter = self._logic.createPoint(incenterPointCoord)
+                    sheet = self._logic._getSheet()
+                    sheet.addChild(incenter)
+                    incenter._updateView()
+
+                    # create tangent point
+                    tangentPointCoord = incirclePoints[1]
+
+                    # get tangent point base side line
+                    sideObjects = self._logic._getSheet()._getObjectsUnderMouse(True, True, tangentPointCoord)
+                    line = comutils._getFirstObjectTypeFromList(sideObjects, [GeometryLineSection])
+
+                    tangent = self._logic.createPoint(tangentPointCoord)
+                    sheet = self._logic._getSheet()
+                    sheet.addChild(tangent)
+
+                    tangent._updateView()
+
+                    _selected = incenter, tangent
+
+                    obj._setIncenterPoints(_selected)
+
+                    # draw incircle
+                    self.active_object = self._logic.createCircle()
+                    if self.active_object.makeBasedOnObjects(_selected):
+                        self._logic._getSheet().addChild(self.active_object)
+                        obj._setIsIncircleDrawed(True)
+                    else:
+                        self.active_object.delete()
+                    self.active_object = None
+
         return False
     
     def _onKeyReleased(self, _evt):
