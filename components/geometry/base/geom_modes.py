@@ -340,14 +340,14 @@ class GeometryEditMode(BaseEditMode):
                     if self.objectInfoPanel.getObject() is selected[0] or self.objectInfoPanel.getObject() is selected[1]:
                         self.objectInfoPanel.update()
 
-        if key == ois.KC_K:
+        if key == ois.KC_N:
             selected = self._logic._getSheet().getSelected()
-            if len(selected) == 2:
-                if isinstance(selected[0], selected[1].__class__) and isinstance(selected[0], (GeometryAngle)):
-                    if selected[0].checkAnglesEquivalence(selected[1]):
-                        self.objectInfoPanel.infoText.setCaption(selected[0].build_text_idtf() + u'\n равен по градусам \n' + selected[0].build_text_idtf())
-                    else:
-                        self.objectInfoPanel.infoText.setCaption(selected[0].build_text_idtf() + u'\n не равен по градусам \n' + selected[0].build_text_idtf())
+            if len(selected) >= 2:
+                for object in selected:
+                    if not isinstance(selected[0], object.__class__):
+                        return
+                selected[0].removeEquivalence(selected)
+                self.objectInfoPanel.update()
 
         if key == ois.KC_S:
             selected = self._logic._getSheet().getSelected()

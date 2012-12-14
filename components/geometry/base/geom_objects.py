@@ -104,6 +104,21 @@ class GeometryAbstractObject:
         else:
             return # do nothing
 
+    def removeEquivalence(self, _objects):
+        for _object in _objects:
+            selGroup = _object.getEqualGroup()
+            if selGroup is not None and self.equalGroup is not None:
+                if selGroup != self.equalGroup:
+                    return
+        if len(GeometryAbstractObject.groups[self.__class__][self.equalGroup]) == len(_objects):
+            GeometryAbstractObject.groups[self.__class__].pop(self.equalGroup)
+            for _object in _objects:
+                _object.equalGroup = None
+        else:
+            for _object in _objects:
+                GeometryAbstractObject.groups[self.__class__][self.equalGroup].remove(_object)
+        return
+
     def getPropertiesAsString(self):
         """Return all properties of object in a one string
         """
@@ -133,7 +148,6 @@ class GeometryAbstractObject:
 
         for prop, value in self.properties.items():
             res += "%s = %s\n" % (str(prop), str(value))
-
 
         return res
 
@@ -1690,9 +1704,9 @@ class GeometryAngle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
     def build_text_idtf(self):
         """Builds text identifier for an object
         """
-       # idtf = self.get_idtf()
-       # if idtf is None:
-       #     return None
+        # idtf = self.get_idtf()
+        # if idtf is None:
+        #     return None
 
         idtf1 = self.point1.build_text_idtf()
         idtfC = self.pointC.build_text_idtf()
@@ -1707,7 +1721,11 @@ class GeometryAngle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         return str(self.angleSize)
 
     def setAngleSize(self, _angleSize):
-        self.angleSize = _angleSize
+        try:
+            self.angleSize = _angleSize
+        except ValueError:
+            print "Non-numeric value found %s" % str(_angleSize)
+
 
     def build_angle_size_text_idtf(self):
         idtf = self.getAngleSize()
@@ -1725,6 +1743,7 @@ class GeometryAngle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         if _name == self.AngleSize:
             self.setAngleSize(_value)
         GeometryAbstractObject.setPropertyValue(self, _name, _value)
+
 
 class GeometryUnion(suit.core.objects.ObjectDepth):
     """Object that represents objects union.
