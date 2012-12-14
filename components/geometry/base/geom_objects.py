@@ -919,6 +919,9 @@ class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         self.__manualObject = None  # manual object to store and render geometry
         self.pts = []        # triangle vertex points
         self.sides = []         # triangle sides
+        self.isIncircleDrawed = False       #flag showing is incircle shown on objects sheet
+        self.incirclePoints = []        #turple for incircle points
+        self.previousIncirclePtsCoordinates = [] # coordinates for incircle points at previous update
             
     def __del__(self):
         suit.core.objects.ObjectDepth.__del__(self)
@@ -984,6 +987,20 @@ class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         self.__manualObject.triangle(2, 1, 0)
         
         self.__manualObject.end()
+
+        # update incircle points position
+        if self.isIncircleDrawed:
+            if str(render_engine.pos3dTo2dWindow(self.incirclePoints[0].getPosition())[0]) == self.previousIncirclePtsCoordinates[0][0] \
+            and str(render_engine.pos3dTo2dWindow(self.incirclePoints[0].getPosition())[1]) == self.previousIncirclePtsCoordinates[0][1] \
+            and str(render_engine.pos3dTo2dWindow(self.incirclePoints[1].getPosition())[0]) == self.previousIncirclePtsCoordinates[1][0] \
+            and str(render_engine.pos3dTo2dWindow(self.incirclePoints[1].getPosition())[1]) == self.previousIncirclePtsCoordinates[1][1]:
+                incirclePointsCoordinats = self._calculateIncirclePoints()
+                incircle = self.incirclePoints[0]
+                tangent = self.incirclePoints[1]
+                incircle.setPosition(render_engine.pos2dTo3dIsoPos(incirclePointsCoordinats[0]))
+                tangent.setPosition(render_engine.pos2dTo3dIsoPos(incirclePointsCoordinats[1]))
+            else:
+                self.isIncircleDrawed = False
         
         suit.core.objects.ObjectDepth._update(self, _timeSinceLastFrame)
         
@@ -1117,9 +1134,87 @@ class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
             
             return u"%s(%s;%s;%s)" % (u'Треугк', idtf1, idtf2, idtf3)
         else:
-            return None 
+            return None
+
+    def _calculateIncirclePoints(self):
+        """Calculate points for incircle and draw it on objects sheet
+        """
+
+        # calculate triangle vertex coordinates
+        pointA_x = render_engine.pos3dTo2dWindow(self.pts[0].getPosition())[0]
+        pointA_y = render_engine.pos3dTo2dWindow(self.pts[0].getPosition())[1]
+        pointB_x = render_engine.pos3dTo2dWindow(self.pts[1].getPosition())[0]
+        pointB_y = render_engine.pos3dTo2dWindow(self.pts[1].getPosition())[1]
+        pointC_x = render_engine.pos3dTo2dWindow(self.pts[2].getPosition())[0]
+        pointC_y = render_engine.pos3dTo2dWindow(self.pts[2].getPosition())[1]
+
+        # calculate triangle sides length
+        sideA_length = math.sqrt(math.pow(pointC_x - pointB_x, 2) + math.pow(pointC_y - pointB_y, 2))
+        sideB_length = math.sqrt(math.pow(pointA_x - pointC_x, 2) + math.pow(pointA_y - pointC_y, 2))
+        sideC_length = math.sqrt(math.pow(pointA_x - pointB_x, 2) + math.pow(pointA_y - pointB_y, 2))
+
+        # calculate incenter coordinates
+        # formula: X = (BC * Xa + AC * Xb + AB * Xc) / (AB + BC + AC)
+        #          Y = (BC * Ya + AC * Yb + AB * Yc) / (AB + BC + AC)
+        # where X, Y        - incenter coordinates
+        #       AB, BC, AC  - triangle sides
+        #       Xa, Xb, Xc  - triangle A, B, C vertexes X coordinates
+        #       Ya, Yb, Yc  - triangle A, B, C vertexes Y coordinates
+        incenter_x = (sideA_length * pointA_x + sideB_length * pointB_x + sideC_length * pointC_x) / (sideA_length + sideB_length + sideC_length)
+        incenter_y = (sideA_length * pointA_y + sideB_length * pointB_y + sideC_length * pointC_y) / (sideA_length + sideB_length + sideC_length)
+
+        # calculate half perimeter
+        halfPerimeter = (sideA_length + sideB_length + sideC_length) / 2
+
+        # calculate incircle radius
+        # formula r = ((p - a)*(p - b)*(p - c) / p) ^ 1/2
+        # where r       - radius
+        #       p       - half perimeter
+        #       a, b, c - triangle sides
+        radius = math.sqrt((halfPerimeter - sideA_length) * (halfPerimeter - sideB_length) * (halfPerimeter - sideC_length) / halfPerimeter)
+
+        # calculate tangent point coordinates (on AC triangle side)
+        # formula X = (Xa - Xc) * (p - AB) / AC + Xc
+        #         Y = (Ya - Yc) * (p - AB) / AC + Yc
+        # where X, Y    - tangent point coordinates
+        #       Xa, Xc  - triangle A, C vertexes X coordinates
+        #       Ya, Yc  - triangle A, C vertexes Y coordinates
+        #       p       - half perimeter
+        tangentPoint_x = (pointA_x - pointC_x) * (halfPerimeter - sideC_length) / sideB_length + pointC_x
+        tangentPoint_y = (pointA_y - pointC_y) * (halfPerimeter - sideC_length) / sideB_length + pointC_y
+
+        # create center point
+        incenterPointCoord = incenter_x, incenter_y
+
+        # create tangent point
+        tangentPointCoord = tangentPoint_x, tangentPoint_y
+
+        self.previousIncirclePtsCoordinates = [[str(incenterPointCoord[0]).split(".")[0], str(incenterPointCoord[1]).split(".")[0]], [str(tangentPointCoord[0]).split(".")[0], str(tangentPointCoord[1]).split(".")[0]]]
+
+        return [incenterPointCoord, tangentPointCoord]
+
+    def _setIncenterPoints(self, incirclePoints):
+        """set list of incircle points
+        """
+        self.incirclePoints = incirclePoints
+
+    def _getIncenterPoints(self):
+        """get list of incircle points
+        """
+        return self.incirclePoints
+
+    def _setIsIncircleDrawed(self, isIncircleDrawed):
+        """set flag indicating if incircle drawed
+        """
+        self.isIncircleDrawed = isIncircleDrawed
+
+    def _getIsIncircleDrawed(self):
+        """get flag indicating if incircle drawed
+        """
+        return self.isIncircleDrawed
+
         
-  
+    
 class GeometryQuadrangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
     
     def __init__(self):
