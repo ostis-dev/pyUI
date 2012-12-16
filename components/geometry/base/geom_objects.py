@@ -1169,16 +1169,6 @@ class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         """get list of circumcircle points
         """
         return self.circumcirclePoints
-    
-    def _setIsCircumcircleDrawed(self, isCircumcircleDrawed):
-        """set flag circumcircle drawed
-        """
-        self.isCircumcircleDrawed = isCircumcircleDrawed
-        
-    def _getIsCircumcircleDrawed(self):
-        """get flag circumcircle drawed
-        """
-        return self.isCircumcircleDrawed
   
 class GeometryQuadrangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
     

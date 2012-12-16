@@ -363,6 +363,9 @@ class GeometryEditMode(BaseEditMode):
             selected = self._logic._getSheet().getSelected()
             for obj in selected:
                 if isinstance(obj, (GeometryTriangle)):
+                    
+                    triangleSides = obj.getSides()
+                    
                     circumcirclePoints = obj._calculateCircumcirclePoints()
                     
                     # create center point of circle
@@ -372,22 +375,40 @@ class GeometryEditMode(BaseEditMode):
                     sheet.addChild(center)
                     center._updateView()
                     
-                    #set point of circle as vertex of triangle
-                    vertexPointCoord = circumcirclePoints[1]
-                    vertex = self._logic.createPoint(vertexPointCoord)
-                    sheet = self._logic._getSheet()
+                    vertexA_x = render_engine.pos3dTo2dWindow(triangleSides[0].getEnd().getPosition())[0]
+                    vertexA_y = render_engine.pos3dTo2dWindow(triangleSides[0].getEnd().getPosition())[1]
+                    vertexB_x = render_engine.pos3dTo2dWindow(triangleSides[1].getEnd().getPosition())[0]
+                    vertexB_y = render_engine.pos3dTo2dWindow(triangleSides[1].getEnd().getPosition())[1]
+                    vertexC_x = render_engine.pos3dTo2dWindow(triangleSides[2].getEnd().getPosition())[0]
+                    vertexC_y = render_engine.pos3dTo2dWindow(triangleSides[2].getEnd().getPosition())[1]
                     
-                    _selected = center, vertex
+                    vertexPointCoordA = vertexA_x, vertexA_y
+                    vertexPointCoordB = vertexB_x, vertexB_y
+                    vertexPointCoordC = vertexC_x, vertexC_y
+                    
+                    sideObjects = self._logic._getSheet()._getObjectsUnderMouse(True, True, vertexPointCoordA)
+                    vertexA = comutils._getFirstObjectTypeFromList(sideObjects, [GeometryPoint])
+                    
+                    sideObjects = self._logic._getSheet()._getObjectsUnderMouse(True, True, vertexPointCoordB)
+                    vertexB = comutils._getFirstObjectTypeFromList(sideObjects, [GeometryPoint])
+                    
+                    sideObjects = self._logic._getSheet()._getObjectsUnderMouse(True, True, vertexPointCoordC)
+                    vertexC = comutils._getFirstObjectTypeFromList(sideObjects, [GeometryPoint])
+                    
+                    _selected = center, vertexA
                     
                     obj._setCircumcirclePoints(_selected)
                     
+                    
                     #draw circumcircle
                     self.active_object = self._logic.createCircle()
+                    
                     if self.active_object.makeBasedOnObjects(_selected):
                         self._logic._getSheet().addChild(self.active_object)
-                        obj._setIsCircumcircleDrawed(True)
                     else:
                         self.active_object.delete()
+                    self.active_object.addPoint(vertexB, self.active_object._calculatePointRelPosition(render_engine.pos2dTo3dIsoPos(vertexPointCoordB)))
+                    self.active_object.addPoint(vertexC, self.active_object._calculatePointRelPosition(render_engine.pos2dTo3dIsoPos(vertexPointCoordC)))
                     self.active_object = None
         
         return False
