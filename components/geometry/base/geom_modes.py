@@ -44,6 +44,7 @@ from geom_objects import GeometryAbstractObject
 import suit.cf.utils as comutils
 import suit.core.render.engine as render_engine
 import geom_controls
+import math
 
 class GeometryEditMode(BaseEditMode):
     
@@ -357,6 +358,58 @@ class GeometryEditMode(BaseEditMode):
                 if isinstance(obj, (GeometryTriangle, GeometryQuadrangle)):
                     self.state = GeometryEditMode.ES_PerimeterChange
                     self.perimetr_changer = TextInput(obj, self._perimeter_change_callback, obj.getPropertyValue(GeometryAbstractObject.PropPerimeter))
+                
+        if key == ois.KC_O:
+            selected = self._logic._getSheet().getSelected()
+            for obj in selected:
+                if isinstance(obj, (GeometryTriangle)):
+                    
+                    triangleSides = obj.getSides()
+                    
+                    circumcirclePoints = obj._calculateCircumcirclePoints()
+                    
+                    # create center point of circle
+                    centerPointCoord = circumcirclePoints[0]
+                    center =  self._logic.createPoint(centerPointCoord)
+                    sheet = self._logic._getSheet()
+                    sheet.addChild(center)
+                    center._updateView()
+                    
+                    vertexA_x = render_engine.pos3dTo2dWindow(triangleSides[0].getEnd().getPosition())[0]
+                    vertexA_y = render_engine.pos3dTo2dWindow(triangleSides[0].getEnd().getPosition())[1]
+                    vertexB_x = render_engine.pos3dTo2dWindow(triangleSides[1].getEnd().getPosition())[0]
+                    vertexB_y = render_engine.pos3dTo2dWindow(triangleSides[1].getEnd().getPosition())[1]
+                    vertexC_x = render_engine.pos3dTo2dWindow(triangleSides[2].getEnd().getPosition())[0]
+                    vertexC_y = render_engine.pos3dTo2dWindow(triangleSides[2].getEnd().getPosition())[1]
+                    
+                    vertexPointCoordA = vertexA_x, vertexA_y
+                    vertexPointCoordB = vertexB_x, vertexB_y
+                    vertexPointCoordC = vertexC_x, vertexC_y
+                    
+                    sideObjects = self._logic._getSheet()._getObjectsUnderMouse(True, True, vertexPointCoordA)
+                    vertexA = comutils._getFirstObjectTypeFromList(sideObjects, [GeometryPoint])
+                    
+                    sideObjects = self._logic._getSheet()._getObjectsUnderMouse(True, True, vertexPointCoordB)
+                    vertexB = comutils._getFirstObjectTypeFromList(sideObjects, [GeometryPoint])
+                    
+                    sideObjects = self._logic._getSheet()._getObjectsUnderMouse(True, True, vertexPointCoordC)
+                    vertexC = comutils._getFirstObjectTypeFromList(sideObjects, [GeometryPoint])
+                    
+                    _selected = center, vertexA
+                    
+                    obj._setCircumcirclePoints(_selected)
+                    
+                    
+                    #draw circumcircle
+                    self.active_object = self._logic.createCircle()
+                    
+                    if self.active_object.makeBasedOnObjects(_selected):
+                        self._logic._getSheet().addChild(self.active_object)
+                    else:
+                        self.active_object.delete()
+                    self.active_object.addPoint(vertexB, self.active_object._calculatePointRelPosition(render_engine.pos2dTo3dIsoPos(vertexPointCoordB)))
+                    self.active_object.addPoint(vertexC, self.active_object._calculatePointRelPosition(render_engine.pos2dTo3dIsoPos(vertexPointCoordC)))
+                    self.active_object = None
         
         return False
     
