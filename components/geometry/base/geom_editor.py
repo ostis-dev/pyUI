@@ -32,6 +32,7 @@ import ogre.io.OIS as ois
 import geom_viewer
 import geom_objects as gobjects
 import geom_modes
+import ogre.renderer.OGRE as ogre
 
 from suit.cf import BaseModeLogic
 from suit.core.objects import Object
@@ -111,17 +112,19 @@ class GeometryEditor(BaseModeLogic):
         @type _beg: GeometryPoint
         @param _end: end point object
         @type _end: GeometryPoint
-        
         @return: created line section object
         @rtype: GeometryLineSection 
         """
+        endPosition = _end.getPosition()
         line_obj = gobjects.GeometryLineSection()
         line_obj.setBegin(_beg)
         line_obj.setEnd(_end)
         line_obj.setState(Object.OS_Normal)
-        
+        _end.setPosition(_beg.getPosition())
+        line_obj._update(0)
+        _end.setPosition(endPosition)
         return line_obj
-    
+
     def createCircle(self):
         """Create circle object
         @return: Return created circle object 

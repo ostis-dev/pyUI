@@ -357,14 +357,37 @@ class GeometryEditMode(BaseEditMode):
                 if isinstance(obj, (GeometryTriangle, GeometryQuadrangle)):
                     self.state = GeometryEditMode.ES_PerimeterChange
                     self.perimetr_changer = TextInput(obj, self._perimeter_change_callback, obj.getPropertyValue(GeometryAbstractObject.PropPerimeter))
-        
+
+        if key == ois.KC_V:
+            selected = self._logic._getSheet().getSelected()
+            for obj in selected:
+                if isinstance(obj, GeometryQuadrangle):
+                    if obj.canHaveInCircle():
+
+                        points = obj.getInCirclePoints()
+                        sheet = self._logic._getSheet()
+
+                        c = self._logic.createPoint(render_engine.pos3dTo2dWindow(points[0]))
+                        sheet.addChild(c)
+                        c._updateView()
+
+                        p = self._logic.createPoint(render_engine.pos3dTo2dWindow(points[1]))
+                        sheet.addChild(p)
+                        p._updateView()
+
+                        self.active_object = self._logic.createCircle()
+                        if self.active_object.makeBasedOnObjects([c, p]):
+                            sheet.addChild(self.active_object)
+                        else:
+                            self.active_object.delete()
+                        self.active_object = None
+
         return False
     
     def _onKeyReleased(self, _evt):
         """Event key released
         """
         if BaseEditMode._onKeyReleased(self, _evt): return True
-        
         return False
     
     def _next_candidate(self):

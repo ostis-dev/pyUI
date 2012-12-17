@@ -1,0 +1,6 @@
+fs_repo
+*.pyc
+*.log
+*.cfg
+.idea
+_cache

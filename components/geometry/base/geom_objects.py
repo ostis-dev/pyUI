@@ -408,7 +408,7 @@ class GeometryLineSection(suit.core.objects.ObjectLine, GeometryAbstractObject):
         return self.begin_pos + (self.end_pos - self.begin_pos) * _pos
     
     def _calculatePointRelPosition(self, _coords):
-        """@see:  GeomatryAbstractObject._calculatePointRelPosition
+        """@see:  GeometryAbstractObject._calculatePointRelPosition
         """
         v = self.end_pos - self.begin_pos
         if v.length() == 0:
@@ -461,7 +461,7 @@ class GeometryLineSection(suit.core.objects.ObjectLine, GeometryAbstractObject):
     
         p1 = self.beginObject._getCross(op2)
         p2 = self.endObject._getCross(op1)
-        
+
         self.begin_pos = p1
         self.end_pos = p2
         
@@ -1284,8 +1284,8 @@ class GeometryQuadrangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
     
     def setSides(self, _lines):
         """Set quadrangle sides
-        @param _line: GeometryLineSection objects, that are a sides of triangle
-        @type _line: list of GeometryLineSection objects
+        @param _lines: GeometryLineSection objects, that are a sides of triangle
+        @type _lines: list of GeometryLineSection objects
         """
         assert len(_lines) == 4
         
@@ -1304,9 +1304,107 @@ class GeometryQuadrangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         if self.sides is not None:
             for _line in self.sides:
                 _line.addLinkedObject(suit.core.objects.Object.LS_BASEONTHIS, self)
-                
+
+    def getSideLength(self, index):
+        return self.sides[index].getLineLength()
+
+    def getPerimeter(self):
+        return self.getSideLength(0) \
+            + self.getSideLength(1) \
+            + self.getSideLength(2) \
+            + self.getSideLength(3)
+
     def getSides(self):
-        """Retur list of sides
+        assert len(self.sides) == 4
+        unused = self.sides
+        ab = unused.pop()
+        cd = self.getOppositeSide(ab)
+        unused.remove(cd)
+        bc = unused.pop()
+        ad = unused.pop()
+        return [ab, bc, cd, ad]
+
+    def getDiagonals(self):
+        assert len(self.sides) == 4
+        sides = self.getSides()
+        points = [self._getDifferentPoints(sides[0], sides[1]), \
+                  self._getDifferentPoints(sides[2], sides[3])]
+        d1 = suit.core.objects.ObjectDepth.getDistance(points[0][0].getPosition(), points[0][1].getPosition())
+        d2 = suit.core.objects.ObjectDepth.getDistance(points[1][0].getPosition(), points[1][1].getPosition())
+        return [d1, d2]
+
+    def _getDifferentPoints(self, sideA, sideB):
+        if sideA.getBegin() is sideB.getBegin():
+            return [sideA.getEnd(), sideB.getEnd()]
+        if sideA.getBegin() is sideB.getEnd():
+            return [sideA.getEnd(), sideB.getBegin()]
+        if sideA.getEnd() is sideB.getBegin():
+            return [sideA.getBegin(), sideB.getEnd()]
+        if sideA.getEnd() is sideB.getEnd():
+            return [sideA.getBegin(), sideB.getBegin()]
+
+    def getSquare(self):
+        assert len(self.sides) == 4
+        sides = self.getSides()
+        a = sides[0].getLineLength()
+        b = sides[1].getLineLength()
+        c = sides[2].getLineLength()
+        d = sides[3].getLineLength()
+        diagonals = self.getDiagonals()
+        d1 = diagonals[0]
+        d2 = diagonals[1]
+        square = math.sqrt((4 * d1*d1 * d2*d2 - (b*b + d*d - a*a - c*c)) / 16)
+        return square
+
+    def canHaveInCircle(self):
+        assert len(self.sides) == 4
+        sides = self.getSides()
+        a = sides[0].getLineLength() + sides[2].getLineLength()
+        b = sides[1].getLineLength() + sides[3].getLineLength()
+        return (a - b) <= 0.1
+
+    def getOppositeSide(self, side):
+        for _side in self.sides:
+            if _side.getBegin() == side.getBegin():
+                continue
+            if _side.getBegin() == side.getEnd():
+                continue
+            if _side.getEnd() == side.getBegin():
+                continue
+            if _side.getEnd() == side.getEnd():
+                continue
+            return _side
+
+    def getInCircleRadius(self):
+        return 2 * self.getSquare() / self.getPerimeter()
+
+    def getInCirclePoints(self):
+        r = self.getInCircleRadius()
+        sides = self.getSides()
+        p1, p3 = self._getDifferentPoints(sides[0], sides[1])
+        if p1 is sides[0].getBegin():
+            p2 = sides[0].getEnd()
+        else:
+            p2 = sides[0].getBegin()
+        p1 = p1.getPosition()
+        p2 = p2.getPosition()
+        p3 = p3.getPosition()
+        a = sides[0].getLineLength()
+        b = sides[1].getLineLength()
+        c = suit.core.objects.ObjectDepth.getDistance(p1, p3)
+        cosY = (a*a + b*b - c*c) / (2*a*b)
+        y = math.acos(cosY)
+        x = 2*r*r - 2*r*r*math.cos(math.pi / 2 - y)
+        p2_a_dist = math.sqrt((x*x / (1 - cosY)) / 2)
+        k = a / p2_a_dist
+        np = p2 + (p1 - p2) * k
+        sinA = p2_a_dist / math.fabs(p2[0] - np[0])
+        cosA = math.sqrt(1 - sinA * sinA)
+        center = ogre.Vector3(np[0] + r*sinA, np[1] - r*cosA, 0)
+        return [center, np]
+
+    def getSides(self):
+        """Returns list of sides
         """
         res = []
         if self.sides is not None:
@@ -1321,7 +1419,6 @@ class GeometryQuadrangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         @return: Return true, if quadrangle was created; otherwise return false  
         """
         if len(_objects) == 4:
-            # fist way to build triangle based on lines
             lines4 = True
             for obj in _objects:
                 if not isinstance(obj, GeometryLineSection):

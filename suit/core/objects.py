@@ -36,6 +36,7 @@ import sc_core.pm
 import keynodes
 import sc_utils
 import thread
+import math
 from suit.core.utils import AnimationUtils
 
 # store global kernal object
@@ -1031,6 +1032,12 @@ class ObjectDepth(Object, ogre.Node.Listener):
         self.needSceneAttachUpdate = True
         self.needViewUpdate = True
         self.needUpdate = True
+
+    @staticmethod
+    def getDistance(a, b):
+        delta = a - b
+        dist2d = math.sqrt(delta[0] * delta[0] + delta[1] * delta[1])
+        return math.sqrt(dist2d * dist2d + delta[2] * delta[2])
         
 # base class for line objects
 class ObjectLine(ObjectDepth):
@@ -1171,7 +1178,11 @@ class ObjectLine(ObjectDepth):
         """Get end object
         """
         return self.endObject
-    
+
+    def getLineLength(self):
+        assert self.beginObject
+        assert self.endObject
+        return ObjectDepth.getDistance(self.endObject.getPosition(), self.beginObject.getPosition())
     
 # base class for sheet objects
 class ObjectSheet(ObjectDepth, ois.KeyListener, ois.MouseListener):
