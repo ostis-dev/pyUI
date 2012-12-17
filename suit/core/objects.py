@@ -1260,6 +1260,7 @@ class ObjectSheet(ObjectDepth, ois.KeyListener, ois.MouseListener):
         self.material_border = 'scg_Normal'
         self.sceneNodeNode = None
         self.entitiesNode = []
+        self.listOfFoundObjs = []
         
         # object that represents sheet logic
         self.__logic = None
@@ -1608,7 +1609,7 @@ class ObjectSheet(ObjectDepth, ois.KeyListener, ois.MouseListener):
         """
         old_mode = render_engine.viewMode
         render_engine.setMode(_newMode)
-        
+
         if render_engine.viewMode is render_engine.Mode_Isometric:
             render_engine._ogreSceneManager.setFog(ogre.FOG_NONE)
         else:
@@ -2131,7 +2132,44 @@ class ObjectSheet(ObjectDepth, ois.KeyListener, ois.MouseListener):
                                                                                         self._getScAddr()), True, 3)
         assert res is not None
         session.erase_el(res[1])
-    
+
+    def getAllChilds(self):
+        """Selecting all objects on sheet
+        """
+
+        return self.__childObjects
+
+    # *************
+    # * Find *
+    # *************
+
+    def selectObject(self, _object):
+        self.selectedObjects.append(_object)
+        _object._setSelected(True)
+        self.listOfFoundObjs.append(_object)
+
+    def clearListOfFoundObjs(self):
+        self.listOfFoundObjs = []
+
+    def findByIdtf(self, _value):
+        """Find ScNode objects on sheet by idtf
+        """
+        self.unselectAll()
+        for obj in self.__childObjects:
+            if obj.getText() is not None and _value in obj.getText() \
+               and not obj._getScAddr() and obj not in self.listOfFoundObjs:
+                self.selectObject(obj)
+                break
+        else:
+            if len(self.listOfFoundObjs):
+                _obj = self.listOfFoundObjs[0]
+                self.listOfFoundObjs = []
+                self.selectObject(_obj)
+
+            #        #            obj.setState(Object.OS_Selected)
+
+        if self.eventSelectionChanged is not None:  self.eventSelectionChanged()
+
     # *************
     # * Selection *
     # *************
@@ -2155,7 +2193,7 @@ class ObjectSheet(ObjectDepth, ois.KeyListener, ois.MouseListener):
 #        _obj.setState(Object.OS_Selected)
         
         if self.eventSelectionChanged is not None:  self.eventSelectionChanged()
-    
+
     def selectAll(self):
         """Selecting all objects on sheet
         """
@@ -2179,7 +2217,7 @@ class ObjectSheet(ObjectDepth, ois.KeyListener, ois.MouseListener):
 #        _obj.resetState()
         
         if self.eventSelectionChanged is not None:  self.eventSelectionChanged()
-        
+
     def unselectAll(self):
         """Unselecting all objects on sheet
         """
