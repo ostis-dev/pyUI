@@ -19,6 +19,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 """
+from sc_core.pm import search_5_f_cpa_cna_cpa_f
 
 
 '''
@@ -923,9 +924,19 @@ def getCurentUserNode(_session):
     @return: sc-element that represent curent user
     """
     import sc_core.pm as sc
-    users_list = searchBinPairsAttrFromNode(_session,keynodes.ui.user,keynodes.ui.active_user,sc.SC_CONST)
-    if users_list[0] is not None:
-        return users_list[0]
+    import sc_core.constants as sc_constants
+    
+    # getting command node
+    users_list = _session.search_one_shot(_session.sc_constraint_new(sc_constants.CONSTR_5_f_a_a_a_f,
+                                                                  keynodes.ui.user,
+                                                                  sc.SC_A_CONST,
+                                                                  sc.SC_N_CONST,
+                                                                  sc.SC_A_CONST,
+                                                                  keynodes.ui.rrel_active_user
+                                                                  ), True, 5)
+    
+    if users_list is not None:
+        return users_list[2]
     else:
         return None
 
@@ -949,7 +960,7 @@ def getUserName(_session,_el):
             sc.SC_A_CONST,
             sc.SC_N_CONST), True)
         while not it1.is_over():
-            if checkIncToSets(_session, it1.value(2), [keynodes.common.user_name], sc.SC_CONST):
+            if checkIncToSets(_session, it1.value(2), [keynodes.ui.user_name], sc.SC_CONST):
                 name = cp1251ToUtf8(_session.get_content_str(it1.value(2)))
                 break
             it1.next()
@@ -975,7 +986,7 @@ def getUserPassword(_session,_el):
             sc.SC_A_CONST,
             sc.SC_N_CONST), True)
         while not it1.is_over():
-            if checkIncToSets(_session, it1.value(2), [keynodes.common.user_password], sc.SC_CONST):
+            if checkIncToSets(_session, it1.value(2), [keynodes.ui.user_password], sc.SC_CONST):
                 password = cp1251ToUtf8(_session.get_content_str(it1.value(2)))
                 break
             it1.next()

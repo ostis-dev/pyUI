@@ -1,466 +1,472 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <GWF version="2.0">
     <staticSector>
-		<node type="node/const/group" idtf="ui_cmd_mouse_move_to_empty_place" shapeColor="0" id="61566848" parent="0" left="0" top="0" right="222" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="686" y="483" haveBus="false">
+        <node type="node/const/group" idtf="имя пользователя" shapeColor="0" id="65048568" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="285" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_pgdown" shapeColor="193" id="57528296" parent="0" left="0" top="0" right="154" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1845" haveBus="false">
+        <node type="node/const/group" idtf="пароль" shapeColor="0" id="65048424" parent="0" left="0" top="0" right="49" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="330" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_pgup" shapeColor="0" id="57528152" parent="0" left="0" top="0" right="138" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1815" haveBus="false">
+        <node type="node/const/group" idtf="SC" shapeColor="0" id="65046984" parent="0" left="0" top="0" right="25" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="795" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_return" shapeColor="0" id="57527720" parent="0" left="0" top="0" right="144" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1755" haveBus="false">
+        <node type="node/const/group" idtf="SCGx" shapeColor="0" id="65046840" parent="0" left="0" top="0" right="40" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="825" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_space" shapeColor="0" id="57527864" parent="0" left="0" top="0" right="141" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1785" haveBus="false">
+        <node type="node/const/group" idtf="GEOMx" shapeColor="0" id="65046696" parent="0" left="0" top="0" right="54" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="855" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_delete" shapeColor="0" id="57527288" parent="0" left="0" top="0" right="143" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1725" haveBus="false">
+        <node type="node/const/group" idtf="JPG" shapeColor="0" id="65046552" parent="0" left="0" top="0" right="32" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="885" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_escape" shapeColor="0" id="57528008" parent="0" left="0" top="0" right="147" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1695" haveBus="false">
+        <node type="node/const/group" idtf="JPEG" shapeColor="0" id="65046408" parent="0" left="0" top="0" right="41" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="915" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_left" shapeColor="0" id="57526712" parent="0" left="0" top="0" right="129" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1515" haveBus="false">
+        <node type="node/const/group" idtf="BMP" shapeColor="0" id="65046264" parent="0" left="0" top="0" right="37" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="945" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_right" shapeColor="0" id="57526856" parent="0" left="0" top="0" right="138" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1485" haveBus="false">
+        <node type="node/const/group" idtf="PNG" shapeColor="0" id="65046120" parent="0" left="0" top="0" right="35" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="975" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_down" shapeColor="0" id="57527000" parent="0" left="0" top="0" right="140" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1455" haveBus="false">
+        <node type="node/const/group" idtf="STRING" shapeColor="0" id="65045976" parent="0" left="0" top="0" right="56" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1005" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_up" shapeColor="0" id="57527144" parent="0" left="0" top="0" right="124" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1425" haveBus="false">
+        <node type="node/const/group" idtf="TERM" shapeColor="0" id="65045832" parent="0" left="0" top="0" right="47" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1035" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_m" shapeColor="0" id="57526568" parent="0" left="0" top="0" right="120" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1365" haveBus="false">
+        <node type="node/const/group" idtf="MATH" shapeColor="0" id="65045688" parent="0" left="0" top="0" right="47" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1485" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_n" shapeColor="0" id="54200840" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1335" haveBus="false">
+        <node type="node/const/group" idtf="HTML" shapeColor="0" id="65045544" parent="0" left="0" top="0" right="46" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1455" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f" shapeColor="0" id="52315816" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1365" haveBus="false">
+        <node type="node/const/group" idtf="MPG" shapeColor="0" id="65045400" parent="0" left="0" top="0" right="38" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1425" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_b" shapeColor="0" id="52314952" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1665" haveBus="false">
+        <node type="node/const/group" idtf="FLV" shapeColor="0" id="65045256" parent="0" left="0" top="0" right="35" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1395" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_v" shapeColor="0" id="52316536" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1635" haveBus="false">
+        <node type="node/const/group" idtf="GRAPH" shapeColor="0" id="65045112" parent="0" left="0" top="0" right="54" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1335" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_c" shapeColor="0" id="52316680" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1605" haveBus="false">
+        <node type="node/const/group" idtf="SPACEx" shapeColor="0" id="65044968" parent="0" left="0" top="0" right="56" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1305" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_x" shapeColor="0" id="52314808" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1575" haveBus="false">
+        <node type="node/const/group" idtf="OBJx" shapeColor="0" id="65044824" parent="0" left="0" top="0" right="39" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1275" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_z" shapeColor="0" id="57526280" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1545" haveBus="false">
+        <node type="node/const/group" idtf="ui_cmd_change_localization" shapeColor="0" id="65044680" parent="0" left="0" top="0" right="169" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="990" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_l" shapeColor="0" id="52316968" parent="0" left="0" top="0" right="114" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1515" haveBus="false">
+        <node type="node/const/group" idtf="ui_cmd_keyboard_button_press" shapeColor="0" id="65044536" parent="0" left="0" top="0" right="186" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="600" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_k" shapeColor="0" id="52315528" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1485" haveBus="false">
+        <node type="node/const/group" idtf="ui_cmd_keyboard_button_release" shapeColor="0" id="65044392" parent="0" left="0" top="0" right="197" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="645" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_j" shapeColor="0" id="52316824" parent="0" left="0" top="0" right="114" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1455" haveBus="false">
+        <node type="node/const/general_node" idtf="mouse_button_left" shapeColor="0" id="65044248" parent="0" left="0" top="0" right="112" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="735" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_h" shapeColor="0" id="52315384" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1425" haveBus="false">
+        <node type="node/const/group" idtf="ui_cmd_mouse_button_release" shapeColor="0" id="65044104" parent="0" left="0" top="0" right="180" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="525" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_g" shapeColor="0" id="52317976" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1395" haveBus="false">
+        <node type="node/-/not_define" idtf="ui_arg_4" shapeColor="0" id="65043960" parent="0" left="0" top="0" right="59" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="165" y="345" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_d" shapeColor="0" id="52317400" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1335" haveBus="false">
+        <node type="node/-/not_define" idtf="ui_arg_3" shapeColor="0" id="65043816" parent="0" left="0" top="0" right="59" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="165" y="300" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_q" shapeColor="0" id="52315240" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1335" haveBus="false">
+        <node type="node/-/not_define" idtf="ui_arg_2" shapeColor="0" id="65043672" parent="0" left="0" top="0" right="59" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="345" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_s" shapeColor="0" id="52315672" parent="0" left="0" top="0" right="115" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1665" haveBus="false">
+        <node type="node/const/group" idtf="ui_used_translation" shapeColor="0" id="65043528" parent="0" left="0" top="0" right="119" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="525" y="855" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_a" shapeColor="0" id="52317112" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1635" haveBus="false">
+        <node type="node/const/group" idtf="ui_all_translations" shapeColor="0" id="65043384" parent="0" left="0" top="0" right="114" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="525" y="810" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_p" shapeColor="0" id="52317832" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1605" haveBus="false">
+        <node type="node/const/group" idtf="неатомарная команда" shapeColor="0" id="65043240" parent="0" left="0" top="0" right="142" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="525" y="1050" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_o" shapeColor="0" id="52316392" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1575" haveBus="false">
+        <node type="node/const/group" idtf="команда вопрос" shapeColor="0" id="65043096" parent="0" left="0" top="0" right="101" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="525" y="1140" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_i" shapeColor="0" id="52316104" parent="0" left="0" top="0" right="114" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1545" haveBus="false">
+        <node type="node/const/group" idtf="формат" shapeColor="0" id="65042952" parent="0" left="0" top="0" right="56" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="45" y="765" haveBus="true">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_u" shapeColor="0" id="52317256" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1515" haveBus="false">
+        <node type="node/const/group" idtf="атомарная команда" shapeColor="0" id="65042808" parent="0" left="0" top="0" right="129" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="525" y="1095" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_y" shapeColor="0" id="52317544" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1485" haveBus="false">
+        <node type="node/const/group" idtf="ui_finished_user_command" shapeColor="0" id="65042664" parent="0" left="0" top="0" right="161" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="390" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_t" shapeColor="0" id="52315096" parent="0" left="0" top="0" right="115" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1455" haveBus="false">
+        <node type="node/const/group" idtf="ui_active_user_command" shapeColor="0" id="65042520" parent="0" left="0" top="0" right="150" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="345" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_r" shapeColor="0" id="52316248" parent="0" left="0" top="0" right="115" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1425" haveBus="false">
+        <node type="node/const/group" idtf="ui_initiated_user_command" shapeColor="0" id="64141296" parent="0" left="0" top="0" right="164" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="300" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_e" shapeColor="0" id="52315960" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1395" haveBus="false">
+        <node type="node/const/group" idtf="ui_user_command" shapeColor="0" id="64141152" parent="0" left="0" top="0" right="110" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="255" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_w" shapeColor="0" id="52317688" parent="0" left="0" top="0" right="119" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1365" haveBus="false">
+        <node type="node/const/relation" idtf="обобщенная формулировка команды*" shapeColor="0" id="64141008" parent="0" left="0" top="0" right="229" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="645" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f1" shapeColor="0" id="54203144" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1335" haveBus="false">
+        <node type="node/const/group" idtf="команда" shapeColor="0" id="64140864" parent="0" left="0" top="0" right="58" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="465" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f12" shapeColor="0" id="52314664" parent="0" left="0" top="0" right="128" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1665" haveBus="false">
+        <node type="node/const/group" idtf="элементарная пользовательская команда" shapeColor="0" id="64140720" parent="0" left="0" top="0" right="257" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="75" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f11" shapeColor="0" id="54199832" parent="0" left="0" top="0" right="127" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1635" haveBus="false">
+        <node type="node/const/group" idtf="ui_cmd_mouse_move_obj" shapeColor="0" id="64140576" parent="0" left="0" top="0" right="152" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="435" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f9" shapeColor="0" id="54203000" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1575" haveBus="false">
+        <node type="node/-/not_define" idtf="ui_arg_set_only" shapeColor="0" id="64140432" parent="0" left="0" top="0" right="98" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="210" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f10" shapeColor="0" id="54203288" parent="0" left="0" top="0" right="128" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1605" haveBus="false">
+        <node type="node/const/general_node" idtf="mouse_button_right" shapeColor="0" id="64140288" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="780" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f8" shapeColor="0" id="52314232" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1545" haveBus="false">
+        <node type="node/const/group" idtf="инициированная элементарная пользовательская команда" shapeColor="0" id="64140144" parent="0" left="0" top="0" right="357" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="120" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f7" shapeColor="0" id="52314088" parent="0" left="0" top="0" right="122" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1515" haveBus="false">
+        <node type="node/-/not_define" idtf="ui_arg_cur_window" shapeColor="0" id="64140000" parent="0" left="0" top="0" right="120" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="210" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f6" shapeColor="0" id="54203432" parent="0" left="0" top="0" right="122" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1485" haveBus="false">
+        <node type="node/const/group" idtf="главное окно" shapeColor="0" id="64139856" parent="0" left="0" top="0" right="84" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="75" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f5" shapeColor="0" id="52314376" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1455" haveBus="false">
+        <node type="node/const/relation" idtf="дочернее окно*" shapeColor="0" id="64139712" parent="0" left="0" top="0" right="98" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="465" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f4" shapeColor="0" id="54201848" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1425" haveBus="false">
+        <node type="node/const/relation" idtf="множетво поддерживаемых форматов*" shapeColor="0" id="64139568" parent="0" left="0" top="0" right="248" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="510" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f3" shapeColor="0" id="54202712" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1395" haveBus="false">
+        <node type="node/const/relation" idtf="множество поддерживаемых входных форматов*" shapeColor="0" id="64139424" parent="0" left="0" top="0" right="306" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="555" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_f2" shapeColor="0" id="54203576" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1365" haveBus="false">
+        <node type="node/const/relation" idtf="множество поддерживаемых выходных форматов*" shapeColor="0" id="64139280" parent="0" left="0" top="0" right="315" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="600" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_1" shapeColor="0" id="54200120" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1335" haveBus="false">
+        <node type="node/const/group" idtf="INT" shapeColor="0" id="64139136" parent="0" left="0" top="0" right="31" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1065" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_2" shapeColor="0" id="54200264" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1365" haveBus="false">
+        <node type="node/const/group" idtf="REAL" shapeColor="0" id="64138992" parent="0" left="0" top="0" right="43" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1095" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_0" shapeColor="0" id="54201416" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1605" haveBus="false">
+        <node type="node/const/group" idtf="MP4" shapeColor="0" id="64138848" parent="0" left="0" top="0" right="35" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1185" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_9" shapeColor="0" id="54201704" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1575" haveBus="false">
+        <node type="node/const/group" idtf="MIDMIF" shapeColor="0" id="64138704" parent="0" left="0" top="0" right="60" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1245" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_8" shapeColor="0" id="54199400" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1545" haveBus="false">
+        <node type="node/const/group" idtf="пользователь" shapeColor="0" id="64138560" parent="0" left="0" top="0" right="89" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="375" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_7" shapeColor="0" id="54200984" parent="0" left="0" top="0" right="118" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1515" haveBus="false">
+        <node type="node/-/not_define" idtf="ui_arg_1" shapeColor="0" id="64138416" parent="0" left="0" top="0" right="59" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="300" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_6" shapeColor="0" id="54201128" parent="0" left="0" top="0" right="118" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1485" haveBus="false">
+        <node type="node/const/group" idtf="sc-окно" shapeColor="0" id="64138272" parent="0" left="0" top="0" right="51" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="120" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_5" shapeColor="0" id="54200696" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1455" haveBus="false">
+        <node type="node/const/general_node" idtf="просмотрщик" shapeColor="0" id="64138128" parent="0" left="0" top="0" right="93" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="45" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_3" shapeColor="0" id="54200408" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1395" haveBus="false">
+        <node type="node/const/general_node" idtf="редактор" shapeColor="0" id="64137984" parent="0" left="0" top="0" right="65" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="90" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="keyboard_button_4" shapeColor="0" id="54200552" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1425" haveBus="false">
+        <node type="node/const/general_node" idtf="транслятор" shapeColor="0" id="64137840" parent="0" left="0" top="0" right="83" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="135" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="mouse_button_middle" shapeColor="0" id="54199256" parent="0" left="0" top="0" right="131" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="825" haveBus="false">
+        <node type="node/const/relation" idtf="множество окон для вывода ответа*" shapeColor="0" id="64137696" parent="0" left="0" top="0" right="232" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="420" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/-/not_define" idtf="ui_arg_all_el" shapeColor="0" id="54199112" parent="0" left="0" top="0" right="84" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="255" haveBus="false">
+        <node type="node/const/group" idtf="WMV" shapeColor="0" id="64137552" parent="0" left="0" top="0" right="42" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1125" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/-/not_define" idtf="ui_arg_set" shapeColor="0" id="54198968" parent="0" left="0" top="0" right="68" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="255" haveBus="false">
+        <node type="node/const/group" idtf="CHEMISTRY" shapeColor="0" id="64137408" parent="0" left="0" top="0" right="86" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1365" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_cmd_play_user_command" shapeColor="0" id="54198824" parent="0" left="0" top="0" right="171" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="1035" haveBus="false">
+        <node type="node/const/group" idtf="активная элементарная пользовательская команда" shapeColor="0" id="64137264" parent="0" left="0" top="0" right="318" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="165" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_output_window_set" shapeColor="0" id="54198680" parent="0" left="0" top="0" right="135" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="420" haveBus="false">
+        <node type="node/const/group" idtf="завершенная элементарная пользовательская команда" shapeColor="0" id="64135968" parent="0" left="0" top="0" right="336" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="210" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="SWF" shapeColor="0" id="54198536" parent="0" left="0" top="0" right="36" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1215" haveBus="false">
+        <node type="node/const/group" idtf="ui_cmd_mouse_button_press" shapeColor="0" id="64135824" parent="0" left="0" top="0" right="169" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="480" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="AVI" shapeColor="0" id="54198392" parent="0" left="0" top="0" right="31" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1155" haveBus="false">
+        <node type="node/const/group" idtf="AVI" shapeColor="0" id="64135680" parent="0" left="0" top="0" right="31" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1155" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_cmd_mouse_button_press" shapeColor="0" id="54198248" parent="0" left="0" top="0" right="169" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="480" haveBus="false">
+        <node type="node/const/group" idtf="SWF" shapeColor="0" id="64135536" parent="0" left="0" top="0" right="36" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1215" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="завершенная элементарная пользовательская команда" shapeColor="0" id="54198104" parent="0" left="0" top="0" right="336" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="210" haveBus="false">
+        <node type="node/const/group" idtf="ui_output_window_set" shapeColor="0" id="64135392" parent="0" left="0" top="0" right="135" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="420" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="активная элементарная пользовательская команда" shapeColor="0" id="54197960" parent="0" left="0" top="0" right="318" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="165" haveBus="false">
+        <node type="node/const/group" idtf="ui_cmd_play_user_command" shapeColor="0" id="64135248" parent="0" left="0" top="0" right="171" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="1035" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="CHEMISTRY" shapeColor="0" id="54197816" parent="0" left="0" top="0" right="86" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1365" haveBus="false">
+        <node type="node/-/not_define" idtf="ui_arg_set" shapeColor="0" id="64135104" parent="0" left="0" top="0" right="68" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="255" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="WMV" shapeColor="0" id="54197672" parent="0" left="0" top="0" right="42" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1125" haveBus="false">
+        <node type="node/-/not_define" idtf="ui_arg_all_el" shapeColor="0" id="64134960" parent="0" left="0" top="0" right="84" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="255" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/relation" idtf="множество окон для вывода ответа*" shapeColor="0" id="54197528" parent="0" left="0" top="0" right="232" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="420" haveBus="false">
+        <node type="node/const/general_node" idtf="mouse_button_middle" shapeColor="0" id="64134816" parent="0" left="0" top="0" right="131" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="825" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="транслятор" shapeColor="0" id="54197384" parent="0" left="0" top="0" right="83" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="135" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_4" shapeColor="0" id="64134672" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1425" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="редактор" shapeColor="0" id="54197240" parent="0" left="0" top="0" right="65" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="90" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_3" shapeColor="0" id="64134528" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1395" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="просмотрщик" shapeColor="0" id="54197096" parent="0" left="0" top="0" right="93" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="45" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_5" shapeColor="0" id="64134384" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1455" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="sc-окно" shapeColor="0" id="54196952" parent="0" left="0" top="0" right="51" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="120" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_6" shapeColor="0" id="64134240" parent="0" left="0" top="0" right="118" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1485" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/-/not_define" idtf="ui_arg_1" shapeColor="0" id="54196808" parent="0" left="0" top="0" right="59" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="300" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_7" shapeColor="0" id="64134096" parent="0" left="0" top="0" right="118" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1515" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="пользователь" shapeColor="0" id="54196664" parent="0" left="0" top="0" right="89" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="375" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_8" shapeColor="0" id="64133952" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1545" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="MIDMIF" shapeColor="0" id="54196520" parent="0" left="0" top="0" right="60" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1245" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_9" shapeColor="0" id="64133808" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1575" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="MP4" shapeColor="0" id="54196376" parent="0" left="0" top="0" right="35" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1185" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_0" shapeColor="0" id="64133664" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1605" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="REAL" shapeColor="0" id="54196232" parent="0" left="0" top="0" right="43" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1095" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_2" shapeColor="0" id="64133520" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1365" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="INT" shapeColor="0" id="54196088" parent="0" left="0" top="0" right="31" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1065" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_1" shapeColor="0" id="64133376" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1335" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/relation" idtf="множество поддерживаемых выходных форматов*" shapeColor="0" id="54195944" parent="0" left="0" top="0" right="315" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="600" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f2" shapeColor="0" id="63348392" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1365" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/relation" idtf="множество поддерживаемых входных форматов*" shapeColor="0" id="54195800" parent="0" left="0" top="0" right="306" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="555" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f3" shapeColor="0" id="63348248" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1395" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/relation" idtf="множетво поддерживаемых форматов*" shapeColor="0" id="54195656" parent="0" left="0" top="0" right="248" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="510" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f4" shapeColor="0" id="63348104" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1425" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/relation" idtf="дочернее окно*" shapeColor="0" id="53312160" parent="0" left="0" top="0" right="98" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="465" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f5" shapeColor="0" id="63347960" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1455" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="главное окно" shapeColor="0" id="53312016" parent="0" left="0" top="0" right="84" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="75" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f6" shapeColor="0" id="63347816" parent="0" left="0" top="0" right="122" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1485" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/-/not_define" idtf="ui_arg_cur_window" shapeColor="0" id="53311872" parent="0" left="0" top="0" right="120" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="210" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f7" shapeColor="0" id="63347672" parent="0" left="0" top="0" right="122" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1515" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="инициированная элементарная пользовательская команда" shapeColor="0" id="53311728" parent="0" left="0" top="0" right="357" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="120" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f8" shapeColor="0" id="63347528" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1545" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="mouse_button_right" shapeColor="0" id="53311584" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="780" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f10" shapeColor="0" id="63347384" parent="0" left="0" top="0" right="128" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1605" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/-/not_define" idtf="ui_arg_set_only" shapeColor="0" id="53311440" parent="0" left="0" top="0" right="98" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="210" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f9" shapeColor="0" id="63347240" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1575" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_cmd_mouse_move_obj" shapeColor="0" id="53311296" parent="0" left="0" top="0" right="152" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="435" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f11" shapeColor="0" id="63347096" parent="0" left="0" top="0" right="127" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1635" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="элементарная пользовательская команда" shapeColor="0" id="53311152" parent="0" left="0" top="0" right="257" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="75" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f12" shapeColor="0" id="63346952" parent="0" left="0" top="0" right="128" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1665" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="команда" shapeColor="0" id="53311008" parent="0" left="0" top="0" right="58" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="390" y="465" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f1" shapeColor="0" id="63346808" parent="0" left="0" top="0" right="121" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="675" y="1335" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/relation" idtf="обобщенная формулировка команды*" shapeColor="0" id="53310864" parent="0" left="0" top="0" right="229" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="645" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_w" shapeColor="0" id="63346664" parent="0" left="0" top="0" right="119" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1365" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_user_command" shapeColor="0" id="53310720" parent="0" left="0" top="0" right="110" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="255" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_e" shapeColor="0" id="63346520" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1395" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_initiated_user_command" shapeColor="0" id="53310576" parent="0" left="0" top="0" right="164" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="300" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_r" shapeColor="0" id="63346376" parent="0" left="0" top="0" right="115" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1425" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_active_user_command" shapeColor="0" id="53310432" parent="0" left="0" top="0" right="150" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="345" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_t" shapeColor="0" id="63346232" parent="0" left="0" top="0" right="115" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1455" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_finished_user_command" shapeColor="0" id="53310288" parent="0" left="0" top="0" right="161" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="390" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_y" shapeColor="0" id="63346088" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1485" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="атомарная команда" shapeColor="0" id="53310144" parent="0" left="0" top="0" right="129" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="525" y="1095" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_u" shapeColor="0" id="63345944" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1515" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="формат" shapeColor="0" id="53310000" parent="0" left="0" top="0" right="56" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="45" y="765" haveBus="true">
+        <node type="node/const/general_node" idtf="keyboard_button_i" shapeColor="0" id="63345800" parent="0" left="0" top="0" right="114" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1545" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="команда вопрос" shapeColor="0" id="53309856" parent="0" left="0" top="0" right="101" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="525" y="1140" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_o" shapeColor="0" id="63345656" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1575" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="неатомарная команда" shapeColor="0" id="53308560" parent="0" left="0" top="0" right="142" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="525" y="1050" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_p" shapeColor="0" id="63345512" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1605" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_all_translations" shapeColor="0" id="53308416" parent="0" left="0" top="0" right="114" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="525" y="810" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_a" shapeColor="0" id="63345368" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1635" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_used_translation" shapeColor="0" id="53308272" parent="0" left="0" top="0" right="119" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="525" y="855" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_s" shapeColor="0" id="63345224" parent="0" left="0" top="0" right="115" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1665" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/-/not_define" idtf="ui_arg_2" shapeColor="0" id="53308128" parent="0" left="0" top="0" right="59" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="75" y="345" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_q" shapeColor="0" id="63345080" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="870" y="1335" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/-/not_define" idtf="ui_arg_3" shapeColor="0" id="53307984" parent="0" left="0" top="0" right="59" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="165" y="300" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_d" shapeColor="0" id="63344936" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1335" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/-/not_define" idtf="ui_arg_4" shapeColor="0" id="53307840" parent="0" left="0" top="0" right="59" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="165" y="345" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_g" shapeColor="0" id="63344792" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1395" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_cmd_mouse_button_release" shapeColor="0" id="53307696" parent="0" left="0" top="0" right="180" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="525" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_h" shapeColor="0" id="63344648" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1425" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/general_node" idtf="mouse_button_left" shapeColor="0" id="53307552" parent="0" left="0" top="0" right="112" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="735" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_j" shapeColor="0" id="63344504" parent="0" left="0" top="0" right="114" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1455" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_cmd_keyboard_button_release" shapeColor="0" id="53307408" parent="0" left="0" top="0" right="197" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="645" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_k" shapeColor="0" id="63344360" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1485" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_cmd_keyboard_button_press" shapeColor="0" id="53307264" parent="0" left="0" top="0" right="186" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="600" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_l" shapeColor="0" id="63344216" parent="0" left="0" top="0" right="114" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1515" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="ui_cmd_change_localization" shapeColor="0" id="53306976" parent="0" left="0" top="0" right="169" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="990" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_z" shapeColor="0" id="63344072" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1545" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="OBJx" shapeColor="0" id="53306688" parent="0" left="0" top="0" right="39" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1275" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_x" shapeColor="0" id="63343928" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1575" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="SPACEx" shapeColor="0" id="53306544" parent="0" left="0" top="0" right="56" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1305" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_c" shapeColor="0" id="63343784" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1605" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="GRAPH" shapeColor="0" id="53306400" parent="0" left="0" top="0" right="54" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1335" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_v" shapeColor="0" id="63343640" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1635" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="FLV" shapeColor="0" id="53306256" parent="0" left="0" top="0" right="35" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1395" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_b" shapeColor="0" id="63343496" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1665" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="MPG" shapeColor="0" id="53306112" parent="0" left="0" top="0" right="38" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1425" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_f" shapeColor="0" id="63343352" parent="0" left="0" top="0" right="116" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1050" y="1365" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="HTML" shapeColor="0" id="53305968" parent="0" left="0" top="0" right="46" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1455" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_n" shapeColor="0" id="63343208" parent="0" left="0" top="0" right="117" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1335" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="MATH" shapeColor="0" id="53305824" parent="0" left="0" top="0" right="47" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1485" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_m" shapeColor="0" id="63343064" parent="0" left="0" top="0" right="120" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1365" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="TERM" shapeColor="0" id="53305680" parent="0" left="0" top="0" right="47" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1035" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_up" shapeColor="0" id="63342920" parent="0" left="0" top="0" right="124" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1425" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="STRING" shapeColor="0" id="53305536" parent="0" left="0" top="0" right="56" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="1005" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_down" shapeColor="0" id="63342776" parent="0" left="0" top="0" right="140" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1455" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="PNG" shapeColor="0" id="53305392" parent="0" left="0" top="0" right="35" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="975" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_right" shapeColor="0" id="63342632" parent="0" left="0" top="0" right="138" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1485" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="BMP" shapeColor="0" id="53305248" parent="0" left="0" top="0" right="37" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="945" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_left" shapeColor="0" id="63342488" parent="0" left="0" top="0" right="129" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="1230" y="1515" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="JPEG" shapeColor="0" id="53305104" parent="0" left="0" top="0" right="41" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="915" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_escape" shapeColor="0" id="63342344" parent="0" left="0" top="0" right="147" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1695" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="JPG" shapeColor="0" id="53304960" parent="0" left="0" top="0" right="32" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="885" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_delete" shapeColor="0" id="63342200" parent="0" left="0" top="0" right="143" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1725" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="GEOMx" shapeColor="0" id="53304816" parent="0" left="0" top="0" right="54" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="855" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_space" shapeColor="0" id="63342056" parent="0" left="0" top="0" right="141" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1785" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="SCGx" shapeColor="0" id="53304672" parent="0" left="0" top="0" right="40" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="825" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_return" shapeColor="0" id="63341912" parent="0" left="0" top="0" right="144" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1755" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <node type="node/const/group" idtf="SC" shapeColor="0" id="32051776" parent="0" left="0" top="0" right="25" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="225" y="795" haveBus="false">
+        <node type="node/const/general_node" idtf="keyboard_button_pgup" shapeColor="0" id="63341768" parent="0" left="0" top="0" right="138" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1815" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="54631888" parent="0" id_b="54349360" id_e="53305824" b_x="0" b_y="0" e_x="225" e_y="1485" dotBBalance="0.97919" dotEBalance="0">
+        <node type="node/const/general_node" idtf="keyboard_button_pgdown" shapeColor="0" id="63341624" parent="0" left="0" top="0" right="154" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1845" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/group" idtf="ui_cmd_mouse_move_to_empty_place" shapeColor="0" id="6397728" parent="0" left="0" top="0" right="222" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="690" y="480" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="65506832" parent="0" id_b="65056152" id_e="65046984" b_x="0" b_y="0" e_x="225" e_y="795" dotBBalance="0.0214996" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="54631720" parent="0" id_b="54349360" id_e="53305968" b_x="0" b_y="0" e_x="225" e_y="1455" dotBBalance="0.93757" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="65506664" parent="0" id_b="65056152" id_e="65046840" b_x="0" b_y="0" e_x="225" e_y="825" dotBBalance="0.0631199" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32153264" parent="0" id_b="54349360" id_e="53306112" b_x="0" b_y="0" e_x="225" e_y="1425" dotBBalance="0.895949" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="65506496" parent="0" id_b="65056152" id_e="65046696" b_x="0" b_y="0" e_x="225" e_y="855" dotBBalance="0.10474" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32153096" parent="0" id_b="54349360" id_e="53306256" b_x="0" b_y="0" e_x="225" e_y="1395" dotBBalance="0.854329" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="65506328" parent="0" id_b="65056152" id_e="65046552" b_x="0" b_y="0" e_x="225" e_y="885" dotBBalance="0.14636" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32152928" parent="0" id_b="54349360" id_e="54197816" b_x="0" b_y="0" e_x="225" e_y="1365" dotBBalance="0.812709" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="65506160" parent="0" id_b="65056152" id_e="65046408" b_x="0" b_y="0" e_x="225" e_y="915" dotBBalance="0.187981" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32152760" parent="0" id_b="54349360" id_e="53306400" b_x="0" b_y="0" e_x="225" e_y="1335" dotBBalance="0.771089" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="65505992" parent="0" id_b="65056152" id_e="65046264" b_x="0" b_y="0" e_x="225" e_y="945" dotBBalance="0.229601" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32152592" parent="0" id_b="54349360" id_e="53306544" b_x="0" b_y="0" e_x="225" e_y="1305" dotBBalance="0.729468" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6430368" parent="0" id_b="65056152" id_e="65046120" b_x="0" b_y="0" e_x="225" e_y="975" dotBBalance="0.271221" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32152424" parent="0" id_b="54349360" id_e="53306688" b_x="0" b_y="0" e_x="225" e_y="1275" dotBBalance="0.687848" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6430200" parent="0" id_b="65056152" id_e="65045976" b_x="0" b_y="0" e_x="225" e_y="1005" dotBBalance="0.312841" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32152256" parent="0" id_b="54349360" id_e="54196520" b_x="0" b_y="0" e_x="225" e_y="1245" dotBBalance="0.646228" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6430032" parent="0" id_b="65056152" id_e="65045832" b_x="0" b_y="0" e_x="225" e_y="1035" dotBBalance="0.354462" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32152088" parent="0" id_b="54349360" id_e="54198536" b_x="0" b_y="0" e_x="225" e_y="1215" dotBBalance="0.604608" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6429864" parent="0" id_b="65056152" id_e="64139136" b_x="0" b_y="0" e_x="225" e_y="1065" dotBBalance="0.396082" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32151920" parent="0" id_b="54349360" id_e="54196376" b_x="0" b_y="0" e_x="225" e_y="1185" dotBBalance="0.562988" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6429696" parent="0" id_b="65056152" id_e="64138992" b_x="0" b_y="0" e_x="225" e_y="1095" dotBBalance="0.437702" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32151752" parent="0" id_b="54349360" id_e="54198392" b_x="0" b_y="0" e_x="225" e_y="1155" dotBBalance="0.521367" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6429528" parent="0" id_b="65056152" id_e="64137552" b_x="0" b_y="0" e_x="225" e_y="1125" dotBBalance="0.479322" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32151584" parent="0" id_b="54349360" id_e="54197672" b_x="0" b_y="0" e_x="225" e_y="1125" dotBBalance="0.479322" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6429360" parent="0" id_b="65056152" id_e="64135680" b_x="0" b_y="0" e_x="225" e_y="1155" dotBBalance="0.521367" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32151416" parent="0" id_b="54349360" id_e="54196232" b_x="0" b_y="0" e_x="225" e_y="1095" dotBBalance="0.437702" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6429192" parent="0" id_b="65056152" id_e="64138848" b_x="0" b_y="0" e_x="225" e_y="1185" dotBBalance="0.562988" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32151248" parent="0" id_b="54349360" id_e="54196088" b_x="0" b_y="0" e_x="225" e_y="1065" dotBBalance="0.396082" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6429024" parent="0" id_b="65056152" id_e="64135536" b_x="0" b_y="0" e_x="225" e_y="1215" dotBBalance="0.604608" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32151080" parent="0" id_b="54349360" id_e="53305680" b_x="0" b_y="0" e_x="225" e_y="1035" dotBBalance="0.354462" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6428856" parent="0" id_b="65056152" id_e="64138704" b_x="0" b_y="0" e_x="225" e_y="1245" dotBBalance="0.646228" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32150912" parent="0" id_b="54349360" id_e="53305536" b_x="0" b_y="0" e_x="225" e_y="1005" dotBBalance="0.312841" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6428688" parent="0" id_b="65056152" id_e="65044824" b_x="0" b_y="0" e_x="225" e_y="1275" dotBBalance="0.687848" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32150744" parent="0" id_b="54349360" id_e="53305392" b_x="0" b_y="0" e_x="225" e_y="975" dotBBalance="0.271221" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6428520" parent="0" id_b="65056152" id_e="65044968" b_x="0" b_y="0" e_x="225" e_y="1305" dotBBalance="0.729468" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32150576" parent="0" id_b="54349360" id_e="53305248" b_x="0" b_y="0" e_x="225" e_y="945" dotBBalance="0.229601" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6428352" parent="0" id_b="65056152" id_e="65045112" b_x="0" b_y="0" e_x="225" e_y="1335" dotBBalance="0.771089" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32150408" parent="0" id_b="54349360" id_e="53305104" b_x="0" b_y="0" e_x="225" e_y="915" dotBBalance="0.187981" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6428184" parent="0" id_b="65056152" id_e="64137408" b_x="0" b_y="0" e_x="225" e_y="1365" dotBBalance="0.812709" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32150240" parent="0" id_b="54349360" id_e="53304960" b_x="0" b_y="0" e_x="225" e_y="885" dotBBalance="0.14636" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6428016" parent="0" id_b="65056152" id_e="65045256" b_x="0" b_y="0" e_x="225" e_y="1395" dotBBalance="0.854329" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32150072" parent="0" id_b="54349360" id_e="53304816" b_x="0" b_y="0" e_x="225" e_y="855" dotBBalance="0.10474" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6427848" parent="0" id_b="65056152" id_e="65045400" b_x="0" b_y="0" e_x="225" e_y="1425" dotBBalance="0.895949" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32149904" parent="0" id_b="54349360" id_e="53304672" b_x="0" b_y="0" e_x="225" e_y="825" dotBBalance="0.0631199" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6427680" parent="0" id_b="65056152" id_e="65045544" b_x="0" b_y="0" e_x="225" e_y="1455" dotBBalance="0.93757" dotEBalance="0">
             <points/>
         </arc>
-        <arc type="arc/const/pos" idtf="" shapeColor="0" id="32149736" parent="0" id_b="54349360" id_e="32051776" b_x="0" b_y="0" e_x="225" e_y="795" dotBBalance="0.0214996" dotEBalance="0">
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="6427512" parent="0" id_b="65056152" id_e="65045688" b_x="0" b_y="0" e_x="225" e_y="1485" dotBBalance="0.97919" dotEBalance="0">
             <points/>
         </arc>
-        <bus type="" idtf="" shapeColor="0" id="54349360" parent="0" owner="53310000" b_x="44.7041" b_y="779.497" e_x="30" e_y="1500">
+        <bus type="" idtf="" shapeColor="0" id="65056152" parent="0" owner="65042952" b_x="44.7041" b_y="779.497" e_x="30" e_y="1500">
             <points/>
         </bus>
     </staticSector>

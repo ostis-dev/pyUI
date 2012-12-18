@@ -282,7 +282,9 @@ class ui:
     noatom_command          =   session.find_keynode_full_uri(u"/ui/core/неатомарная команда")
     question_command        =   session.find_keynode_full_uri(u"/ui/core/команда вопрос")
     user                    =   session.find_keynode_full_uri(u"/ui/core/пользователь")
-    active_user             =   session.find_keynode_full_uri(u"/ui/core/активный пользователь*")
+    rrel_active_user             =   session.find_keynode_full_uri(u"/ui/core/активный пользователь_")
+    user_name               =   session.find_keynode_full_uri(u"/ui/core/имя пользователя")
+    user_password           =   session.find_keynode_full_uri(u"/ui/core/пароль")
     
 class common:
     nrel_decomposition      =   session.find_keynode_full_uri(u"/etc/com_keynodes/декомпозиция*");
@@ -298,8 +300,6 @@ class common:
     
     #group_russian_language  =   session.find_keynode_full_uri(u"/etc/com_keynodes/Русский язык")
     group_image             =   session.find_keynode_full_uri(u"/etc/com_keynodes/изображение")
-    user_name               =   session.find_keynode_full_uri(u"/etc/com_keynodes/имя пользователя")
-    user_password           =   session.find_keynode_full_uri(u"/etc/com_keynodes/пароль")
         
     
 class questions:

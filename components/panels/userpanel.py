@@ -54,7 +54,7 @@ class UserPanel(objects.ObjectOverlay):
         panelWidth = 0
         textWidth = 0
         if self._curentUser._name is not None:
-            textWidth = len(self._curentUser._name.decode('utf-8')) * self._fontSize * 7/10
+            textWidth = len(self._curentUser._name) * self._fontSize * 7/10
             panelWidth = textWidth + self._border * 4 + self._buttonSize
         else:
             textWidth = self._size[0]
