@@ -20,7 +20,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 """
-
 '''
 Created on 24.11.2009
 
@@ -41,14 +40,16 @@ state_post = {suit.core.objects.Object.OS_Normal: 'Normal',
               suit.core.objects.Object.OS_NewInMemory: 'NewInMemory',
               suit.core.objects.Object.OS_Merged: 'Merged'}    
 
+
 class GeometryAbstractObject:
     
     groups = {}
-    
+
     PropSquare = u"Площадь"
     PropPerimeter = u"Периметр"
     PropLength = u"Длина"
-        
+    PropKind = u"Тип"
+
     def __init__(self):
         # list of child points (begin and end points are excluded)
         # that list contains tuples. Each tuple contains point and it position.

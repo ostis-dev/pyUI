@@ -45,6 +45,8 @@ import suit.cf.utils as comutils
 import suit.core.render.engine as render_engine
 import geom_controls
 
+from Tkinter import *
+
 class GeometryEditMode(BaseEditMode):
     
     # states
@@ -53,9 +55,9 @@ class GeometryEditMode(BaseEditMode):
     ES_CircleCreate, \
     ES_LengthChange, \
     ES_SquareChange, \
-    ES_PerimeterChange, \
+    ES_PerimeterChange,\
     ES_Count = range(BaseEditMode.ES_Count + 1, BaseEditMode.ES_Count + 8)
-    
+
     def __init__(self, _logic):
         BaseEditMode.__init__(self, _logic, "Geometry edit")
         
@@ -340,8 +342,8 @@ class GeometryEditMode(BaseEditMode):
                 if isinstance(selected[0], selected[1].__class__):
                     selected[0].setEqualTo(selected[1])
                     if self.objectInfoPanel.getObject() is selected[0] or self.objectInfoPanel.getObject() is selected[1]:
-                        self.objectInfoPanel.update()              
-        
+                        self.objectInfoPanel.update()
+
         if key == ois.KC_S:
             selected = self._logic._getSheet().getSelected()
             if len(selected) == 1:
@@ -349,7 +351,7 @@ class GeometryEditMode(BaseEditMode):
                 if isinstance(obj, (GeometryCircle, GeometryTriangle, GeometryQuadrangle)):
                     self.state = GeometryEditMode.ES_SquareChange
                     self.square_changer = TextInput(obj, self._square_change_callback, obj.getPropertyValue(GeometryAbstractObject.PropSquare))
-                    
+
         if key == ois.KC_P:
             selected = self._logic._getSheet().getSelected()
             if len(selected) == 1:
@@ -357,9 +359,16 @@ class GeometryEditMode(BaseEditMode):
                 if isinstance(obj, (GeometryTriangle, GeometryQuadrangle)):
                     self.state = GeometryEditMode.ES_PerimeterChange
                     self.perimetr_changer = TextInput(obj, self._perimeter_change_callback, obj.getPropertyValue(GeometryAbstractObject.PropPerimeter))
-        
-        return False
-    
+
+        if key == ois.KC_K:
+            selected = self._logic._getSheet().getSelected()
+            if len(selected) == 1:
+                obj = selected[0]
+                if isinstance(obj, (GeometryQuadrangle)):
+                    from components.geometry.base.geom_qw_list import QuadrangleChanger
+                    self.dialog = QuadrangleChanger(obj,self._kind_change_callback,obj.getPropertyValue(GeometryAbstractObject.PropKind))
+
+
     def _onKeyReleased(self, _evt):
         """Event key released
         """
@@ -437,7 +446,26 @@ class GeometryEditMode(BaseEditMode):
         
         if self.objectInfoPanel.getObject() is _object:
             self.objectInfoPanel.update()
-    
+
+    def _kind_change_callback(self, _object, _value):
+        """Callback on kind change
+        """
+        self.state = GeometryEditMode.ES_None
+        if _value is not None:
+            v = None
+            try:
+                v = str(_value)
+            except:
+                print "Non-numeric value found %s" % str(_value)
+
+            if v is not None:
+                _object.setPropertyValue(GeometryAbstractObject.PropKind, v)
+
+        #del self.kind_changer
+
+        if self.objectInfoPanel.getObject() is _object:
+            self.objectInfoPanel.update()
+
     def _updateLineSpirits(self):
         """Updates spirit objects used in line creation mode
         """
@@ -499,5 +527,15 @@ class GeometryEditMode(BaseEditMode):
             prev = _list[len(_list) - 1][1]
             
         return prev
-        
-        
+
+        """"
+            def _handlerQuadrangleChange(self):
+               #Handler for changing content
+
+                sheet = self._logic._getSheet()
+                obj = sheet.getSelected()
+                from components.geometry.base.temp import QuadrangleChanger
+
+                self.dialog = QuadrangleChanger(obj)
+                self.dialog.run()
+        """""
