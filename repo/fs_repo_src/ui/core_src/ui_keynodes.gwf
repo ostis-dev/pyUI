@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <GWF version="2.0">
     <staticSector>
+		<node type="node/const/group" idtf="ui_cmd_mouse_move_to_empty_place" shapeColor="0" id="61566848" parent="0" left="0" top="0" right="222" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="686" y="483" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
         <node type="node/const/general_node" idtf="keyboard_button_pgdown" shapeColor="193" id="57528296" parent="0" left="0" top="0" right="154" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="480" y="1845" haveBus="false">
             <content type="0" mime_type="" file_name=""/>
         </node>
