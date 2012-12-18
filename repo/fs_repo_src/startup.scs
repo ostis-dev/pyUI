@@ -33,6 +33,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 	"/operation/search_identifiers/init_op",
 	"/operation/search_decomposition/init_op",
 	"/operation/search_illustration/init_op",
+	"/operation/get_my_command/init_op",
 	
 	"/operation/ui_change_localization/init_op"
 

@@ -44,6 +44,6 @@ class segments:
             
 # menu keynodes
 class menu:
-    root            =   session.find_keynode_full_uri(u"/ui/menu/main menu")
+    root            =   session.find_keynode_full_uri(u"/ui/menu/main_menu")
     
     

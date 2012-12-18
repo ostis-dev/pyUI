@@ -64,3 +64,4 @@ nrel_action_area = "/etc/questions/область действия вопроса*";
 nrel_key_fragment = "/etc/questions/ключевой фрагмент вопроса*";
 nrel_answer = "/etc/questions/ответ*";
 nrel_general_formulation = "/etc/questions/обобщенная формулировка вопроса*";
+q_mycommand = "/etc/questions/моя команда";

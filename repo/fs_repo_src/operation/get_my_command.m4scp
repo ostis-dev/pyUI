@@ -1,0 +1,762 @@
+
+
+/*
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2011 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modfirst_ely
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with OSTIS.  first_el not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
+
+/////////////////////////////////////////////////////
+//        File: get_length.m4scp
+// Description: Файл содержит операцию вычисления длины
+/////////////////////////////////////////////////////
+// 		Author: Sergei Zalivako
+//        Date: 14.02.2012 
+#include "meta_info.scsy"
+#include "scp_keynodes.scsy"
+#include "etc_questions.scsy"
+#include "com_keynodes.scsy"
+#include "lib_search.scsy"
+#include "lib_check.scsy"
+#include "lib_gen.scsy"
+#include "lib_answer.scsy"
+#include "lib_set.scsy"
+
+
+program(init_op,
+[[
+	// Вызываемая SCP-программа
+	my_comm;	
+	// Ключевой узел, обозначающий инициированный вопрос
+	q_initiated;
+	// Событие, на которое реагирует обработчик(проведение выходящей дуги из узла)
+	catch_output_arc;
+]],
+[{
+}],
+{[
+]}
+)
+// Установка обработчика события на проведение дуги  из узла "инициированный запрос" 
+sys_set_event_handler([
+	1_: fixed_: catch_output_arc,
+	2_: fixed_: my_comm,
+	3_: fixed_: {1_: q_initiated}
+])
+
+return()
+	
+end
+
+procedure(my_comm,
+[[
+	// Ключевой узел, обозначающий запрос
+	q_mycommand;
+	
+	// Ключевой узел, обозначающий инициированный вопрос
+	q_initiated;
+	
+	// Ключевой узел, обозначающий вопрос
+	question;
+	
+	// Ключевой узел, обозначающий запрос значения величины
+	q_var_value;
+
+	// Атрибут присутствия ответа
+	rrel_answer_is_present;
+
+	// Ключевой узел отношения периметра
+	nrel_length;
+		
+	// Процедура поиска значения величины
+	search_quantity_value;
+	
+	// Атрибут для обозначения десятичного числа
+	rrel_decimal_number;
+	
+	// Процедура поиска конца бинарной пары
+	search_bin_pair_end_proc;
+	
+	// Процедура для генерации ответа
+	answer_make;
+	
+	// Процедура удаление элемента из множества
+	set_rm_el;
+		
+	// Узел, содержимым которого является число 0
+	zero =n= 0;
+	nrel_decomposition;
+	// Узел, содержимым которого является число 1
+	one =n= 1;
+	//рутовый элемент меню
+	main_menu;
+	
+	stype_sheaf;
+	
+	// Шаблон для поиска арифметических отношений без атрибутов
+	
+/*!
+	Procedure to find construction showed on schema with specified relation.
+	
+		relation
+			|
+			|
+			v
+		O<======== (-)
+					|-----> e1
+					|
+					|-----> e2
+					|
+					....
+					|-----> en
+					
+	@result	Result contains whole construction (excluding O) set and binary pair (author relation)
+*/
+
+	pattern = [
+		_rel_arc = (_relation ->> _tmp_rel);
+		_con_a2 = (_tmp_rel ->> _elem);
+		_con_a1 = (_tmp_rel ->> _node);
+		_attr_a1 = (1_ ->> _con_a1);
+		_attr_a2 = (2_ ->> _con_a2);
+		_arc = (_node ->> _elem_node)
+	];
+
+	
+]],
+[{
+	handler, element,
+	arcFromRequest, arcFromQuestion, 
+	location, segments,
+	questionLink,
+	arcForChecking, arcVar, attributeArc, nodeVar, checkingNode,
+	object, valueNode, questionNode, result,
+	upper_menu,
+	old_upper_menu,	
+	stype_sheaf_s,
+	needEraseArc,
+	EraseInFindedDecomp,
+	node,
+	oneMoreNode,
+	arc,
+	searching_node,
+	deleteAfterUse,
+	updateAfterUse,
+	finded_decomp,
+		//связка
+	sheaf,
+	viewedNode,
+	parentNode,
+	nodesToView,
+	arcVari,
+	arcVaric,
+	up_node,
+	up_nodes,
+	upViewedNode,
+		relation,
+		node1,
+		mypermrel,
+		myresult,
+	answer
+}],
+{[
+	1_: in_: handler, 
+	2_: in_: element, 
+	3_: in_: arcFromQuestion, 
+	4_: in_: questionLink
+]}
+)
+
+// Получение сегмента, в котором находится узел отношения длина
+sys_get_location([
+	1_: fixed_: questionLink,
+	2_: assign_: location
+])
+
+// Установка найденного сегмента как основного
+sys_set_default_segment([
+	1_: fixed_: location
+])
+
+// Разворачивание установленного сегмента
+sys_spin_segment([
+	1_: fixed_: location,
+	2_: assign_: segments
+])
+
+// Проверяем, что в узел запроса проведена дуга из узла "запрос длины"
+searchElStr3([
+	1_: fixed_: q_mycommand,
+	2_: assign_: const_: pos_: arc_: arcFromRequest,
+	3_: fixed_: questionLink
+], , finishOperation)
+
+// Находим объект, длину которого надо найти
+searchElStr3([
+	1_: fixed_: questionLink,
+	2_: assign_: const_: pos_: arc_: arcVar,
+	3_: assign_: const_: node_: object
+])
+// good - merged
+// Находим значение длины для указанного объекта
+	genEl([
+		1_: assign_: node_: result
+	])
+		genEl([
+		1_: assign_: node_: myresult
+	])
+	genEl([
+		1_: assign_: node_: nodesToView
+	])
+		genEl([
+		1_: assign_: node_: up_nodes
+	])
+			genEl([
+		1_: assign_: node_: mypermrel
+	])
+varAssign([1_:upper_menu,2_:object])
+		genEl([
+		1_: assign_: var_: node_: node
+	])
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:node
+])	
+genElStr3([
+	1_:fixed_:ui_user_command,
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:node
+])
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:ui_user_command
+])		
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+])		
+genElStr3([
+	1_:fixed_:node,
+	2_:assign_:var_:pos_:arcVar,
+	3_:assign_:var_:oneMoreNode
+])
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+])		
+
+/* make answer */
+
+genElStr3([
+	1_:fixed_:result,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:upper_menu
+])	
+
+label(oneMoreUp)
+varAssign([1_:old_upper_menu,2_:upper_menu])	
+
+// ищем конструкцию по схеме
+sys_search([
+	1_: fixed_: pattern,
+	2_: fixed_: {
+		{1_: _elem, 2_: viewedNode}
+	},
+	3_: fixed_: {
+		{1_: _relation, 2_: nrel_decomposition},
+		{1_: _elem_node, 2_: upper_menu}
+	}
+], , goto_error)
+
+searchSetStr3([
+	1_:fixed_:q_atom,
+	2_:assign_:arc_:arc,
+	3_:fixed_:viewedNode				
+],foundNewParentNode,,error)
+searchSetStr3([
+	1_:fixed_:q_noatom,
+	2_:assign_:arc_:arc,
+	3_:fixed_:viewedNode				
+],foundNewParentNode,,error)
+searchSetStr3([
+	1_:fixed_:ui_noatom_command,
+	2_:assign_:arc_:arc,
+	3_:fixed_:viewedNode				
+],foundNewParentNode,,error)
+searchSetStr3([
+	1_:fixed_:ui_atom_command,
+	2_:assign_:arc_:arc,
+	3_:fixed_:viewedNode				
+],foundNewParentNode,,error)
+
+label(foundNewParentNode)
+
+ifCoin([
+	1_:fixed_:viewedNode,
+	2_:fixed_:"/ui/menu/main_menu"
+],ending,secondSegment,goto_error)
+
+label(secondSegment)
+
+genElStr3([
+	1_:fixed_:viewedNode,
+	2_:assign_:var_:neg_:arcVar,
+	3_:fixed_:old_upper_menu
+])	
+
+genElStr3([
+	1_:fixed_:result,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:viewedNode
+])	
+
+genElStr3([
+	1_:fixed_:result,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+])	
+		
+
+
+varAssign([1_:upper_menu,2_:viewedNode],oneMoreUp)
+
+label(ending)
+
+varAssign([1_:upper_menu,2_:"/ui/menu/main_menu"])
+
+genElStr3([
+	1_:fixed_:upper_menu,
+	2_:assign_:var_:neg_:arc_:arcVar,
+	3_:fixed_:old_upper_menu
+])	
+
+genElStr3([
+	1_:fixed_:result,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:viewedNode
+])	
+
+genElStr3([
+	1_:fixed_:result,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],thirdSegment)	
+
+label(thirdSegment)
+///////////////////////////////////////////////////////
+varAssign([1_:viewedNode,2_:upper_menu])
+
+label(generetionOneMore)
+printNl([ 1_: /"***************************"/ ])		
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:oneMoreNode
+],,,goto_error)	
+
+genElStr3([
+	1_:fixed_:ui_cmd_mouse_move_obj,
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:oneMoreNode
+],,,goto_error)	
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:ui_cmd_mouse_move_obj
+],,,goto_error)	
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)	
+
+
+
+genElStr3([
+	1_:fixed_:"элементарная пользовательская команда",
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:oneMoreNode
+],,,goto_error)	
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)	
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:"элементарная пользовательская команда"
+],,,goto_error)	
+
+genElStr3([
+	1_:fixed_:oneMoreNode,
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:viewedNode
+],,,goto_error)	
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:viewedNode
+],,,goto_error)	
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)	
+
+genElStr5([
+	1_:fixed_:oneMoreNode,
+	2_:assign_:var_:pos_:arcVar,
+	3_:assign_:var_:node,
+	4_:assign_:var_:arcVaric,
+	5_:fixed_:1_
+],,,goto_error)
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:node
+],,,goto_error)
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVaric
+],,,goto_error)
+
+genElStr5([
+	1_:fixed_:node,
+	2_:assign_:var_:pos_:arcVar,
+	3_:assign_:var_:oneMoreNode,
+	4_:assign_:var_:arcVaric,
+	5_:fixed_:2_
+],,,goto_error)
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:oneMoreNode
+])
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVaric
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:node,
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:"базовая последовательность*"
+],,,goto_error)	
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:node,
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:stype_sheaf
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+
+////////////////////////////////////////////////
+
+genElStr3([
+	1_:fixed_:ui_cmd_mouse_button_press,
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:oneMoreNode
+],,,goto_error)	
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:ui_cmd_mouse_button_press
+],,,goto_error)	
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)	
+
+
+genElStr3([
+	1_:fixed_:"элементарная пользовательская команда",
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:oneMoreNode
+],,,goto_error)	
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)	
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:"элементарная пользовательская команда"
+],,,goto_error)	
+
+genElStr3([
+	1_:fixed_:oneMoreNode,
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:mouse_button_left
+],,,goto_error)	
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:mouse_button_left
+],,,goto_error)	
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)	
+
+genElStr5([
+	1_:fixed_:oneMoreNode,
+	2_:assign_:var_:pos_:arcVar,
+	3_:assign_:var_:node,
+	4_:assign_:var_:arcVaric,
+	5_:fixed_:1_
+],,,goto_error)
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:node
+],,,goto_error)
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVaric
+],,,goto_error)
+
+genElStr5([
+	1_:fixed_:node,
+	2_:assign_:var_:pos_:arcVar,
+	3_:assign_:var_:oneMoreNode,
+	4_:assign_:var_:arcVaric,
+	5_:fixed_:2_
+],,,goto_error)
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:oneMoreNode
+])
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVaric
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:node,
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:"базовая последовательность*"
+],,,goto_error)	
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:node,
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:stype_sheaf
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+////////////////////////////////////////////////
+
+genElStr3([
+	1_:fixed_:ui_cmd_mouse_button_release,
+	2_:assign_:var_:pos_:arc,
+	3_:fixed_:oneMoreNode
+],,,goto_error)	
+
+genElStr3([
+	1_:fixed_:"элементарная пользовательская команда",
+	2_:assign_:var_:pos_:arc,
+	3_:fixed_:oneMoreNode
+],,,goto_error)	
+
+genElStr3([
+	1_:fixed_:oneMoreNode,
+	2_:assign_:var_:pos_:arc,
+	3_:fixed_:mouse_button_left
+],,,goto_error)	
+
+genElStr5([
+	1_:fixed_:oneMoreNode,
+	2_:assign_:var_:pos_:arcVar,
+	3_:assign_:var_:node,
+	4_:assign_:var_:arcVaric,
+	5_:fixed_:1_
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVaric
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:node
+],,,goto_error)
+
+genElStr5([
+	1_:fixed_:node,
+	2_:assign_:var_:pos_:arcVaric,
+	3_:assign_:var_:oneMoreNode,
+	4_:assign_:var_:arcVar,
+	5_:fixed_:2_
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVaric
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:node,
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:"базовая последовательность*"
+],,,goto_error)	
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:node,
+	2_:assign_:var_:pos_:arcVar,
+	3_:fixed_:stype_sheaf
+],,,goto_error)
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:arcVar
+],,,goto_error)
+////////////////////////////////////////////
+
+searchElStr3([
+	1_: fixed_: viewedNode,
+	2_: assign_: var_:neg_: arcVar,
+	3_: assign_: updateAfterUse
+],,genAnswer)
+
+
+varAssign([1_:viewedNode,2_:updateAfterUse],generetionOneMore)
+
+label(genAnswer)
+printNl([ 1_: /"genAnswer"/ ])	
+
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:"базовая последовательность*"
+],,,goto_error)	
+genElStr3([
+	1_:fixed_:myresult,
+	2_:assign_:const_:pos_:arc,
+	3_:fixed_:stype_sheaf
+],,,goto_error)
+
+printEl([ 1_: myresult])
+
+	/////////////////////////////////////////////////////
+	// Call of the answer making procedure
+	callReturn([
+		1_:	fixed_: answer_make,
+		2_:	fixed_: {[
+				1_: questionLink,
+				2_: myresult
+			]}
+		]
+	)
+
+label(theend)
+printNl([ 1_: /"theend"/ ])		
+label(goto_error)
+printNl([ 1_: /"goto_error"/ ])		
+label(finish_op)
+printNl([ 1_: /"finish_op"/ ])		
+label(finishOperation)
+printNl([ 1_: /"finishOperation"/ ])		
+return()
+	
+end

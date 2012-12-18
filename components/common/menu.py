@@ -53,7 +53,7 @@ kernel = core.Kernel.getSingleton()
 
 session = kernel.session()
 session.open_segment(u"/ui/menu")
-main_menu                =    session.find_keynode_full_uri(u"/ui/menu/main menu")
+main_menu                =    session.find_keynode_full_uri(u"/ui/menu/main_menu")
 
 menu_root = None
 menu_layout_group = None
@@ -498,7 +498,7 @@ class SCgMenuLayoutGroup(layoutGroup.LayoutGroupOverlay, ogre.WindowEventListene
         render_engine.unregisterWindowEventListener(self)
         
     def _expandMain(self):
-        """Expands main menu
+        """Expands main_menu
         """
         self._onExpand(self.menu_root)
         

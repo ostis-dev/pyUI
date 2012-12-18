@@ -194,3 +194,4 @@
 "ui_cmd_play_user_command"	=	"/ui/core/ui_cmd_play_user_command";
 "ui_arg_set"	=	"/ui/core/ui_arg_set";
 "ui_arg_all_el"	=	"/ui/core/ui_arg_all_el";
+"моя команда"	=	"/etc/questions/моя команда";
