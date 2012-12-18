@@ -264,10 +264,10 @@ class Kernel(Singleton):
         if Kernel.__segment_core is None:
             raise RuntimeError("Can't open ui core segment by uri '%s'" % environment.URI_ui_core)
         
-        # create user node
-        import sc_utils, keynodes
-        self._user_addr = sc_utils.createNodeElement(self.session(), self.segment(), sc_core.pm.SC_CONST)
-        assert sc_utils.createPairPosPerm(self.session(), self.segment(), keynodes.ui.user, self._user_addr, sc_core.pm.SC_CONST) is not None
+        # find user node
+        import sc_utils
+        self._user_addr = sc_utils.getCurentUserNode(self.session())
+
 
     def initializeModules(self, _modules):
         """Loads and initialize extension modules
