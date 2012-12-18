@@ -42,6 +42,7 @@ __all__ = ['scg',
 modules = [
 			'common.menu',
 			'panels.mainpanel',
+            'panels.userpanel',
 #			'panels.windowpanel',
 			'panels.taskpanel',
 			'scg.base.scg_init',
