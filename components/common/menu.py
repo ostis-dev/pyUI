@@ -53,7 +53,7 @@ kernel = core.Kernel.getSingleton()
 
 session = kernel.session()
 session.open_segment(u"/ui/menu")
-main_menu				=	session.find_keynode_full_uri(u"/ui/menu/main menu")
+main_menu                =    session.find_keynode_full_uri(u"/ui/menu/main menu")
 
 menu_root = None
 menu_layout_group = None

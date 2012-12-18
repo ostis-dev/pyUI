@@ -30,6 +30,7 @@ Created on 02.01.2010
 import suit.core.render.engine as render_engine
 import suit.core.render.mygui as mygui
 
+
 class TextInput:
     """Class that realize text value input
     """    
@@ -106,7 +107,7 @@ class TextInput:
     def _textAccept(self, _widget):
         """Callback for identifier value accepted event
         """
-        self.finish(self.idtf_edit.getCaption())
+        self.finish(unicode(self.idtf_edit.getCaption()))
         
     def _textNoAccept(self, _widget):
         """Callback for identifier editing cancel 
