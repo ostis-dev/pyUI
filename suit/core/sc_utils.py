@@ -19,6 +19,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 """
+from sc_core.pm import search_5_f_cpa_cna_cpa_f
 
 
 '''
@@ -915,6 +916,81 @@ def getLocalizedIdentifier(_session, _el):
     else:
         assert isinstance(_caption, unicode)
     return _caption, _system
+
+def getCurentUserNode(_session):
+    """
+    @author: Sergei Sosnovitch
+    @param _session: session to work with sc-memory
+    @return: sc-element that represent curent user
+    """
+    import sc_core.pm as sc
+    import sc_core.constants as sc_constants
+    
+    # getting command node
+    users_list = _session.search_one_shot(_session.sc_constraint_new(sc_constants.CONSTR_5_f_a_a_a_f,
+                                                                  keynodes.ui.user,
+                                                                  sc.SC_A_CONST,
+                                                                  sc.SC_N_CONST,
+                                                                  sc.SC_A_CONST,
+                                                                  keynodes.ui.rrel_active_user
+                                                                  ), True, 5)
+    
+    if users_list is not None:
+        return users_list[2]
+    else:
+        return None
+
+def getUserName(_session,_el):
+    """
+    @param _session:  session to work with sc-memory
+    @param _el: sc-element that represent user
+    @return: string that contains name of user
+    @author: Sergei Sosnovitch
+    """
+    import sc_core.constants as sc_constants
+    import sc_core.pm as sc
+
+    name = None
+
+    idtf_set = searchOneShotBinPairAttrToNode(_session, _el, keynodes.common.nrel_identification, sc.SC_CONST)
+
+    if idtf_set is not None:
+        it1 = _session.create_iterator(_session.sc_constraint_new(sc_constants.CONSTR_3_f_a_a,
+            idtf_set,
+            sc.SC_A_CONST,
+            sc.SC_N_CONST), True)
+        while not it1.is_over():
+            if checkIncToSets(_session, it1.value(2), [keynodes.ui.user_name], sc.SC_CONST):
+                name = cp1251ToUtf8(_session.get_content_str(it1.value(2)))
+                break
+            it1.next()
+    return  name
+
+def getUserPassword(_session,_el):
+    """
+    @param _session:  session to work with sc-memory
+    @param _el: sc-element that represent user
+    @return: string that contains password of user
+    @author: Sergei Sosnovitch
+    """
+    import sc_core.constants as sc_constants
+    import sc_core.pm as sc
+
+    password = None
+
+    idtf_set = searchOneShotBinPairAttrToNode(_session, _el, keynodes.common.nrel_identification, sc.SC_CONST)
+
+    if idtf_set is not None:
+        it1 = _session.create_iterator(_session.sc_constraint_new(sc_constants.CONSTR_3_f_a_a,
+            idtf_set,
+            sc.SC_A_CONST,
+            sc.SC_N_CONST), True)
+        while not it1.is_over():
+            if checkIncToSets(_session, it1.value(2), [keynodes.ui.user_password], sc.SC_CONST):
+                password = cp1251ToUtf8(_session.get_content_str(it1.value(2)))
+                break
+            it1.next()
+    return  password
 
 def getImageIdentifier(_session, _el):
     """Return image identifier for \p el
