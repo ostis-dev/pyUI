@@ -30,6 +30,7 @@ Created on 02.01.2010
 import suit.core.render.engine as render_engine
 import suit.core.render.mygui as mygui
 
+
 class TextInput:
     """Class that realize text value input
     """    
@@ -98,7 +99,7 @@ class TextInput:
             self.panel.setPosition(pos[0], pos[1])
             # set old text to edit
 #            text_value = self.object.getText()
-            if self.default_value is not None: self.idtf_edit.setCaption(self.default_value)
+            if self.default_value is not None: self.idtf_edit.setCaption(str(self.default_value))
             mygui.InputManager.getInstance().setKeyFocusWidget(self.idtf_edit)
         else:
             self.destroyWidgets()

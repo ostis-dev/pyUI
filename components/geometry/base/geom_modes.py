@@ -45,17 +45,23 @@ import suit.cf.utils as comutils
 import suit.core.render.engine as render_engine
 import geom_controls
 
+
 class GeometryEditMode(BaseEditMode):
-    
+
     # states
     ES_Move, \
     ES_LineCreate, \
     ES_CircleCreate, \
     ES_LengthChange, \
+    ES_RadiusChange, \
+    ES_DiameterChange, \
     ES_SquareChange, \
     ES_PerimeterChange, \
-    ES_Count = range(BaseEditMode.ES_Count + 1, BaseEditMode.ES_Count + 8)
-    
+    ES_Count = range(BaseEditMode.ES_Count + 1, BaseEditMode.ES_Count + 10)
+
+    # label used for removing property if user inputs this value
+    label_to_clear_property = ""
+
     def __init__(self, _logic):
         BaseEditMode.__init__(self, _logic, "Geometry edit")
         
@@ -340,8 +346,17 @@ class GeometryEditMode(BaseEditMode):
                 if isinstance(selected[0], selected[1].__class__):
                     selected[0].setEqualTo(selected[1])
                     if self.objectInfoPanel.getObject() is selected[0] or self.objectInfoPanel.getObject() is selected[1]:
-                        self.objectInfoPanel.update()              
-        
+                        self.objectInfoPanel.update()
+
+        #remove figure's congruence property
+        if key == ois.KC_W:
+            selected = self._logic._getSheet().getSelected()
+            if len(selected) == 2:
+                if isinstance(selected[0], selected[1].__class__):
+                    selected[0].removeCongruency(selected[1])
+                    if self.objectInfoPanel.getObject() is selected[0] or self.objectInfoPanel.getObject() is selected[1]:
+                        self.objectInfoPanel.update()
+
         if key == ois.KC_S:
             selected = self._logic._getSheet().getSelected()
             if len(selected) == 1:
@@ -357,9 +372,25 @@ class GeometryEditMode(BaseEditMode):
                 if isinstance(obj, (GeometryTriangle, GeometryQuadrangle)):
                     self.state = GeometryEditMode.ES_PerimeterChange
                     self.perimetr_changer = TextInput(obj, self._perimeter_change_callback, obj.getPropertyValue(GeometryAbstractObject.PropPerimeter))
-        
+
+        if key == ois.KC_R:
+            selected = self._logic._getSheet().getSelected()
+            if len(selected) == 1:
+                obj = selected[0]
+                if isinstance(obj, GeometryCircle):
+                    self.state = GeometryEditMode.ES_RadiusChange
+                    self.radius_changer = TextInput(obj, self._radius_change_callback, obj.getPropertyValue(GeometryAbstractObject.PropRadius))
+
+        if key == ois.KC_D:
+            selected = self._logic._getSheet().getSelected()
+            if len(selected) == 1:
+                obj = selected[0]
+                if isinstance(obj, GeometryCircle):
+                    self.state = GeometryEditMode.ES_DiameterChange
+                    self.diameter_changer = TextInput(obj, self._diameter_change_callback, obj.getPropertyValue(GeometryAbstractObject.PropDiameter))
+
         return False
-    
+
     def _onKeyReleased(self, _evt):
         """Event key released
         """
@@ -384,60 +415,117 @@ class GeometryEditMode(BaseEditMode):
         """Callback on line length changing
         """
         self.state = GeometryEditMode.ES_None
-        if _value is not None:
+
+        # if user inputs value equal to label, remove property
+        if str(_value) == self.label_to_clear_property:
+            _object.removeProperty(GeometryAbstractObject.PropLength)
+        elif _value is not None:
             v = None
             try:
                 v = float(str(_value))
-                
             except ValueError:
                 print "Non-numeric value found %s" % str(_value)
-                
+
             if v is not None:
                 _object.setPropertyValue(GeometryAbstractObject.PropLength, v)
-        
+
         del self.length_changer
-        
+
         if self.objectInfoPanel.getObject() is _object:
             self.objectInfoPanel.update()
-        
+
     def _square_change_callback(self, _object, _value):
         """Callback on square change
         """
         self.state = GeometryEditMode.ES_None
-        if _value is not None:
+
+        # if user inputs value equal to label, remove property
+        if str(_value) == self.label_to_clear_property:
+            _object.removeProperty(GeometryAbstractObject.PropSquare)
+        elif _value is not None:
             v = None
             try:
                 v = float(str(_value))
-            except:
+            except ValueError:
                 print "Non-numeric value found %s" % str(_value)
-            
+
             if v is not None:
                 _object.setPropertyValue(GeometryAbstractObject.PropSquare, v)
-                
+
         del self.square_changer
-        
+
         if self.objectInfoPanel.getObject() is _object:
             self.objectInfoPanel.update()
-        
+
     def _perimeter_change_callback(self, _object, _value):
         """Callback on perimeter change
         """
         self.state = GeometryEditMode.ES_None
-        if _value is not None:
+
+        # if user inputs value equal to label, remove property
+        if str(_value) == self.label_to_clear_property:
+            _object.removeProperty(GeometryAbstractObject.PropPerimeter)
+        elif _value is not None:
             v = None
             try:
                 v = float(str(_value))
-            except:
+            except ValueError:
                 print "Non-numeric value found %s" % str(_value)
-            
+
             if v is not None:
                 _object.setPropertyValue(GeometryAbstractObject.PropPerimeter, v)
-                
+
         del self.perimetr_changer
-        
+
         if self.objectInfoPanel.getObject() is _object:
             self.objectInfoPanel.update()
-    
+
+    def _radius_change_callback(self, _object, _value):
+        """Callback on radius change
+        """
+        self.state = GeometryEditMode.ES_None
+
+        # if user inputs value equal to label, remove property
+        if str(_value) == self.label_to_clear_property:
+            _object.removeProperty(GeometryAbstractObject.PropRadius)
+        elif _value is not None:
+            v = None
+            try:
+                v = float(str(_value))
+            except ValueError:
+                print "Non-numeric value found %s" % str(_value)
+
+            if v is not None:
+                _object.setPropertyValue(GeometryAbstractObject.PropRadius, v)
+
+        del self.radius_changer
+
+        if self.objectInfoPanel.getObject() is _object:
+            self.objectInfoPanel.update()
+
+    def _diameter_change_callback(self, _object, _value):
+        """Callback on diameter change
+        """
+        self.state = GeometryEditMode.ES_None
+
+        # if user inputs value equal to label, remove property
+        if str(_value) == self.label_to_clear_property:
+            _object.removeProperty(GeometryAbstractObject.PropDiameter)
+        elif _value is not None:
+            v = None
+            try:
+                v = float(str(_value))
+            except ValueError:
+                print "Non-numeric value found %s" % str(_value)
+
+            if v is not None:
+                _object.setPropertyValue(GeometryAbstractObject.PropDiameter, v)
+
+        del self.diameter_changer
+
+        if self.objectInfoPanel.getObject() is _object:
+            self.objectInfoPanel.update()
+
     def _updateLineSpirits(self):
         """Updates spirit objects used in line creation mode
         """
