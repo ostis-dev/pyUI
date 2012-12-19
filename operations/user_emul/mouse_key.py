@@ -47,6 +47,9 @@ def initialize():
     kernel.registerOperation(ScEventHandlerSetMember(u"операция эмуляции нажатия(отпускания) кнопки мыши",
                                                      keynodes.ui.init_base_user_cmd,
                                                      mouse_button, []))
+    kernel.registerOperation(ScEventHandlerSetMember(u"операция эмуляции перемещения мыши в область поля без объектов",
+                                                     keynodes.ui.init_base_user_cmd,
+                                                     mouse_move_to_empty_place, []))
     kernel.registerOperation(ScEventHandlerSetMember(u"операция эмуляции нажатия(отпускания) кнопки клавиатуры",
                                                     keynodes.ui.init_base_user_cmd,
                                                     keyboard_button, []))
@@ -127,7 +130,84 @@ def mouse_move_object(_params, _segment):
     cmd.eventFinished = finish_callback
     cmds[cmd] = command
     cmd.start()
-    
+
+# function to move the cursor in empty place
+def mouse_move_to_empty_place(_params, _segment):
+    session = Kernel.session()
+
+    # getting command node
+    command = session.search_one_shot(session.sc_constraint_new(sc_core.constants.CONSTR_5_f_a_a_a_f,
+        keynodes.ui.init_base_user_cmd,
+        sc_core.pm.SC_A_CONST,
+        sc_core.pm.SC_N_CONST,
+        sc_core.pm.SC_A_CONST,
+        _params), True, 5)
+
+    if not command:
+        return
+
+    command = command[2]
+
+    # check if it's a mouse move to emty place command
+    if not sc_utils.checkIncToSets(session, command, [keynodes.ui.cmd_mouse_move_to_empty_place], sc_core.pm.SC_CONST):
+        return
+
+    # remove command from initiated set
+    sc_utils.removeFromSet(session, command, keynodes.ui.init_base_user_cmd)
+
+    # make command activated
+    sc_utils.appendIntoSet(session, _segment, command,
+        keynodes.ui.active_base_user_cmd,
+        sc_core.pm.SC_CONST | sc_core.pm.SC_POS)
+
+    window_width = render_engine._ogreViewport.getActualWidth()
+    window_height = render_engine._ogreViewport.getActualHeight()
+
+    kernel = Kernel.getSingleton()
+
+    init_pos = (window_width / 2, window_height / 2)
+
+    # check whether there is object under the mouse cursor
+    objects = kernel.getRootSheet()._getObjectsUnderMouse(True, True, init_pos)
+
+    # looking for a place without object
+    while len(objects) > 0:
+        init_pos = calculate_next_mouse_position(init_pos, window_height, window_width, 30, 30)
+        objects = kernel.getRootSheet()._getObjectsUnderMouse(True, True, init_pos)
+
+    cmd = commands.MouseMoveTo(init_pos)
+    cmd.eventFinished = finish_callback
+    cmds[cmd] = command
+    cmd.start()
+
+# function to calculate the next position of the mouse
+def calculate_next_mouse_position(current_position, height, width, stepX, stepY):
+    center = (width / 2, height / 2)
+    deltaX = current_position[0] - center[0]
+    deltaY = current_position[1] - center[1]
+    newX = current_position[0]
+    newY = current_position[1]
+
+    if deltaX == 0:
+        newX = center[0] + stepX
+    elif deltaX < 0:
+        newX = center[0] - deltaX + stepX
+    elif deltaX > 0:
+        newX = center[0] - deltaX
+
+    if newX <= 0 or newX >= width:
+        newY = current_position[1] + stepY
+
+        if deltaY < 0:
+            newY = current_position[1] - stepY
+        elif newY <= 0:
+            newY = center[1] + stepY
+        elif newY >= height:
+            newY = center[1] - stepY
+
+        newX = center[0]
+
+    return newX, newY
     
 def mouse_button(_params, _segment):
     
