@@ -28,7 +28,8 @@ Created on 02.01.2010
 @author: Denis Koronchik
 '''
 from BaseMode import BaseMode
-from TextInput import TextInput 
+from TextInput import TextInput
+from FindTextInput import FindTextInput
 import ogre.io.OIS as ois
 
 class BaseEditMode(BaseMode):
@@ -100,7 +101,10 @@ class BaseEditMode(BaseMode):
             
         if key == ois.KC_A and self._ctrl:
             self._selectAll()
-            
+
+        elif key == ois.KC_F and self._ctrl:
+            self._findObjectsByIdtf()
+
         return False
     
     def _onKeyReleased(self, _evt):
@@ -144,8 +148,25 @@ class BaseEditMode(BaseMode):
             _object.setText(_value)
             _object.setTextVisible(True)
         del self.idtf_changer
-            
-    
+
+    def _findObjectsByIdtf(self):
+        """Bind function on find objects by idtf
+        """
+        if self.state == BaseEditMode.ES_None:
+            self.idtf_changer = FindTextInput(self._find_callback)
+
+    def _find_callback(self,  _value):
+        """Callback for find by idtf finished
+        """
+        sheet = self._logic._getSheet()
+        if _value is not None:
+            sheet.findByIdtf(_value)
+            self._ctrl = False
+        else:
+           sheet.clearListOfFoundObjs()
+           sheet.unselectAll()
+    #        del self.idtf_changer
+
     ####################
     ##### Selection ####
     ####################
