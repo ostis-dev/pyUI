@@ -19,7 +19,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 """
-__all__ = ['scg',
+__all__ = ['3d', 'scg',
 			'common',
 			'geometry',
 			'text',
@@ -42,7 +42,6 @@ __all__ = ['scg',
 modules = [
 			'common.menu',
 			'panels.mainpanel',
-            'panels.userpanel',
 #			'panels.windowpanel',
 			'panels.taskpanel',
 			'scg.base.scg_init',
@@ -53,12 +52,14 @@ modules = [
 			'graph.graph_init',
 			'image.image_init',
 #			'map.map_init',
-			#'space.space_init',
+			'space.space_init',
 			'video.video_init',
 			'geometry.base.geom_init',
+            '3d.base._3d_init',
+
 #			'LUI.lui_init',
 #			'LUI_voice_output.vo_init',
             'questions.questions_init',
-			'math.math_init'
+#			'math.math_init'
             'logic.logic_init'
 ]

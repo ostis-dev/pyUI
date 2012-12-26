@@ -1,0 +1,166 @@
+<scene formatVersion="1.0.0">
+  <nodes>
+    <node name="tag_wheelrl">
+      <position x="-28.437500" y="-7.187500" z="-21.093750"/>
+      <quaternion x="0.268195" y="0.131546" z="-0.036996" w="0.953624"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="pPlane3">
+      <position x="0.000000" y="0.000000" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <entity name="pPlane3" meshFile="pPlane3.mesh"/>
+    </node>
+    <node name="pPlane2">
+      <position x="0.000000" y="0.000000" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <entity name="pPlane2" meshFile="pPlane2.mesh"/>
+    </node>
+    <node name="b_int">
+      <position x="0.000000" y="0.000000" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <entity name="b_int" meshFile="b_int.mesh"/>
+    </node>
+    <node name="Lamp">
+      <position x="4.076245" y="5.903862" z="-1.005454"/>
+      <quaternion x="-0.284166" y="0.726942" z="0.342034" w="0.523275"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <light name="Spot" type="point">
+        <colourDiffuse r="1.000000" g="1.000000" b="1.000000"/>
+        <colourSpecular r="1.000000" g="1.000000" b="1.000000"/>
+        <lightAttenuation range="5000.0" constant="1.000000" linear="0.033333" quadratic="0.000000"/>
+      </light>
+    </node>
+    <node name="Camera">
+      <position x="7.481132" y="5.343665" z="6.507640"/>
+      <quaternion x="-0.212056" y="0.386910" z="0.085793" w="0.893293"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <camera name="Camera" fov="37.849289" projectionType="perspective">
+        <clipping nearPlaneDist="0.100000" farPlaneDist="100.000000"/>
+      </camera>
+    </node>
+    <node name="tag_weapon">
+      <position x="25.156250" y="9.531250" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="tag_wheelrr">
+      <position x="-28.437500" y="-7.187500" z="21.093750"/>
+      <quaternion x="0.268195" y="-0.131546" z="0.036996" w="0.953624"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="b_steer">
+      <position x="0.000000" y="0.000000" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <entity name="b_steer" meshFile="b_steer.mesh"/>
+    </node>
+    <node name="b_hlites">
+      <position x="0.000000" y="0.000000" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <entity name="b_hlites" meshFile="b_hlites.mesh"/>
+    </node>
+    <node name="tag_plate">
+      <position x="-48.281250" y="2.656250" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.034445" w="0.999407"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="tag_wheelfl">
+      <position x="33.906250" y="-7.187500" z="-20.156250"/>
+      <quaternion x="0.268195" y="0.131546" z="-0.036996" w="0.953624"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="b_main1">
+      <position x="0.000000" y="0.000000" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <entity name="b_main1" meshFile="b_main1.mesh"/>
+    </node>
+    <node name="tag_head">
+      <position x="-7.343750" y="9.218750" z="-10.781250"/>
+      <quaternion x="0.000000" y="0.000000" z="0.270734" w="0.962654"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="b_under">
+      <position x="0.000000" y="0.000000" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <entity name="b_under" meshFile="b_under.mesh"/>
+    </node>
+    <node name="tag_smoke">
+      <position x="37.343750" y="1.406250" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.270734" z="-0.000000" w="0.962654"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="tag_rlite2">
+      <position x="-46.562500" y="3.437500" z="-13.125000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="tag_rlite1">
+      <position x="-46.562500" y="3.437500" z="13.125000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="tag_wheelfr">
+      <position x="33.906250" y="-7.187500" z="20.156250"/>
+      <quaternion x="0.268195" y="-0.131546" z="0.036996" w="0.953624"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="tag_turbo">
+      <position x="-49.375000" y="-6.406250" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.270734" z="-0.000000" w="0.962654"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="tag_blite2">
+      <position x="-44.843750" y="1.875000" z="-17.968750"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="tag_blite1">
+      <position x="-44.843750" y="1.875000" z="17.812500"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="tag_hlite1">
+      <position x="50.468750" y="-4.062500" z="-14.843750"/>
+      <quaternion x="0.000000" y="0.270734" z="-0.000000" w="0.962654"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="tag_hlite2">
+      <position x="50.468750" y="-4.062500" z="14.843750"/>
+      <quaternion x="0.000000" y="0.270734" z="-0.000000" w="0.962654"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+    </node>
+    <node name="b_main">
+      <position x="0.000000" y="0.000000" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <entity name="b_main" meshFile="b_main.mesh"/>
+    </node>
+    <node name="b_tlites">
+      <position x="0.000000" y="0.000000" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <entity name="b_tlites" meshFile="b_tlites.mesh"/>
+    </node>
+    <node name="b_glass">
+      <position x="0.000000" y="0.000000" z="-0.000000"/>
+      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <entity name="b_glass" meshFile="b_glass.mesh"/>
+    </node>
+  </nodes>
+  <externals>
+    <item type="material">
+      <file name="Scene.material"/>
+    </item>
+  </externals>
+  <environment>
+    <colourAmbient r="0.000000" g="0.000000" b="0.000000"/>
+    <colourBackground r="0.056563" g="0.220815" b="0.400000"/>
+  </environment>
+</scene>
