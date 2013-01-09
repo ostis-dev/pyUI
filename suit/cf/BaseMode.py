@@ -154,3 +154,9 @@ class BaseMode:
         @type _key: ois.KeyCode  
         """
         self.key_release_bindings.pop(_key)
+    def _cmdInput(self):
+        self.cmd_starter = CommandInput(self._cmd_callback)
+    def _cmdDestroy(self):
+        self.cmd_starter.destroyWidget()
+    def _cmd_callback(self, _value):
+        None
