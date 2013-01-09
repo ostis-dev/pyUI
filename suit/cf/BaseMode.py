@@ -29,7 +29,7 @@ Created on 25.12.2009
 '''
 
 import ogre.io.OIS as ois
-
+from CommandInput import CommandInput
 
 class BaseMode:
     """Base class for modes
@@ -53,7 +53,8 @@ class BaseMode:
         # key bindings
         self.key_press_bindings = {}
         self.key_release_bindings = {}
-        
+        self.bindKeyPress(ois.KC_F7,self._cmdInput)
+        self.bindKeyPress(ois.KC_F8,self._cmdDestroy)        
     def __del__(self):
         print "__del__ in %s" % str(self)
     
