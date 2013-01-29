@@ -92,33 +92,3 @@ class GraphEditor(BaseModeLogic):
         self._viewer._onRootChanged(_isRoot)
         
         
-    def createVertex(self, _pos):
-        """Creates vertex based on mouse position
-        @param _pos: mouse coordinates
-        @type _pos: tuple 
-        
-        @return: created graph vertex object
-        @rtype: GraphPoint
-        """
-        vertex_obj = gobjects.GraphVertex()
-        vertex_obj.setPosition(render_engine.pos2dTo3dIsoPos(_pos))
-        vertex_obj.setState(Object.OS_Normal)
-        
-        return vertex_obj
-    
-    def createLink(self, _beg, _end):
-        """Creates link
-        @param _beg: begin vertex object
-        @type _beg: GraphVertex
-        @param _end: end vertex object
-        @type _end: GraphVertex
-        
-        @return: created graph link object
-        @rtype: GraphLink 
-        """
-        link_obj = gobjects.GraphLink()
-        link_obj.setBegin(_beg)
-        link_obj.setEnd(_end)
-        link_obj.setState(Object.OS_Normal)
-        
-        return link_obj

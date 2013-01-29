@@ -31,12 +31,18 @@ Modified on 8.04.2010
 by Maxim Kaskevich
 '''
 
+import suit.core.render.engine as render_engine
 from suit.core.kernel import Kernel 
 from suit.cf import BaseModeLogic
+
 from suit.core.objects import BaseLogic
+from suit.core.objects import Object
+
 import ogre.io.OIS as ois
 import ogre.renderer.OGRE as ogre
+
 import graph_env
+import graph_objects as gobjects
 
 def initialize():
     """Initialize module function
@@ -76,13 +82,58 @@ class GraphViewer(BaseModeLogic):
         BaseModeLogic._setSheet(self, _sheet)
         
         _sheet.eventRootChanged = self._onRootChanged
+        _sheet.eventContentUpdate = self._onContentUpdate
+        
+        import suit.core.layout.LayoutGroupForceDirected as layout
+        _sheet.setLayoutGroup(layout.LayoutGroupForceSimple())
         
     def _onRootChanged(self, _isRoot):
         """Notification message on sheet root changed
         """
         if _isRoot:
-            sheet = self._getSheet()
+            render_engine.SceneManager.setBackMaterial("Back/Compare")
         else:
-            sheet = self._getSheet()
+            render_engine.SceneManager.setDefaultBackMaterial()  
             
         self.is_root = _isRoot
+        
+    def _onContentUpdate(self):
+        
+        import suit.core.keynodes as keynodes
+        import suit.core.objects as objects
+        sheet = self._getSheet()
+        
+        sheet.content_type = objects.ObjectSheet.CT_String
+        sheet.content_data = str("")
+        sheet.content_format = keynodes.ui.format_graph
+        
+    def createVertex(self, _pos):
+        """Creates vertex based on mouse position
+        @param _pos: mouse coordinates
+        @type _pos: tuple 
+        
+        @return: created graph vertex object
+        @rtype: GraphPoint
+        """
+        vertex_obj = gobjects.GraphVertex()
+        vertex_obj.setPosition(render_engine.pos2dTo3dIsoPos(_pos))
+        vertex_obj.setState(Object.OS_Normal)
+        
+        return vertex_obj
+    
+    def createLink(self, _beg, _end):
+        """Creates link
+        @param _beg: begin vertex object
+        @type _beg: GraphVertex
+        @param _end: end vertex object
+        @type _end: GraphVertex
+        
+        @return: created graph link object
+        @rtype: GraphLink 
+        """
+        link_obj = gobjects.GraphLink()
+        link_obj.setBegin(_beg)
+        link_obj.setEnd(_end)
+        link_obj.setState(Object.OS_Normal)
+        
+        return link_obj

@@ -41,8 +41,6 @@ res_mesh_dir        =   os.path.join(resource_dir, 'meshes')
 res_mat_dir         =   os.path.join(resource_dir, 'materials')
 res_mat_scripts_dir =   os.path.join(res_mat_dir, 'scripts')
 
-print res_mesh_dir
-
 # list of resource directories
 resource_dirs = [res_mesh_dir, res_mat_dir, res_mat_scripts_dir]
 
@@ -55,6 +53,10 @@ material_grid = "graph_back_grid"
 
 material_state_pat = "graph_%s"
 
+segment_path = u"/seb/graph"
+
 # segment for searching
-search_segments     =   ["/seb/graph"]
+search_segments     =   [segment_path]
+
+
 

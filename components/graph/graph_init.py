@@ -34,9 +34,13 @@ import os
 import graph_viewer
 import graph_editor
 import graph_env
-#import graph2sc
+import graph2sc
+import sc2graph
+import graph_operations
 
 
+trans_graph2sc_factory = None
+trans_sc2graph_factory = None
 
 def initialize():
         
@@ -47,16 +51,22 @@ def initialize():
     global view_factory
     global edit_factory
     global trans_graph2sc_factory
+    global trans_sc2graph_factory
     
     # register viewers and editors
     kernel = core.Kernel.getSingleton()
     # registering components
     view_factory = Factory(viewer_creator)
     edit_factory = Factory(editor_creator)
-#    trans_graph2sc_factory = Factory(transGraph2Sc_creator)
+    trans_graph2sc_factory = Factory(transGraph2Sc_creator)
+    trans_sc2graph_factory = Factory(transSc2Graph_creator)
+
     kernel.registerViewerFactory(view_factory, [keyn.ui.format_graph])
     kernel.registerEditorFactory(edit_factory, [keyn.ui.format_graph])
-#    kernel.registerTranslatorFactory(trans_graph2sc_factory, [keyn.ui.format_graph], [keyn.ui.format_sc])
+    kernel.registerTranslatorFactory(trans_graph2sc_factory, [keyn.ui.format_graph], [keyn.ui.format_sc])
+    kernel.registerTranslatorFactory(trans_sc2graph_factory, [keyn.ui.format_sc], [keyn.ui.format_graph])
+
+    graph_operations.initialize()
     
 def shutdown():
     import suit.core.kernel as core    
@@ -64,14 +74,18 @@ def shutdown():
     
     global view_factory
     global edit_factory
-#    global trans_graph2sc_factory
+    global trans_graph2sc_factory
+    global trans_sc2graph_factory
     
     #TODO:    make language unloading
     
     # unregister components
     kernel.unregisterViewerFactory(view_factory)
     kernel.unregisterEditorFactory(edit_factory)
-#    kernel.unregisterTranslatorFactory(trans_graph2sc_factory)
+    kernel.unregisterTranslatorFactory(trans_graph2sc_factory)
+    kernel.unregisterTranslatorFactory(trans_sc2graph_factory)
+
+    graph_operations.shutdown()
   
 
 
@@ -100,5 +114,8 @@ def viewer_creator():
 def editor_creator():
     return graph_editor.GraphEditor()
 
-#def transGraph2Sc_creator():
-#    return graph2sc.TranslatorGraph2Sc()
+def transGraph2Sc_creator():
+    return graph2sc.TranslatorGraph2Sc()
+
+def transSc2Graph_creator():
+    return sc2graph.TranslatorSc2Graph()

@@ -36,7 +36,7 @@ import suit.core.render.mygui
 
 from suit.cf import BaseEditMode
 from suit.cf import BaseViewMode
-from suit.cf import IdtfChanger
+from suit.cf import TextInput
 from suit.core.objects import Object
 from graph_objects import GraphVertex
 from graph_objects import GraphLink
@@ -93,11 +93,9 @@ class GraphEditMode(BaseEditMode):
         if (obj is self.highlighted_obj):   return
         
         # change highlight
-        if self.highlighted_obj:
-            if self.highlighted_obj._getSelected():
-                self.highlighted_obj.setState(Object.OS_Selected)
-            else:
-                self.highlighted_obj.setState(Object.OS_Normal)
+        if self.highlighted_obj is not None:
+            self.highlighted_obj.resetState()
+
         self.highlighted_obj = obj
         if self.highlighted_obj:    self.highlighted_obj.setState(Object.OS_Highlighted)
     

@@ -38,7 +38,10 @@ import graph_env
 
 state_post = {suit.core.objects.Object.OS_Normal: 'Normal',
               suit.core.objects.Object.OS_Selected: 'Selected',
-              suit.core.objects.Object.OS_Highlighted: 'Highlighted'}
+              suit.core.objects.Object.OS_Highlighted: 'Highlighted',
+              suit.core.objects.Object.OS_WasInMemory: 'WasInMemory',
+              suit.core.objects.Object.OS_NewInMemory: 'NewInMemory',
+              suit.core.objects.Object.OS_Merged: 'Merged'}  
 
 class GraphVertex(suit.core.objects.ObjectDepth):
     """Object that represents graph point
@@ -74,10 +77,6 @@ class GraphVertex(suit.core.objects.ObjectDepth):
         if self.needStateUpdate:
             self.needStateUpdate = False
             self.entity.setMaterialName(self._getMaterialName())
-#            if state_post[self.getState()] == "Selected":
-#                self.sceneNode.showBoundingBox(True)
-#            else:
-#                self.sceneNode.showBoundingBox(False)
 
         suit.core.objects.ObjectDepth._updateView(self)
         
@@ -147,7 +146,7 @@ class GraphLink(suit.core.objects.ObjectLine):
             self.sceneNode.setScale(ogre.Vector3(self.radius * 2, l, self.radius * 2))
             
                 
-            # update identificator position
+            # update identifier position
             if self.begin_pos and self.end_pos and self.text_obj:
                 self.text_obj.setPosition((self.begin_pos + self.end_pos) / 2.0 + self.radius * 1.2 * ogre.Vector3(1.0, 1.0, 0.0))
                 self.needUpdate = False
@@ -168,7 +167,7 @@ class GraphLink(suit.core.objects.ObjectLine):
         suit.core.objects.ObjectDepth._updateView(self)
      
     def get_idtf(self):
-        """Returns object identificator.
+        """Returns object identifier.
         It parse structures like: Point(A), Point A, pA and return A
         """
         #FIXME:    add parsing for Point(A), Point A and etc. structures
