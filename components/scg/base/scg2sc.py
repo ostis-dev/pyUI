@@ -71,7 +71,7 @@ def translate_object(_segment, _object, _type, _params):
         created = True
     else:
         # encode idtf to cp1251
-        idtf = sc_utils.utf8ToCp1251(str(idtf))
+        idtf = sc_utils.utf8ToCp1251(str(idtf.encode('utf-8')))
 
         # check if idtf if full uri
         isUri = idtf.startswith('/')
