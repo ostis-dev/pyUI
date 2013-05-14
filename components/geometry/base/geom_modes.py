@@ -295,12 +295,40 @@ class GeometryEditMode(BaseEditMode):
         if BaseEditMode._onKeyPressed(self, _evt):  return True
         
         key = _evt.key
-        
+
         if key == ois.KC_C:
             _selected = self._logic._getSheet().getSelected()
+            if len(_selected) == 1 and isinstance(_selected[0], GeometryTriangle):
+
+                obj = _selected[0]
+                circlePoints = obj._calculateCirclePoints()
+
+                CoordinateC = circlePoints[0]
+                center = self._logic.createPoint(CoordinateC)
+                sheet = self._logic._getSheet()
+                sheet.addChild(center)
+                center._updateView()
+
+                CoordinateT = circlePoints[1]
+
+                sideObjects = self._logic._getSheet()._getObjectsUnderMouse(True, True, CoordinateT)
+                line = comutils._getFirstObjectTypeFromList(sideObjects, [GeometryLineSection])
+
+                tangent = self._logic.createPoint(CoordinateT)
+                sheet = self._logic._getSheet()
+                sheet.addChild(tangent)
+
+                tangent._updateView()
+
+                _selected = center, tangent
+
+                obj._setCenterPoints(_selected)
+                obj._setIsCircleDrawed(True)
+
             self.active_object = self._logic.createCircle()
             if self.active_object.makeBasedOnObjects(_selected):
                 self._logic._getSheet().addChild(self.active_object)
+
             else:
                 self.active_object.delete()
             self.active_object = None

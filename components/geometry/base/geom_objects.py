@@ -948,7 +948,8 @@ class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         self.__manualObject = None  # manual object to store and render geometry
         self.pts = []        # triangle vertex points
         self.sides = []         # triangle sides
-            
+        self.isCircleDrawed = False
+        self.circlePoints = []
     def __del__(self):
         suit.core.objects.ObjectDepth.__del__(self)
         GeometryAbstractObject.__del__(self)
@@ -1013,6 +1014,16 @@ class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         self.__manualObject.triangle(2, 1, 0)
         
         self.__manualObject.end()
+
+        # update circle points position
+        if self.isCircleDrawed:
+            circlePointsCoordinats = self._calculateCirclePoints()
+            circle = self.circlePoints[0]
+            tangent = self.circlePoints[1]
+            circle.setPosition(render_engine.pos2dTo3dIsoPos(circlePointsCoordinats[0]))
+            tangent.setPosition(render_engine.pos2dTo3dIsoPos(circlePointsCoordinats[1]))
+        else:
+            self.isCircleDrawed = False
         
         suit.core.objects.ObjectDepth._update(self, _timeSinceLastFrame)
         
@@ -1146,8 +1157,59 @@ class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
             
             return u"%s(%s;%s;%s)" % (u'Треугк', idtf1, idtf2, idtf3)
         else:
-            return None 
-        
+            return None
+
+    def _calculateCirclePoints(self):
+        """Calculate points for incircle and draw it on objects sheet
+        """
+
+        x1 = render_engine.pos3dTo2dWindow(self.pts[0].getPosition())[0]
+        y1 = render_engine.pos3dTo2dWindow(self.pts[0].getPosition())[1]
+        x2 = render_engine.pos3dTo2dWindow(self.pts[1].getPosition())[0]
+        y2 = render_engine.pos3dTo2dWindow(self.pts[1].getPosition())[1]
+        x3 = render_engine.pos3dTo2dWindow(self.pts[2].getPosition())[0]
+        y3 = render_engine.pos3dTo2dWindow(self.pts[2].getPosition())[1]
+
+
+        p13 = math.sqrt(math.pow(x1 - x3, 2) + math.pow(y1 - y3, 2))
+        p12 = math.sqrt(math.pow(x1 - x2, 2) + math.pow(y1 - y2, 2))
+        p32 = math.sqrt(math.pow(x3 - x2, 2) + math.pow(y3 - y2, 2))
+
+        cx = (p32 * x1 + p13 * x2 + p12 * x3) / (p12 + p13 + p32)
+        cy = (p32 * y1 + p13 * y2 + p12 * y3) / (p12 + p13 + p32)
+
+        halfPerimeter = (p12 + p13 + p32) / 2
+
+        tx = (x1 - x3) * (halfPerimeter - p12) / p13 + x3
+        ty = (y1 - y3) * (halfPerimeter - p12) / p13 + y3
+
+        # create center point
+        CoordinateC = cx, cy
+
+        # create tangent point
+        CoordinateT = tx, ty
+
+        return [CoordinateC, CoordinateT]
+
+    def _setCenterPoints(self, circlePoints):
+        """set list of incircle points
+        """
+        self.circlePoints = circlePoints
+
+    def _getCenterPoints(self):
+        """get list of incircle points
+        """
+        return self.circlePoints
+
+    def _setIsCircleDrawed(self, isCircleDrawed):
+        """set flag indicating if incircle drawed
+        """
+        self.isCircleDrawed = isCircleDrawed
+
+    def _getIsCircleDrawed(self):
+        """get flag indicating if incircle drawed
+        """
+        return self.isCircleDrawed
   
 class GeometryQuadrangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
     
