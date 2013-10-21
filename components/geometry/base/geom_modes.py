@@ -35,6 +35,7 @@ from suit.cf import BaseViewMode
 from suit.cf.TextInput import TextInput
 from suit.core.objects import Object
 from geom_objects import GeometryPoint
+from geom_objects import GeometryAngle
 from geom_objects import GeometryLineSection
 from geom_objects import GeometryTriangle
 from geom_objects import GeometryQuadrangle
@@ -389,7 +390,34 @@ class GeometryEditMode(BaseEditMode):
                     self.state = GeometryEditMode.ES_DiameterChange
                     self.diameter_changer = TextInput(obj, self._diameter_change_callback, obj.getPropertyValue(GeometryAbstractObject.PropDiameter))
 
+        if key == ois.KC_G:
+            selected = self._logic._getSheet().getSelected()
+            if len(selected) == 1:
+                obj = selected[0]
+                if isinstance(obj, (GeometryAngle)):
+                    self.state = GeometryEditMode.ES_LengthChange
+                    self.length_changer = TextInput(obj, self.angle_size_change_callback,
+                        obj.getPropertyValue(GeometryAngle.AngleSize))
+
         return False
+
+    def angle_size_change_callback(self, _object, _value):
+        self.state = GeometryEditMode.ES_None
+        if _value is not None:
+            v = None
+            try:
+                v = float(str(_value))
+
+            except ValueError:
+                print "Non-numeric value found %s" % str(_value)
+
+            if v is not None:
+                _object.setPropertyValue(GeometryAngle.AngleSize, v)
+
+            self.length_changer.__del__()
+
+            if self.objectInfoPanel.getObject() is _object:
+                self.objectInfoPanel.update()
 
     def _onKeyReleased(self, _evt):
         """Event key released

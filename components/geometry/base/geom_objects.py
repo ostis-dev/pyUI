@@ -1144,7 +1144,7 @@ class GeometryTriangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
             if idtf1 is None or idtf2 is None or idtf3 is None:
                 return None
             
-            return u"%s(%s;%s;%s)" % (u'Треугк', idtf1, idtf2, idtf3)
+            return u"%s(%s;%s;%s)\n" % (u'Треугк', idtf1, idtf2, idtf3)
         else:
             return None 
         
@@ -1398,6 +1398,9 @@ class GeometryQuadrangle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
 class GeometryAngle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
     """Class that realize geometry angle
     """
+
+    AngleSize = u'Величина угла'
+
     def __init__(self):
         suit.core.objects.ObjectDepth.__init__(self)
         GeometryAbstractObject.__init__(self)
@@ -1410,7 +1413,9 @@ class GeometryAngle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         self.width = 0.12
         self.radius = 1.2
         self.sectors = 20
-        
+
+        self.angleSize = None
+
         self._equalObject = None
         
         # mesh
@@ -1730,9 +1735,9 @@ class GeometryAngle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
     def build_text_idtf(self):
         """Builds text identifier for an object
         """        
-        idtf = self.get_idtf()
-        if idtf is None:
-            return None
+#        idtf = self.get_idtf()
+#        if idtf is None:
+#            return None
         
         idtf1 = self.point1.build_text_idtf()
         idtfC = self.pointC.build_text_idtf()
@@ -1740,8 +1745,32 @@ class GeometryAngle(suit.core.objects.ObjectDepth, GeometryAbstractObject):
         
         if idtf1 is None or idtfC is None or idtf2 is None:
             return None
-        
-        return "%s(%s;%s;%s)" % (u'Угол', idtf1, idtfC, idtf2)
+
+
+        return "%s(%s;%s;%s)\n" % (u'Угол', idtf1, idtfC, idtf2)
+
+    def getAngleSize(self):
+        return str(self.angleSize)
+
+    def setAngleSize(self, _angleSize):
+        self.angleSize = _angleSize
+
+    def build_angle_size_text_idtf(self):
+        idtf = self.getAngleSize()
+        return "%s%s" % (u'Размер Угла', idtf)
+
+    def checkAnglesEquivalence(self, _angle):
+        if _angle is not None and self.angleSize is not None and _angle.angleSize is not None:
+            angleSize = float(self.getAngleSize())
+            angleSize2 = float(_angle.getAngleSize())
+            if angleSize == angleSize2:
+                return True
+        False
+
+    def setPropertyValue(self, _name, _value):
+        if _name == self.AngleSize:
+            self.setAngleSize(_value)
+        GeometryAbstractObject.setPropertyValue(self, _name, _value)
      
 class GeometryUnion(suit.core.objects.ObjectDepth):
     """Object that represents objects union.
