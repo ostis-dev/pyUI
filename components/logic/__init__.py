@@ -20,4 +20,4 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 """
 
-__all__ = [ 'logic_init','logic2sc','logic_keynodes','logic_editor','logic_viewer']
+__all__ = [ 'logic_init','logic2sc','logic_keynodes','logic_editor','logic_viewer','sc2logic']
