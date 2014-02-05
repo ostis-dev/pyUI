@@ -243,9 +243,14 @@ class Kernel(Singleton):
                                                             mygui.Align(),
                                                             "Popup")
         self._exit_button.subscribeEventMouseButtonClick(self, "_onExitButton")
-                
-        render_engine._start_rendering()
-    
+        
+	# creates explain panel        
+        explain = Explain()
+        explainThread = threading.Thread(target=explain.slideExplains)
+        explainThread.start()
+
+        render_engine._start_rendering()        
+
     
     def initSCMemory(self):
         """Initialization of sc memory
@@ -1587,3 +1592,87 @@ class Kernel(Singleton):
         self.mainWindow._needLocalizationUpdate()
         for obj in self.__overlayObjects:
             obj._needLocalizationUpdate()
+
+class Explain():
+    def __init__(self):
+        import render.mygui as mygui
+        self.explainPanel = render_engine.Gui.createWidgetT("Window", "Panel",
+                                          mygui.IntCoord(0, 0, 200, 200), mygui.Align(),
+                                          "Info", "")
+        self.explains = self.getExplains()
+        self.curExplain = 0;
+        self.text = self.explainPanel.createWidgetT("StaticText",
+                                       "ToolTipText",
+                                       mygui.IntCoord(12, 12, 0, 0),
+                                       mygui.Align())
+
+        self.text.setCaption(self.explains[0])
+        tsize = self.text.getTextSize()
+        w = tsize.width + 24
+        h = tsize.height + 24
+        self.explainPanel.setSize(w + 24, h + 24)
+        self.text.setSize(w, h)
+        x = 20
+        y = (render_engine.Window.height - 120)
+        self.explainPanel.setPosition(x, y)
+        self.explainPanel.setAlpha(1.0)
+        exiteExplain = self.explainPanel.createWidgetT("Button",
+                             "MainPanel_OutputWindowDelButton",
+                             mygui.IntCoord(0, 5, 20, 20),
+                             mygui.Align(),
+                             "")
+        exiteExplain.subscribeEventMouseButtonClick(self, "_onExitExplain")
+        self.explainPanel.subscribeEventMouseDrag(self, "_eventMouseDragPanel")
+        self.explainPanel.subscribeEventMouseButtonPressed(self, "_eventMouseButtonPressedPanel")
+
+    def getExplains(self):
+        import suit.core.sc_utils as sc_utils
+        import sc_core.pm as sc
+        session = Kernel.session()
+        result = []
+        attr = sc_utils.getElementByIdtf("next*", ["/seb/test"])
+        el = sc_utils.getElementByIdtf("first", ["/seb/test"])
+        result.append(sc_utils.cp1251ToUtf8(session.get_content_str(el)))
+        cur = sc_utils.searchBinPairsAttrFromNode(session, el, attr, sc.SC_POS)
+        while cur:
+            el = cur[0]
+            result.append(sc_utils.cp1251ToUtf8(session.get_content_str(el)))
+            cur = sc_utils.searchBinPairsAttrFromNode(session, el, attr, sc.SC_POS)
+
+        return result
+
+    def slideExplains(self):
+        time.sleep(5.0)
+        self.explainPanel.setVisible(False)
+        time.sleep(2.0)
+        while self.curExplain < len(self.explains)-1 :
+            self.explainPanel.setVisible(True)
+            self.curExplain += 1
+            self.text.setCaption(self.explains[self.curExplain])
+            tsize = self.text.getTextSize()
+            w = tsize.width + 24
+            h = tsize.height + 24
+            self.explainPanel.setSize(w + 24, h + 24)
+            self.text.setSize(w, h)
+            x = 20
+            y = (render_engine.Window.height - 120)
+            self.explainPanel.setPosition(x, y)
+            self.explainPanel.setAlpha(1.0)
+            self.slideExplains()
+
+
+    def _eventMouseDragPanel(self, _sender, _left, _top):
+        dx = _left - self.x
+        dy = _top - self.y
+        pos = self.explainPanel.getPosition()
+        self.explainPanel.setPosition(pos.left + dx, pos.top + dy)
+
+    def _eventMouseButtonPressedPanel(self, _sender, _left, _top, _id):
+        """Event on identifier pressed
+        """
+        self.x = _left
+        self.y = _top
+
+    def _onExitExplain(self, widget):
+        render_engine.Gui.destroyWidget(self.explainPanel)
+
