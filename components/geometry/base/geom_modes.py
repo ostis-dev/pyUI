@@ -359,11 +359,29 @@ class GeometryEditMode(BaseEditMode):
 
         if key == ois.KC_S:
             selected = self._logic._getSheet().getSelected()
+            obj = selected[0]
             if len(selected) == 1:
                 obj = selected[0]
                 if isinstance(obj, (GeometryCircle, GeometryTriangle, GeometryQuadrangle)):
                     self.state = GeometryEditMode.ES_SquareChange
                     self.square_changer = TextInput(obj, self._square_change_callback, obj.getPropertyValue(GeometryAbstractObject.PropSquare))
+            if isinstance(obj, (GeometryCircle, GeometryPoint)):
+                pointAObject = selected[1]
+                pointBObject = selected[2]
+                pointCObject = selected[3]
+                
+                lineAB = self._logic.createLineSection(pointAObject, pointBObject)
+                sheet = self._logic._getSheet()
+                sheet.addChild(lineAB)
+                
+                lineBC = self._logic.createLineSection(pointBObject, pointCObject)
+                sheet = self._logic._getSheet()
+                sheet.addChild(lineBC)
+                
+                lineAC = self._logic.createLineSection(pointAObject, pointCObject)
+                sheet = self._logic._getSheet()
+                sheet.addChild(lineAC)
+                
                     
         if key == ois.KC_P:
             selected = self._logic._getSheet().getSelected()
