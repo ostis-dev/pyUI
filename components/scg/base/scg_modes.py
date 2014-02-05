@@ -177,6 +177,10 @@ class SCgEditMode(BaseEditMode):
 #            button.eventPush = self._onToolBarButtonPush
 #            
 #        self.toolbar.setButtonSize(38)
+
+        #contour points
+        self.contour_points = []
+        self.contour_lines = []
             
         
     def __del__(self):
@@ -397,12 +401,20 @@ class SCgEditMode(BaseEditMode):
         # * if pressed left button and there are no objects under mouse, then
         # creating new scg-node            
         elif _id == ois.MB_Right:
+            #check if modifire key pressed
+            is_modifire_down = render_engine._oisKeyboard.isModifierDown(render_engine._oisKeyboard.Modifier.Shift)
             # check objects under mouse
             if self.state is SCgEditMode.ES_None:
                 if len(mobjects) is 0:
-                    self._logic._createNode((mstate.X.abs, mstate.Y.abs))
-                    self.state = SCgEditMode.ES_None
-                    return True
+                    #check if contour draw mode
+                    if is_modifire_down:
+                        self.contour_points.append(render_engine.pos2dTo3dIsoPos([mstate.X.abs, mstate.Y.abs]))
+                        self.state = SCgEditMode.ES_ContourCreate
+
+                    else:
+                        self._logic._createNode((mstate.X.abs, mstate.Y.abs))
+                        self.state = SCgEditMode.ES_None
+                        return True
                 else:
                     if self.line_mode_beg is None:
                         self.state = SCgEditMode.ES_LineCreate
@@ -417,7 +429,26 @@ class SCgEditMode(BaseEditMode):
                         self._updateLineCreationObjects()
                         
                         return True
-                    
+            # contour creation state
+            elif self.state is SCgEditMode.ES_ContourCreate:
+                sheet=self._logic._getSheet()
+                self.contour_points.append(render_engine.pos2dTo3dIsoPos(((mstate.X.abs, mstate.Y.abs))))
+                self.contour_lines.append(self._logic._createLine(self.contour_points[-1],self.contour_points[-2]))
+                if  is_modifire_down and len(self.contour_points)>2:
+                    contour = self._logic._createContour(self.contour_points)
+                    for line in self.contour_lines:
+                        render_engine._ogreSceneManager.getRootSceneNode().removeChild(line)
+                    self.contour_lines = []
+                    sheet.removeChild(contour)
+                    childs = sheet.getChilds()
+                    for i in range(len(childs)):
+                        current = childs[0]
+                        if scg_utils.checkOnPointInContour(current.position,self.contour_points):
+                            sheet.removeChild(current)
+                            render_engine.SceneNode.addChild(contour.sceneNode, current.sceneNode)
+                    self._logic._getSheet().addChild(contour)
+                    self.contour_points = []
+                    self.state = SCgEditMode.ES_None
             # line creation state
             elif (self.state is SCgEditMode.ES_LineCreate) and (self.line_mode_beg is not None):
                 # check if is there 

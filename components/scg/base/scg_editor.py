@@ -177,7 +177,28 @@ class SCgEditor(BaseModeLogic):
         sheet.addChild(contour)
         contour.setPoints(points)
         contour.setState(objects.Object.OS_Normal)
+        return contour
 
-    
-    
+    def _createLine(self,begin, end):
+        """Create line
+        """
+        import random
+        line = render_engine._ogreSceneManager.createManualObject("temp_"+str(random.random()))
+        myManualObjectNode = render_engine._ogreSceneManager.getRootSceneNode().createChildSceneNode("temp_node"+str(random.random()))
+        line.setDynamic(True)
+
+        manualObjectMaterial = ogre.MaterialManager.getSingleton().create("temp_material","General")
+        manualObjectMaterial.setReceiveShadows(False);
+        manualObjectMaterial.getTechnique(0).setLightingEnabled(True);
+        manualObjectMaterial.getTechnique(0).getPass(0).setDiffuse(0,0,1,0);
+        manualObjectMaterial.getTechnique(0).getPass(0).setAmbient(0,0,1);
+        manualObjectMaterial.getTechnique(0).getPass(0).setSelfIllumination(0,0,1);
+
+        line.begin("temp_material", ogre.RenderOperation.OT_LINE_LIST)
+        line.position(begin)
+        line.position(end)
+        line.end()
+        myManualObjectNode.attachObject(line)
+
+        return myManualObjectNode
     

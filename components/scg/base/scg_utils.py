@@ -98,3 +98,38 @@ def createWindowFromNode(_node, _format, _is_edit):
     
     
     return sheet
+
+def checkOnPointInContour(point, polygon):
+    if len(polygon) < 3:
+        return False
+    q_patt = ((0,1), (3,2));
+
+    import ogre.renderer.OGRE as ogre
+
+    pred_pt = ogre.Vector3(polygon[-1].x, polygon[-1].y, 0)
+    pred_pt.x -= point.x
+    pred_pt.y -= point.y
+
+    pred_q=q_patt[pred_pt.y<0][pred_pt.x<0];
+
+    w = 0
+
+    for cur_pt in polygon:
+        cur_pt = ogre.Vector3(cur_pt.x, cur_pt.y, 0)
+        cur_pt.x -= point.x
+        cur_pt.y -= point.y
+
+        q=q_patt[cur_pt.y<0][cur_pt.x<0];
+
+        if q-pred_q == -3:
+            w+=1
+        if q-pred_q == 3:
+            w-=1
+        if q-pred_q == -2:
+            if pred_pt[0]*cur_pt[1]>=pred_pt[1]*cur_pt[0]: w+=1
+        if q-pred_q == 2:
+            if not (pred_pt[0]*cur_pt[1]>=pred_pt[1]*cur_pt[0]): w-=1
+
+        pred_pt = cur_pt
+        pred_q = q
+    return w != 0
