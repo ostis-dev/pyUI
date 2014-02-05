@@ -849,13 +849,25 @@ def SceneManager_createSceneNode(_name = None):
     """Creates ogre scene node
     @param _name: scene node name (if it will be None, then will be used default name)
     @type _name:    str
-    
+
     @return: returns created scene node
-    """   
+    """
     if _name:   return _ogreSceneManager.createSceneNode(_name)
-    
+
     return _ogreSceneManager.createSceneNode()
 
+
+def SceneManager_createLight(_name):
+    return _ogreSceneManager.createLight(_name)
+
+def SceneManager_createCamera(_name):
+    return _ogreSceneManager.createCamera(_name)
+
+def SceneManager_destroyLight(_light):
+    _ogreSceneManager.destroyLight(_light)
+
+def SceneManager_destroyCamera(_camera):
+    _ogreSceneManager.destroyCamera(_camera)
 
 def SceneManager_destroyEntity(_entity):
     """Destroys entity
@@ -994,11 +1006,15 @@ class SceneManager:
     createEntity = staticmethod(SceneManager_createEntity)
     createManualObject = staticmethod(SceneManager_createManualObject)
     createSceneNode = staticmethod(SceneManager_createSceneNode)
+    createLight = staticmethod(SceneManager_createLight)
+    createCamera = staticmethod(SceneManager_createCamera)
     
     destroyEntity = staticmethod(SceneManager_destroyEntity)
     destroyManualObject = staticmethod(SceneManager_destroyManualObject)
     destroySceneNode = staticmethod(SceneManager_destroySceneNode)
-    
+    destroyLight = staticmethod(SceneManager_destroyLight)
+    destroyCamera = staticmethod(SceneManager_destroyCamera)
+
     resetScale = staticmethod(SceneManager_resetScale)
     setScale = staticmethod(SceneManager_setScale)
     setBackMaterial = staticmethod(SceneManager_setBackMaterial)
