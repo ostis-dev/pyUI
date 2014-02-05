@@ -28,7 +28,8 @@ Created on 02.01.2010
 @author: Denis Koronchik
 '''
 from BaseMode import BaseMode
-from TextInput import TextInput 
+from TextInput import TextInput
+from FindTextInput import FindTextInput
 import ogre.io.OIS as ois
 
 class BaseEditMode(BaseMode):
@@ -100,7 +101,10 @@ class BaseEditMode(BaseMode):
             
         if key == ois.KC_A and self._ctrl:
             self._selectAll()
-            
+
+        elif key == ois.KC_F and self._ctrl:
+            self._findObjectsByIdtf()
+
         return False
     
     def _onKeyReleased(self, _evt):
@@ -113,6 +117,7 @@ class BaseEditMode(BaseMode):
             self._shift = False
         elif key == ois.KC_LCONTROL:
             self._ctrl = False
+
         
         return False
     
@@ -144,8 +149,34 @@ class BaseEditMode(BaseMode):
             _object.setText(_value)
             _object.setTextVisible(True)
         del self.idtf_changer
-            
-    
+
+    def _findObjectsByIdtf(self):
+        """Bind function on find objects by idtf
+        """
+        self._ctrl = False
+        self.listOfFoundObjs = []
+        if self.state == BaseEditMode.ES_None:
+            self.idtf_changer = FindTextInput(self._find_callback, self.listOfFoundObjs )
+
+    def _find_callback(self,  _value, listOfFoundObjs):
+        """Callback for find by idtf finished
+        """
+        sheet = self._logic._getSheet()
+        sheet.unselectAll()
+        if _value is not None and _value != '':
+            for obj in sheet.getAllChilds():
+                if obj.getText() is not None and _value in obj.getText()\
+                and not obj._getScAddr() and obj not in listOfFoundObjs:
+                    listOfFoundObjs.append(obj)
+                    self._selectObject(obj)
+                    break
+            else:
+                if len(listOfFoundObjs):
+                    del listOfFoundObjs[:]
+                    self._find_callback(_value, listOfFoundObjs)
+        else:
+            sheet.unselectAll()
+
     ####################
     ##### Selection ####
     ####################
@@ -173,7 +204,7 @@ class BaseEditMode(BaseMode):
         """
         sheet = self._logic._getSheet()
         sheet.unselect(_object)
-    
+
     ##################
     #### Deleting ####
     ##################
