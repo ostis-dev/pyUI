@@ -120,6 +120,7 @@ class SCgEditMode(BaseEditMode):
     ES_ContType     = ES_TypeChange + 1         # content type changing
     ES_Translate    = ES_ContType + 1           # translate camera position
     ES_ContourCreate= ES_Translate + 1          # contour creation
+    ES_BusCreate    = ES_ContourCreate + 1      # bus creation    
     ES_Count        = ES_ContourCreate + 1      # count of all states
     
     EM_Select   =   0
@@ -331,6 +332,13 @@ class SCgEditMode(BaseEditMode):
             self._updateLineCreationObjects()
             self._highlight()
             return True
+            
+        elif self.state is SCgEditMode.ES_BusCreate:
+            pos = render_engine.pos2dTo3dIsoPos(self.mouse_pos)
+            self.line_mode_obj.setPosition(pos)
+            self._updateLineCreationObjects()
+            self._highlight()
+            return True
         
         elif self.state is SCgEditMode.ES_Translate:
             if render_engine.viewMode is render_engine.Mode_Isometric:
@@ -408,6 +416,15 @@ class SCgEditMode(BaseEditMode):
                         self.state = SCgEditMode.ES_LineCreate
                         # setting begin object
                         self.line_mode_beg = mobjects[0][1]
+                        
+                        if isinstance(self.line_mode_beg, scg_objects.SCgBus):
+                            bus = self.line_mode_beg
+                            self.line_mode_beg = scg_objects.AttachmentPoint(render_engine.SceneManager.createSceneNode(),
+                                bus,
+                                render_engine.pos2dTo3dIsoPos((mstate.X.abs, mstate.Y.abs)))
+                            sheet = self._logic._getSheet()
+                            sheet.addChild(self.line_mode_beg)
+                        
                         self.line_mode_line.setBegin(self.line_mode_beg)
                         self.line_mode_obj.setPosition(render_engine.pos2dTo3dIsoPos((mstate.X.abs, mstate.Y.abs)))
                         # adding to scene
@@ -417,6 +434,34 @@ class SCgEditMode(BaseEditMode):
                         self._updateLineCreationObjects()
                         
                         return True
+                        
+            # line bus state
+            elif (self.state is SCgEditMode.ES_BusCreate) and (self.line_mode_beg is None):
+                # setting begin object
+                self.line_mode_beg = mobjects[0][1]
+                self.line_mode_line.setBegin(self.line_mode_beg)
+                self.line_mode_obj.setPosition(render_engine.pos2dTo3dIsoPos((mstate.X.abs, mstate.Y.abs)))
+                # adding to scene
+                sheet = self._logic._getSheet()
+                render_engine.SceneNode.addChild(sheet.sceneNodeChilds, self.line_mode_line.sceneNode)
+
+                self._updateLineCreationObjects()
+
+                return True
+
+            elif (self.state is SCgEditMode.ES_BusCreate) and (self.line_mode_beg is not None):
+                # check if is there
+                if len(mobjects) is 0:
+                    sheet = self._logic._getSheet()
+                    self._logic._createBus(self.line_mode_beg, (mstate.X.abs, mstate.Y.abs))
+
+                sheet = self._logic._getSheet()
+                render_engine.SceneNode.removeChild(sheet.sceneNodeChilds, self.line_mode_line.sceneNode)
+                self.line_mode_line.setBegin(None)
+                self.line_mode_beg = None
+                self.state = SCgEditMode.ES_None
+
+                return True
                     
             # line creation state
             elif (self.state is SCgEditMode.ES_LineCreate) and (self.line_mode_beg is not None):
@@ -501,6 +546,10 @@ class SCgEditMode(BaseEditMode):
                     layout_group.stop()
                 else:
                     layout_group.play()
+                    
+        elif key == ois.KC_B:
+            if self.state != SCgEditMode.ES_BusCreate:
+                self.state = SCgEditMode.ES_BusCreate
                     
         elif _evt.key == ois.KC_F9:
             if render_engine.viewMode is render_engine.Mode_Isometric:
@@ -823,6 +872,15 @@ class SCgEditMode(BaseEditMode):
         
         if key == ois.KC_LSHIFT:
             self._shift = False
+            
+        elif key == ois.KC_B:
+            if self.state == SCgEditMode.ES_BusCreate:
+                sheet = self._logic._getSheet()
+                render_engine.SceneNode.removeChild(sheet.sceneNodeChilds, self.line_mode_line.sceneNode)
+                self.line_mode_line.setBegin(None)
+                self.line_mode_beg = None
+
+                self.state = SCgEditMode.ES_None
                
         return False
     

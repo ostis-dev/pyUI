@@ -195,6 +195,11 @@ def createContour():
     """Create scg-contour
     """
     return scg_objects.SCgContour(render_engine.SceneManager.createSceneNode())
+    
+def createBus():
+    """Create scg-bus
+    """
+    return scg_objects.SCgBus(render_engine.SceneManager.createSceneNode())
 
 def changeObjectType(_obj, _type):
     """Changing node type

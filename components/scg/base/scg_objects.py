@@ -692,15 +692,203 @@ class SCgPair(objects.ObjectLine):
 
 
 class SCgBus(objects.ObjectDepth):
-    
+    """Class that represents realization of scg-bus object.
+    """
     def __init__(self, sceneNode):
-        objects.ObjectDepth(self, sceneNode)
-        
+        """Constructor
+        @param sceneNode:    Ogre Scene node for bus object
+        """
+        objects.ObjectDepth.__init__(self, sceneNode)
+
+        self.__manualObject = None
+
+        self.radius = 0.12
+        self.length = 0.5
+
+        self.attachedNode = None
+        self.attachmentPoints = []
+
+        self.begin_pos = None
+        self.end_pos = None
+        self.orient = None
+
+        self.needGeometryUpdate = True
+
     def __del__(self):
-        pass
-    
+        """Destructor
+        """
+        objects.ObjectDepth.__del__(self)
+
     def delete(self):
-        pass
+        # destroying ogre objects
+        if self.__manualObject:
+            render_engine.SceneManager.destroyManualObject(self.__manualObject)
+
+        objects.ObjectDepth.__del__(self)
+
+    def _update(self, timeSinceLastFrame):
+        """Update bus. Creates new geometry.
+        """
+        objects.ObjectDepth._update(self, timeSinceLastFrame)
+
+        if self.needViewUpdate:
+            self._updateView()
+            self.needViewUpdate = False
+
+        if self.needGeometryUpdate:
+            self.needGeometryUpdate = False
+
+        self._updateGeometry()
+
+    def _updateGeometry(self):
+        """Updates geometry.
+        """
+        if self.__manualObject is None:
+            self.__manualObject = render_engine._ogreSceneManager.createManualObject(str(self))
+            self.__manualObject.setDynamic(False)
+            self.sceneNode.attachObject(self.__manualObject)
+            self.__manualObject.begin(self._getMaterialName())
+        else:
+            self.__manualObject.beginUpdate(0)
+
+        self.begin_pos = self.attachedNode._getCross(self.attachedNode.getPosition() - self.orient)
+        self.end_pos = self.attachedNode.getPosition() - self.orient
+
+        length = self.begin_pos.distance(self.end_pos)
+
+        if render_engine.viewMode == render_engine.Mode_Isometric:
+
+            self.__manualObject.position(-self.radius, 0.0, 0.0)
+            self.__manualObject.textureCoord(0.0, 0.0)
+            self.__manualObject.normal(0, 0, 1)
+
+            self.__manualObject.position(-self.radius, length, 0.0)
+            self.__manualObject.textureCoord(1.0, 0.0)
+            self.__manualObject.normal(0, 0, 1)
+
+            self.__manualObject.position(self.radius, length, 0.0)
+            self.__manualObject.textureCoord(1.0, 1.0)
+            self.__manualObject.normal(0, 0, 1)
+
+            self.__manualObject.position(self.radius, 0.0, 0.0)
+            self.__manualObject.textureCoord(0.0, 1.0)
+            self.__manualObject.normal(0, 0, 1)
+
+            self.__manualObject.quad(0, 1, 2, 3)
+
+        self.__manualObject.end()
+
+        self.sceneNode.setPosition(self.begin_pos)
+        self.length = length
+        self.__orientV = self.end_pos - self.begin_pos
+        self.sceneNode.setDirection(-self.orient, ogre.SceneNode.TS_PARENT, [0, 1, 0])
+
+    def _updateView(self):
+        """Update object view
+        Updating object materials based on state.
+        """
+        objects.ObjectDepth._updateView(self)
+
+        if self.needStateUpdate:
+            if self.__manualObject is not None:
+                self.needStateUpdate = False
+                self.__materialName = self._getMaterialName()
+                if self.__manualObject.getNumSections() > 0:
+                    self.__manualObject.setMaterialName(0, self.__materialName)
+            else:
+                self.needUpdate = True
+                self.needViewUpdate = True
+
+    def appendPoint(self, point):
+        """Add the point to which the line will be attached
+        """
+        self.attachmentPoints.append(point)
+
+    def _getCross(self, pos):
+        """Count cross position
+        """
+        return (self.begin_pos + self.end_pos) / 2.0
+
+    def _getMaterialName(self):
+        return "scg_Node_" + state_post[self.getState()]
+
+    def setAttachedNode(self, node):
+        if self.attachedNode:
+            self.attachedNode.removeLinkedObject(objects.Object.LS_BASEONTHIS, self)
+
+        self.attachedNode = node
+        if self.attachedNode:
+            self.attachedNode.addLinkedObject(objects.Object.LS_BASEONTHIS, self)
+
+        self.attachedNode.sceneNode._updateBounds()
+        self.needUpdate = True
+
+    def getAttachedNode(self):
+        return self.attachedNode
+
+    def setEndPointPos(self, end_point_pos):
+        self.end_pos = render_engine.pos2dTo3dIsoPos(end_point_pos)
+        self.orient = self.attachedNode.getPosition() - self.end_pos
+
+    def _checkRayIntersect(self, ray):
+        """Check if ray intersects object
+        @param ray: ray to check intersection with
+        @type ray: ogre.Ray
+        @returns tuple (intersection result, distance to intersection point)
+        """
+        if self.begin_pos is None or self.end_pos is None:
+            return False, -1
+
+        v1 = self.__orientV
+        v2 = ray.getDirection()
+
+        r = v1.crossProduct(v2)
+        s = self.begin_pos - ray.getOrigin()
+        d = abs(r.normalisedCopy().dotProduct(s))
+
+        if d <= self.radius:
+            return True, 0
+
+        return False, -1
+
+    def getType(self):
+        return self.attachedNode.getType()
+
+
+class AttachmentPoint(objects.ObjectDepth):
+    """Class that represents realization of point to which line will be attached to the bus
+    """
+    def __init__(self, sceneNode, bus, pos):
+        """Constructor
+        """
+        objects.ObjectDepth.__init__(self, sceneNode)
+
+        self.bus = bus
+        if self.bus:
+            self.bus.addLinkedObject(objects.Object.LS_BASEONTHIS, self)
+        bus.appendPoint(self)
+
+        self.pos = pos
+        self.orient = self.bus.getAttachedNode().getPosition() - self.pos
+
+    def __del__(self):
+        """Destructor
+        """
+        objects.ObjectDepth.__del__(self)
+
+    def delete(self):
+        objects.ObjectDepth.__del__(self)
+
+    def _getCross(self, pos):
+        return self.pos
+
+    def _update(self, timeSinceLastFrame):
+        objects.ObjectDepth._update(self, timeSinceLastFrame)
+
+        self.pos = self.bus.getAttachedNode().getPosition() - self.orient
+
+    def _getScAddr(self):
+        return self.bus.getAttachedNode()._getScAddr()
     
     
 class SCgContour(objects.ObjectDepth):

@@ -177,7 +177,22 @@ class SCgEditor(BaseModeLogic):
         sheet.addChild(contour)
         contour.setPoints(points)
         contour.setState(objects.Object.OS_Normal)
+    
+    def _createBus(self, _beg, _end_pos):
+        """Create bus
+        @param _beg: begin object
+        @type _beg: object.Object
+        @param _end_pos: end position
+        @type _end_pos: tuple
 
-    
-    
+        @return: created bus
+        """
+        bus = scg_alphabet.createBus()
+        sheet = self._getSheet()
+        sheet.addChild(bus)
+        bus.setAttachedNode(_beg)
+        bus.setEndPointPos(_end_pos)
+        bus.setState(objects.Object.OS_Normal)
+
+        return bus  
     
